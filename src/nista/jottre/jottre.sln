@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jottre-console", "console\jottre-console.csproj", "{3966D0C1-264F-4F1C-AE36-AA6110353B5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "jottre-wpf", "wpf\jottre-wpf.csproj", "{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3966D0C1-264F-4F1C-AE36-AA6110353B5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3966D0C1-264F-4F1C-AE36-AA6110353B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3966D0C1-264F-4F1C-AE36-AA6110353B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3966D0C1-264F-4F1C-AE36-AA6110353B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75741BD2-32E1-41B3-8B5D-41EF8FA40B60}
+	EndGlobalSection
+EndGlobal
