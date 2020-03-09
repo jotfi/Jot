@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nista.Jottre.Console", "console\Nista.Jottre.Console.csproj", "{3966D0C1-264F-4F1C-AE36-AA6110353B5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nista.Jottre.Console", "Nista.Jottre.Console\Nista.Jottre.Console.csproj", "{3966D0C1-264F-4F1C-AE36-AA6110353B5B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nista.Jottre.Wpf", "wpf\Nista.Jottre.Wpf.csproj", "{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nista.Jottre.Wpf", "Nista.Jottre.Wpf\Nista.Jottre.Wpf.csproj", "{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nista.Jottre.C", "jottre-core\Nista.Jottre.C.csproj", "{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nista.Jottre.Core", "Nista.Jottre.Core\Nista.Jottre.Core.csproj", "{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
