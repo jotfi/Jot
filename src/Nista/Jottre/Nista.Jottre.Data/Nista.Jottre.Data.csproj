@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="System\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nista.Jottre.Database\Nista.Jottre.Database.csproj" />
+    <ProjectReference Include="..\Nista.Jottre.Model\Nista.Jottre.Model.csproj" />
+  </ItemGroup>
+
+</Project>
