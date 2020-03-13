@@ -7,4 +7,8 @@
     <RootNamespace>Nista.Jottre.Console</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Terminal.Gui" Version="0.70.0" />
+  </ItemGroup>
+
 </Project>
