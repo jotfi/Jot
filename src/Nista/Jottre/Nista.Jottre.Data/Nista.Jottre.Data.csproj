@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="System\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Nista.Jottre.Database\Nista.Jottre.Database.csproj" />
     <ProjectReference Include="..\Nista.Jottre.Model\Nista.Jottre.Model.csproj" />
   </ItemGroup>

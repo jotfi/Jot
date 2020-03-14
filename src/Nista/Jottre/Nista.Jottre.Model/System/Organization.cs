@@ -8,12 +8,13 @@ namespace Nista.Jottre.Model.System
     public class Organization : Entity, ITransaction
     {
         public string Name { get; set; }
-        public HashSet<Entity> Contacts { get; set; }
+        public List<Entity> Contacts { get; set; }
 
         public static string CreateTable() =>
             $@"
 create table Organization( 
     {TransactionFields()}
+    {EntityFields()}
     Name text not null
 );";
 
