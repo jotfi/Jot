@@ -1,4 +1,6 @@
-﻿using Nista.Jottre.Base;
+﻿using Dapper;
+using Nista.Jottre.Base;
+using Nista.Jottre.Database.Base;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -6,27 +8,26 @@ using System.Text;
 
 namespace Nista.Jottre.Database
 {
-    public abstract class Database : Logger
+    //TODO: potentially abstract Database to not include Dapper, could use MongoDB in future, etc.
+    
+    public class Database : Logger
     {
-        protected DbConnection DbConnection;
+        protected UnitOfWorkContext Context;
 
-        public virtual void Start()
+        public Database(SimpleCRUD.Dialect dbType)
         {
-            Open();
-            if (DbConnection.State == System.Data.ConnectionState.Open)
+            Context = new UnitOfWorkContext(dbType);
+        }
+
+        public void Setup()
+        {
+            using (Context.Create())
             {
-                Setup();
+                foreach (var table in Model.Model.CreateTables)
+                {
+                    Context.GetConnection().Execute(table);
+                }
             }
-        }
-
-        public virtual void Open()
-        {
-
-        }
-
-        public virtual void Setup()
-        {
-
         }
     }
 }

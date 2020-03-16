@@ -8,15 +8,12 @@ namespace Nista.Jottre.Model.Base
     {
         public long Id { get; set; }
         public string Hash { get; set; }
-        public DateTime CreatedTime { get; set; }
-        public DateTime ModifiedTime { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
-        public static string TransactionFields() =>
-            @"
-    Id integer primary key,
-    Hash varchar(64) not null,
-    CreatedTime text not null,
-    ModifiedTime text not null";
-
+        public static string TransactionFields()
+        {
+            return @"Id INTEGER PRIMARY KEY AUTOINCREMENT, Hash varchar(64) not null, CreatedDate datetime default current_timestamp, ModifiedDate datetime";
+        }            
     }
 }

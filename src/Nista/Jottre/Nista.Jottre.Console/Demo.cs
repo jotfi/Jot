@@ -46,19 +46,12 @@ namespace Nista.Jottre.Console
 					Move(0, y);
 					for (int x = 0; x < f.Height; x++)
 					{
-						Rune r;
-						switch (x % 3)
+						var r = (x % 3) switch
 						{
-							case 0:
-								r = '.';
-								break;
-							case 1:
-								r = 'o';
-								break;
-							default:
-								r = 'O';
-								break;
-						}
+							0 => '.',
+							1 => 'o',
+							_ => 'O',
+						};
 						Driver.AddRune(r);
 					}
 				}

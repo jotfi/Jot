@@ -8,15 +8,14 @@
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Dapper.Contrib" Version="2.0.30" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.2" />
+    <PackageReference Include="MySql.Data" Version="8.0.19" />
+    <PackageReference Include="Npgsql" Version="4.1.3.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Nista.Jottre.Base\Nista.Jottre.Base.csproj" />
     <ProjectReference Include="..\Nista.Jottre.Model\Nista.Jottre.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Base\" />
   </ItemGroup>
 
 </Project>
