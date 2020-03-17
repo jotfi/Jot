@@ -37,9 +37,23 @@ namespace Nista.Jottre.Base
             Console.WriteLine(message);
         }
 
-        public void Log(Exception ex)
+        public void Log(Exception ex, string extra = "")
         {
-            Log($"{ex.Message} {ex.InnerException} {ex.StackTrace}", LogLevels.Error);
+            var message = "";
+            if (!string.IsNullOrEmpty(ex.Message))
+            {
+                message += $"Exception: {ex.Message}\r\n";
+            }
+            if (!string.IsNullOrEmpty(extra))
+            {
+                message += $"Extra: {extra}\r\n";
+            }
+            if (!string.IsNullOrEmpty(ex.InnerException?.ToString()))
+            {
+                message += $"Inner Exception: {ex.InnerException}\r\n";
+            }
+            message += ex.StackTrace;
+            Log(message, LogLevels.Error);
         }
 
         public void Log(string message, LogLevels level = LogLevels.Debug)

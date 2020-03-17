@@ -7,19 +7,13 @@ namespace Nista.Jottre.Model.System
 {
     public class Person : Entity, ITransaction
     {
-        public string FirstName { get; set; }
-        public string MiddleNames { get; set; }
+        public string FirstNames { get; set; }
         public string LastName { get; set; }
         public Email Email { get; set; }
 
-        public static string CreateTable() =>
-        $@"
-create table Person( 
-    {TransactionFields()}
-    FirstName varchar(255) not null,
-    MiddleNames varchar(255) not null,
-    LastName varchar(255) not null,
-    EmailId integer,
-);";
+        public static string CreateTable()
+        {
+            return $@"create table if not exists Person({TransactionFields()}, {EntityFields()}, FirstNames varchar(255) not null, LastName varchar(255) not null, EmailId integer);";
+        }       
     }
 }

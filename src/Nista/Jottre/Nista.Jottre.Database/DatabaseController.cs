@@ -33,7 +33,14 @@ namespace Nista.Jottre.Database
             {
                 foreach (var table in CreateTables)
                 {
-                    Context.GetConnection().Execute(table);
+                    try
+                    {
+                        Context.GetConnection().Execute(table);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log(ex, table);
+                    }
                 }
             }
         }
