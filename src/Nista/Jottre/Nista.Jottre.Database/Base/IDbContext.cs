@@ -2,8 +2,9 @@
 
 namespace Nista.Jottre.Database.Base
 {
-    public interface IConnectionContext
+    public interface IDbContext
     {
+        UnitOfWork Create();
         DbConnection GetConnection();
     }
 }

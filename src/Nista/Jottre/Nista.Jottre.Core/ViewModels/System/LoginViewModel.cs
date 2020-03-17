@@ -13,9 +13,15 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         }
 
-        public List<Organization> GetOrganizations()
+        public void Run()
         {
-            return new List<Organization>();
+            App.Database.Setup();
+            App.Repository.TableNames.GetList();
+            if (!App.Repository.Users.Exists())
+            {
+                App.SetupAdmin();
+            }
         }
+
     }
 }

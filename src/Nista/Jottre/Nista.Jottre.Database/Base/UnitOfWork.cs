@@ -6,7 +6,6 @@ namespace Nista.Jottre.Database.Base
 {
     public class UnitOfWork : IDisposable
     {
-
         private readonly DbTransaction DbTransaction;
         public DbConnection DbConnection { get; }
 

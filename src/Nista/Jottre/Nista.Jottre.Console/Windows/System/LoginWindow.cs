@@ -17,9 +17,9 @@ namespace Nista.Jottre.Console.Windows.System
         {
             App.Top.Add(Window);
             var menu = new MenuBar(new MenuBarItem[] {
-            new MenuBarItem ("_File", new MenuItem [] {
-                new MenuItem ("_Quit", "", () => { if (Program.Quit()) App.Top.Running = false; })
-            })
+                new MenuBarItem ("_File", new MenuItem [] {
+                    new MenuItem ("_Quit", "", () => { if (App.Quit()) App.Top.Running = false; })
+                })
             });
             App.Top.Add(menu);
 
@@ -54,7 +54,7 @@ namespace Nista.Jottre.Console.Windows.System
                             MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
                         }
                         },
-                        new Button(13, 14, "Quit") { Clicked = () => { if (Program.Quit()) App.Top.Running = false; } },
+                        new Button(13, 14, "Quit") { Clicked = () => { if (App.Quit()) App.Top.Running = false; } },
                         new Label(3, 18, "Press F9 or ESC plus 9 to activate the menubar"));            
         }
     }

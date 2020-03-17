@@ -13,10 +13,10 @@ namespace Nista.Jottre.Database
     
     public class DatabaseController : Logger
     {
-        private readonly UnitOfWorkContext Context;
+        private readonly IDbContext Context;
         private readonly List<string> CreateTables;
         
-        public DatabaseController(UnitOfWorkContext context)
+        public DatabaseController(IDbContext context)
         {
             Context = context;
             CreateTables = new List<string>()
@@ -29,20 +29,19 @@ namespace Nista.Jottre.Database
 
         public void Setup()
         {
-            using (Context.Create())
+            using var uow = Context.Create();
+            foreach (var table in CreateTables)
             {
-                foreach (var table in CreateTables)
+                try
                 {
-                    try
-                    {
-                        Context.GetConnection().Execute(table);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log(ex, table);
-                    }
+                    Context.GetConnection().Execute(table);
+                }
+                catch (Exception ex)
+                {
+                    Log(ex, table);
                 }
             }
+            uow.CommitAsync().Wait();
         }
     }
 }

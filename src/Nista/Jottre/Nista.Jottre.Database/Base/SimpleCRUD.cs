@@ -877,7 +877,9 @@ namespace Nista.Jottre.Database.Base
         //Not marked ReadOnly
         //Not marked IgnoreInsert
         //Not marked NotMapped
+#pragma warning disable IDE0060 // Remove unused parameter
         private static IEnumerable<PropertyInfo> GetUpdateableProperties<T>(T entity)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             var updateableProperties = GetScaffoldableProperties<T>();
             //remove ones with ID

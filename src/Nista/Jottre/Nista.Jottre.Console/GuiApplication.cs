@@ -20,9 +20,21 @@ namespace Nista.Jottre.Console
 
         public override void Run()
         {
-            base.Run();
-            Win.Login.Run();
+            base.Run();            
             Terminal.Gui.Application.Run();
+        }
+
+        public override void SetupAdmin()
+        {
+            base.SetupAdmin();
+            Win.Login.Run();
+        }
+
+        public override bool Quit()
+        {
+            base.Quit();
+            var n = Terminal.Gui.MessageBox.Query(50, 7, "Quit Demo", "Are you sure you want to quit this demo?", "Yes", "No");
+            return n == 0;
         }
     }
 }

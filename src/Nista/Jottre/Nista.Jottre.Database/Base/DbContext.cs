@@ -9,7 +9,7 @@ using System.Data.SQLite;
 
 namespace Nista.Jottre.Database.Base
 {
-    public class UnitOfWorkContext : Logger, IUnitOfWorkContext, IConnectionContext
+    public class DbContext : Logger, IDbContext
     {
         private readonly DbConnection DbConnection;
         private readonly SimpleCRUD.Dialects DbType;
@@ -17,7 +17,7 @@ namespace Nista.Jottre.Database.Base
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
-        public UnitOfWorkContext(SimpleCRUD.Dialects dbType)
+        public DbContext(SimpleCRUD.Dialects dbType)
         {
             try
             {

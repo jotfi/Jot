@@ -8,11 +8,14 @@ namespace Nista.Jottre.Data
 {
     public class RepositoryController
     {
+        public readonly TableNameRepository TableNames;
         public readonly UserRepository Users;
         public readonly OrganizationRepository Organizations;
 
-        public RepositoryController(IConnectionContext context)
+        public RepositoryController(IDbContext context)
         {
+            TableNames = new TableNameRepository(context);
+            Users = new UserRepository(context);
             Organizations = new OrganizationRepository(context);
         }
     }

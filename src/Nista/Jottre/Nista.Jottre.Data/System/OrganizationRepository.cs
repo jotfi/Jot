@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Nista.Jottre.Data.System
 {
-    public class OrganizationRepository : BaseRepository
+    public class OrganizationRepository : BaseRepository<Organization>
     {
-        public OrganizationRepository(IConnectionContext context) : base(context)
+        public OrganizationRepository(IDbContext context) : base(context)
         {
 
         }
