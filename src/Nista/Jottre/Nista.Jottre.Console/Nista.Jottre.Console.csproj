@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="NLog.Config" Version="4.7.0-rc1" />
     <PackageReference Include="Terminal.Gui" Version="0.70.0" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ namespace Nista.Jottre.Console
         public readonly Terminal.Gui.Toplevel Top;
         public readonly WindowController Win;
 
-        public GuiApplication()
+        public GuiApplication() : base(true)
         {
             Terminal.Gui.Application.Init();
             Top = Terminal.Gui.Application.Top;
@@ -20,6 +20,7 @@ namespace Nista.Jottre.Console
 
         public override void Run()
         {
+            base.Run();
             Win.Login.Run();
             Terminal.Gui.Application.Run();
         }

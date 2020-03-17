@@ -21,22 +21,22 @@ namespace Nista.Jottre.Database.Base
             DbType = dbType;
             if (DbType == SimpleCRUD.Dialects.PostgreSQL)
             {
-                DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "testdb"));
+                DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JottreDb"));
                 SimpleCRUD.SetDialect(SimpleCRUD.Dialects.PostgreSQL);
             }
             else if (DbType == SimpleCRUD.Dialects.SQLite)
             {
-                DbConnection = new SqliteConnection("Data Source=MyDatabase.sqlite;Version=3;");
+                DbConnection = new SqliteConnection("Data Source=Jottre.sqlite;Version=3;");
                 SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLite);
             }
             else if (DbType == SimpleCRUD.Dialects.MySQL)
             {
-                DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "testdb"));
+                DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JottreDb"));
                 SimpleCRUD.SetDialect(SimpleCRUD.Dialects.MySQL);
             }
             else
             {
-                DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=DapperSimpleCrudTestDb;Integrated Security=True;MultipleActiveResultSets=true;");
+                DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JottreDb;Integrated Security=True;MultipleActiveResultSets=true;");
                 SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLServer);
             }
             DbConnection.Open();
