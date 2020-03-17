@@ -8,6 +8,11 @@ namespace Nista.Jottre.Core.ViewModels.System
 {
     public class LoginViewModel : BaseViewModel
     {
+        public LoginViewModel(ViewModelController viewmodels) : base(viewmodels)
+        {
+
+        }
+
         public List<Organization> GetOrganizations()
         {
             return new List<Organization>();

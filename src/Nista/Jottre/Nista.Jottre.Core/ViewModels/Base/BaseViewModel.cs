@@ -8,6 +8,13 @@ namespace Nista.Jottre.Core.ViewModels.Base
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        protected readonly ViewModelController ViewModels;
+
+        public BaseViewModel(ViewModelController viewmodels)
+        {
+            ViewModels = viewmodels;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

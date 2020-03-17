@@ -27,7 +27,7 @@ namespace Nista.Jottre.Core
             }
             catch (Exception ex)
             {
-                Error(ex.Message);
+                Log(ex);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Nista.Jottre.Core
             }
             catch (Exception ex)
             {
-                Error(ex.Message);
+                Log(ex);
             }
         }
     }
