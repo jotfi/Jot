@@ -10,13 +10,9 @@ namespace Nista.Jottre.Model.System
         public string Name { get; set; }
         public List<Entity> Contacts { get; set; }
 
-        public static string CreateTable() =>
-            $@"
-create table Organization( 
-    {TransactionFields()}
-    {EntityFields()}
-    Name text not null
-);";
-
+        public static string CreateTable()
+        {
+            return $@"create table if not exists Organization({TransactionFields()}, {EntityFields()}, Name text not null);";
+        }
     }
 }

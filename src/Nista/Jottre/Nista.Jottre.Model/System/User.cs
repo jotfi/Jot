@@ -13,7 +13,7 @@ namespace Nista.Jottre.Model.System
 
         public static string CreateTable()
         {
-            return $@"create table User({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
+            return $@"create table if not exists User({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
         }
     }
 }

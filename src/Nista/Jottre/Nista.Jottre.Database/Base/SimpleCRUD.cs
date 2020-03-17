@@ -19,13 +19,13 @@ namespace Nista.Jottre.Database.Base
 
         static SimpleCRUD()
         {
-            SetDialect(_dialect);
+            SetDialect(Dialect);
         }
 
-        private static Dialect _dialect = Dialect.SQLServer;
-        private static string _encapsulation;
-        private static string _getIdentitySql;
-        private static string _getPagedListSql;
+        private static Dialects Dialect = Dialects.SQLServer;
+        private static string Encapsulation;
+        private static string GetIdentitySql;
+        private static string GetPagedListSql;
 
         private static readonly ConcurrentDictionary<Type, string> TableNames = new ConcurrentDictionary<Type, string>();
         private static readonly ConcurrentDictionary<string, string> ColumnNames = new ConcurrentDictionary<string, string>();
@@ -33,8 +33,8 @@ namespace Nista.Jottre.Database.Base
         private static readonly ConcurrentDictionary<string, string> StringBuilderCacheDict = new ConcurrentDictionary<string, string>();
         private static readonly bool StringBuilderCacheEnabled = true;
 
-        private static ITableNameResolver _tableNameResolver = new TableNameResolver();
-        private static IColumnNameResolver _columnNameResolver = new ColumnNameResolver();
+        private static ITableNameResolver DbTableNameResolver = new TableNameResolver();
+        private static IColumnNameResolver DbColumnNameResolver = new ColumnNameResolver();
 
         /// <summary>
         /// Append a Cached version of a strinbBuilderAction result based on a cacheKey
@@ -63,40 +63,40 @@ namespace Nista.Jottre.Database.Base
         /// <returns></returns>
         public static string GetDialect()
         {
-            return _dialect.ToString();
+            return Dialect.ToString();
         }
 
         /// <summary>
         /// Sets the database dialect 
         /// </summary>
         /// <param name="dialect"></param>
-        public static void SetDialect(Dialect dialect)
+        public static void SetDialect(Dialects dialect)
         {
             switch (dialect)
             {
-                case Dialect.PostgreSQL:
-                    _dialect = Dialect.PostgreSQL;
-                    _encapsulation = "\"{0}\"";
-                    _getIdentitySql = string.Format("SELECT LASTVAL() AS id");
-                    _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
+                case Dialects.PostgreSQL:
+                    Dialect = Dialects.PostgreSQL;
+                    Encapsulation = "\"{0}\"";
+                    GetIdentitySql = string.Format("SELECT LASTVAL() AS id");
+                    GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
                     break;
-                case Dialect.SQLite:
-                    _dialect = Dialect.SQLite;
-                    _encapsulation = "\"{0}\"";
-                    _getIdentitySql = string.Format("SELECT LAST_INSERT_ROWID() AS id");
-                    _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
+                case Dialects.SQLite:
+                    Dialect = Dialects.SQLite;
+                    Encapsulation = "\"{0}\"";
+                    GetIdentitySql = string.Format("SELECT LAST_INSERT_ROWID() AS id");
+                    GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
                     break;
-                case Dialect.MySQL:
-                    _dialect = Dialect.MySQL;
-                    _encapsulation = "`{0}`";
-                    _getIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
-                    _getPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
+                case Dialects.MySQL:
+                    Dialect = Dialects.MySQL;
+                    Encapsulation = "`{0}`";
+                    GetIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
+                    GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
                 default:
-                    _dialect = Dialect.SQLServer;
-                    _encapsulation = "[{0}]";
-                    _getIdentitySql = string.Format("SELECT CAST(SCOPE_IDENTITY()  AS BIGINT) AS [id]");
-                    _getPagedListSql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY {OrderBy}) AS PagedNumber, {SelectColumns} FROM {TableName} {WhereClause}) AS u WHERE PagedNumber BETWEEN (({PageNumber}-1) * {RowsPerPage} + 1) AND ({PageNumber} * {RowsPerPage})";
+                    Dialect = Dialects.SQLServer;
+                    Encapsulation = "[{0}]";
+                    GetIdentitySql = string.Format("SELECT CAST(SCOPE_IDENTITY()  AS BIGINT) AS [id]");
+                    GetPagedListSql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY {OrderBy}) AS PagedNumber, {SelectColumns} FROM {TableName} {WhereClause}) AS u WHERE PagedNumber BETWEEN (({PageNumber}-1) * {RowsPerPage} + 1) AND ({PageNumber} * {RowsPerPage})";
                     break;
             }
         }
@@ -107,7 +107,7 @@ namespace Nista.Jottre.Database.Base
         /// <param name="resolver">The resolver to use when requesting the format of a table name</param>
         public static void SetTableNameResolver(ITableNameResolver resolver)
         {
-            _tableNameResolver = resolver;
+            DbTableNameResolver = resolver;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Nista.Jottre.Database.Base
         /// <param name="resolver">The resolver to use when requesting the format of a column name</param>
         public static void SetColumnNameResolver(IColumnNameResolver resolver)
         {
-            _columnNameResolver = resolver;
+            DbColumnNameResolver = resolver;
         }
 
         /// <summary>
@@ -275,7 +275,7 @@ namespace Nista.Jottre.Database.Base
         /// <returns>Gets a paged list of entities with optional exact match where conditions</returns>
         public static IEnumerable<T> GetListPaged<T>(this IDbConnection connection, int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            if (string.IsNullOrEmpty(_getPagedListSql))
+            if (string.IsNullOrEmpty(GetPagedListSql))
                 throw new Exception("GetListPage is not supported with the current SQL Dialect");
 
             if (pageNumber < 1)
@@ -288,7 +288,7 @@ namespace Nista.Jottre.Database.Base
 
             var name = GetTableName(currenttype);
             var sb = new StringBuilder();
-            var query = _getPagedListSql;
+            var query = GetPagedListSql;
             if (string.IsNullOrEmpty(orderby))
             {
                 orderby = GetColumnName(idProps.First());
@@ -387,7 +387,7 @@ namespace Nista.Jottre.Database.Base
 
             if ((keytype == typeof(int) || keytype == typeof(long)) && Convert.ToInt64(idProps.First().GetValue(entityToInsert, null)) == 0)
             {
-                sb.Append(";" + _getIdentitySql);
+                sb.Append(";" + GetIdentitySql);
             }
             else
             {
@@ -929,7 +929,7 @@ namespace Nista.Jottre.Database.Base
             if (TableNames.TryGetValue(type, out string tableName))
                 return tableName;
 
-            tableName = _tableNameResolver.ResolveTableName(type);
+            tableName = DbTableNameResolver.ResolveTableName(type);
 
             TableNames.AddOrUpdate(type, tableName, (t, v) => tableName);
 
@@ -943,7 +943,7 @@ namespace Nista.Jottre.Database.Base
             if (ColumnNames.TryGetValue(key, out string columnName))
                 return columnName;
 
-            columnName = _columnNameResolver.ResolveColumnName(propertyInfo);
+            columnName = DbColumnNameResolver.ResolveColumnName(propertyInfo);
 
             ColumnNames.AddOrUpdate(key, columnName, (t, v) => columnName);
 
@@ -952,7 +952,7 @@ namespace Nista.Jottre.Database.Base
 
         private static string Encapsulate(string databaseword)
         {
-            return string.Format(_encapsulation, databaseword);
+            return string.Format(Encapsulation, databaseword);
         }
         /// <summary>
         /// Generates a GUID based on the current date/time
@@ -976,7 +976,7 @@ namespace Nista.Jottre.Database.Base
         /// <summary>
         /// Database server dialects
         /// </summary>
-        public enum Dialect
+        public enum Dialects
         {
             SQLServer,
             PostgreSQL,

@@ -170,7 +170,7 @@ namespace Nista.Jottre.Database.Base
         /// <returns>Gets a list of entities with optional exact match where conditions</returns>
         public static Task<IEnumerable<T>> GetListPagedAsync<T>(this IDbConnection connection, int pageNumber, int rowsPerPage, string conditions, string orderby, object parameters = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            if (string.IsNullOrEmpty(_getPagedListSql))
+            if (string.IsNullOrEmpty(GetPagedListSql))
                 throw new Exception("GetListPage is not supported with the current SQL Dialect");
 
             var currenttype = typeof(T);
@@ -180,7 +180,7 @@ namespace Nista.Jottre.Database.Base
 
             var name = GetTableName(currenttype);
             var sb = new StringBuilder();
-            var query = _getPagedListSql;
+            var query = GetPagedListSql;
             if (string.IsNullOrEmpty(orderby))
             {
                 orderby = GetColumnName(idProps.First());
@@ -278,7 +278,7 @@ namespace Nista.Jottre.Database.Base
 
             if ((keytype == typeof(int) || keytype == typeof(long)) && Convert.ToInt64(idProps.First().GetValue(entityToInsert, null)) == 0)
             {
-                sb.Append(";" + _getIdentitySql);
+                sb.Append(";" + GetIdentitySql);
             }
             else
             {

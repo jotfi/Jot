@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Terminal.Gui;
 
 namespace Nista.Jottre.Console.Windows.Base
 {
     public abstract class BaseWindow
     {
-        protected readonly Window Window;
-        public BaseWindow(string title)
+        protected readonly WindowController Win;
+        protected readonly GuiApplication App;
+        protected readonly Terminal.Gui.Window Window;
+        
+        public BaseWindow(WindowController win, string title)
         {
-            Window = new Window(title)
+            Win = win;
+            App = win.App;            
+            Window = new Terminal.Gui.Window(title)
             {
                 X = 0,
                 Y = 1,
-                Width = Dim.Fill(),
-                Height = Dim.Fill()
+                Width = Terminal.Gui.Dim.Fill(),
+                Height = Terminal.Gui.Dim.Fill()
             };
         }
     }

@@ -11,33 +11,33 @@ namespace Nista.Jottre.Database.Base
     public class UnitOfWorkContext : IUnitOfWorkContext, IConnectionContext
     {
         private readonly DbConnection DbConnection;
-        private readonly SimpleCRUD.Dialect DbType;
+        private readonly SimpleCRUD.Dialects DbType;
         private UnitOfWork UnitOfWork;        
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
-        public UnitOfWorkContext(SimpleCRUD.Dialect dbType)
+        public UnitOfWorkContext(SimpleCRUD.Dialects dbType)
         {
             DbType = dbType;
-            if (DbType == SimpleCRUD.Dialect.PostgreSQL)
+            if (DbType == SimpleCRUD.Dialects.PostgreSQL)
             {
                 DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "testdb"));
-                SimpleCRUD.SetDialect(SimpleCRUD.Dialect.PostgreSQL);
+                SimpleCRUD.SetDialect(SimpleCRUD.Dialects.PostgreSQL);
             }
-            else if (DbType == SimpleCRUD.Dialect.SQLite)
+            else if (DbType == SimpleCRUD.Dialects.SQLite)
             {
                 DbConnection = new SqliteConnection("Data Source=MyDatabase.sqlite;Version=3;");
-                SimpleCRUD.SetDialect(SimpleCRUD.Dialect.SQLite);
+                SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLite);
             }
-            else if (DbType == SimpleCRUD.Dialect.MySQL)
+            else if (DbType == SimpleCRUD.Dialects.MySQL)
             {
                 DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "testdb"));
-                SimpleCRUD.SetDialect(SimpleCRUD.Dialect.MySQL);
+                SimpleCRUD.SetDialect(SimpleCRUD.Dialects.MySQL);
             }
             else
             {
                 DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=DapperSimpleCrudTestDb;Integrated Security=True;MultipleActiveResultSets=true;");
-                SimpleCRUD.SetDialect(SimpleCRUD.Dialect.SQLServer);
+                SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLServer);
             }
             DbConnection.Open();
         }

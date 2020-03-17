@@ -14,7 +14,7 @@ namespace Nista.Jottre.Database
     {
         protected UnitOfWorkContext Context;
 
-        public Database(SimpleCRUD.Dialect dbType)
+        public Database(SimpleCRUD.Dialects dbType)
         {
             Context = new UnitOfWorkContext(dbType);
         }
