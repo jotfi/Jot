@@ -11,13 +11,9 @@ namespace Nista.Jottre.Model.System
         public Person Person { get; set; }
         public Password Password { get; set; }
 
-        public static string CreateTable() =>
-        $@"
-create table User( 
-    {TransactionFields()}
-    UserName varchar(100) not null,
-    PersonId integer,
-    PasswordId integer,
-);";
+        public static string CreateTable()
+        {
+            return $@"create table User({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
+        }
     }
 }

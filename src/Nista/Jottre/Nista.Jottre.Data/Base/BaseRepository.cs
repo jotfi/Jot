@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Nista.Jottre.Data.Base
 {
-    public abstract class Repository
+    public abstract class BaseRepository
     {
         protected readonly IConnectionContext Context;
 
-        public Repository(IConnectionContext context)
+        public BaseRepository(IConnectionContext context)
         {
             Context = context;
         }

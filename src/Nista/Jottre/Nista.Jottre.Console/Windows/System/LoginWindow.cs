@@ -1,19 +1,22 @@
-﻿using System;
+﻿using Nista.Jottre.Console.Windows.Base;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
 
 namespace Nista.Jottre.Console.Windows.System
 {
-    public class Login
+    public class LoginWindow : BaseWindow
     {
-        public void Run()
+        public LoginWindow() : base("Jottre Login")
         {
-            Application.Init();
-            var top = Application.Top;
+            
+        }
 
+        public void Run(Toplevel top)
+        {
             // Creates the top-level window to show
-            var win = new Window("Jottre")
+            var win = new Window("Jottre Login")
             {
                 X = 0,
                 Y = 1, // Leave one row for the toplevel menu
@@ -23,6 +26,13 @@ namespace Nista.Jottre.Console.Windows.System
                 Height = Dim.Fill()
             };
             top.Add(win);
+
+            var menu = new MenuBar(new MenuBarItem[] {
+            new MenuBarItem ("_File", new MenuItem [] {
+                new MenuItem ("_Quit", "", () => { if (Program.Quit()) top.Running = false; })
+            })
+            });
+            top.Add(menu);
 
             var login = new Label("Login: ") { X = 3, Y = 2 };
             var password = new Label("Password: ")
@@ -48,18 +58,15 @@ namespace Nista.Jottre.Console.Windows.System
             win.Add(
                 // The ones with my favorite layout system
                 login, password, loginText, passText,
-
                         new Button(3, 14, "Ok", true)
                         {
                             Clicked = () =>
                         {
-                    MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
-                }
+                            MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
+                        }
                         },
-                        new Button(13, 14, "Quit"),
-                        new Label(3, 18, "Press F9 or ESC plus 9 to activate the menubar"));
-            _ = new Login();
-            Application.Run();
+                        new Button(13, 14, "Quit") { Clicked = () => { if (Program.Quit()) top.Running = false; } },
+                        new Label(3, 18, "Press F9 or ESC plus 9 to activate the menubar"));            
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Nista.Jottre.Core.ViewModels.Base
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class BaseViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

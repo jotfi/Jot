@@ -13,7 +13,7 @@ namespace Nista.Jottre.Model.Base
 
         public static string TransactionFields()
         {
-            return @"Id INTEGER PRIMARY KEY AUTOINCREMENT, Hash varchar(64) not null, CreatedDate datetime default current_timestamp, ModifiedDate datetime";
+            return @"Id integer primary key autoincrement, Hash varchar(64) not null, CreatedDate datetime default current_timestamp, ModifiedDate datetime";
         }            
     }
 }

@@ -310,7 +310,7 @@ namespace Nista.Jottre.Console
 
 
 		public static Label ml;
-		static void Main()
+		static void MainDemo()
 		{
 			//Application.UseSystemConsole = true;
 			Application.Init();

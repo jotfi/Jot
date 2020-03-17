@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Nista.Jottre.Core.ViewModels.System
 {
-    public class Login : ViewModel
+    public class LoginViewModel : BaseViewModel
     {
         public List<Organization> GetOrganizations()
         {
