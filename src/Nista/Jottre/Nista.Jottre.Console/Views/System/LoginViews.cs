@@ -1,15 +1,15 @@
-﻿using Nista.Jottre.Console.Windows.Base;
+﻿using Nista.Jottre.Console.Views.Base;
 using Nista.Jottre.Core.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
 
-namespace Nista.Jottre.Console.Windows.System
+namespace Nista.Jottre.Console.Views.System
 {
-    public class LoginWindow : BaseWindow, ILoginView
+    public class LoginViews : BaseView, ILoginViews
     {
-        public LoginWindow(WindowController win) : base(win, "Jottre Login")
+        public LoginViews(WindowController win) : base(win, "Jottre Login")
         {
             
         }

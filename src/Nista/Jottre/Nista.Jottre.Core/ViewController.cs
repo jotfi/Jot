@@ -7,7 +7,7 @@ namespace Nista.Jottre.Core
 {
     public abstract class ViewController
     {
-        public ILoginView Login { get; protected set; }
-        public ISetupView Setup { get; protected set; }
+        public ILoginViews Login { get; protected set; }
+        public ISetupViews Setup { get; protected set; }
     }
 }

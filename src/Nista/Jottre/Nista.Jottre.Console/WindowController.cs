@@ -1,4 +1,4 @@
-﻿using Nista.Jottre.Console.Windows.System;
+﻿using Nista.Jottre.Console.Views.System;
 using Nista.Jottre.Core;
 using System;
 using System.Collections.Generic;
@@ -13,8 +13,8 @@ namespace Nista.Jottre.Console
         public WindowController(GuiApplication app)
         {
             App = app;
-            Login = new LoginWindow(this);
-            Setup = new SetupWindow(this);
+            Login = new LoginViews(this);
+            Setup = new SetupViews(this);
         }
     }
 }

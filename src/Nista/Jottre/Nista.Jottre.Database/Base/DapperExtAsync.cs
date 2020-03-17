@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace Nista.Jottre.Database.Base
 {
     /// <summary>
-    /// Main class for Dapper.SimpleCRUD extensions
+    /// Main class for Dapper extensions
     /// </summary>
-    public static partial class SimpleCRUD
+    public static partial class DapperExt
     {
         /// <summary>
         /// <para>By default queries the table matching the class name asynchronously </para>

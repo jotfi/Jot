@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nista.Jottre.Console.Windows.Base
+namespace Nista.Jottre.Console.Views.Base
 {
-    public abstract class BaseWindow
+    public abstract class BaseView
     {
         protected readonly WindowController Win;
         protected readonly GuiApplication App;
         protected readonly Terminal.Gui.Window Window;
         
-        public BaseWindow(WindowController win, string title)
+        public BaseView(WindowController win, string title)
         {
             Win = win;
             App = win.App;            

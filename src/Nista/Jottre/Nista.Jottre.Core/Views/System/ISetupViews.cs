@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Nista.Jottre.Core.Views.System
 {
-    public interface ILoginView
+    public interface ISetupViews
     {
-        void ShowLogin();
+        void SetupAdmin();
     }
 }

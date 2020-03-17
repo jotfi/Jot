@@ -12,39 +12,39 @@ namespace Nista.Jottre.Database.Base
     public class DbContext : Logger, IDbContext
     {
         private readonly DbConnection DbConnection;
-        private readonly SimpleCRUD.Dialects DbType;
+        private readonly DapperExt.Dialects DbType;
         private UnitOfWork UnitOfWork;        
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
-        public DbContext(SimpleCRUD.Dialects dbType)
+        public DbContext(DapperExt.Dialects dbType)
         {
             try
             {
                 DbType = dbType;
-                if (DbType == SimpleCRUD.Dialects.PostgreSQL)
+                if (DbType == DapperExt.Dialects.PostgreSQL)
                 {
                     DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JottreDb"));
-                    SimpleCRUD.SetDialect(SimpleCRUD.Dialects.PostgreSQL);
+                    DapperExt.SetDialect(DapperExt.Dialects.PostgreSQL);
                 }
-                else if (DbType == SimpleCRUD.Dialects.SQLite)
+                else if (DbType == DapperExt.Dialects.SQLite)
                 {
                     var builder = new SQLiteConnectionStringBuilder
                     {
                         DataSource = "./Jottre.db"                         
                     };
                     DbConnection = new SQLiteConnection(builder.ConnectionString);                    
-                    SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLite);
+                    DapperExt.SetDialect(DapperExt.Dialects.SQLite);
                 }
-                else if (DbType == SimpleCRUD.Dialects.MySQL)
+                else if (DbType == DapperExt.Dialects.MySQL)
                 {
                     DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JottreDb"));
-                    SimpleCRUD.SetDialect(SimpleCRUD.Dialects.MySQL);
+                    DapperExt.SetDialect(DapperExt.Dialects.MySQL);
                 }
                 else
                 {
                     DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JottreDb;Integrated Security=True;MultipleActiveResultSets=true;");
-                    SimpleCRUD.SetDialect(SimpleCRUD.Dialects.SQLServer);
+                    DapperExt.SetDialect(DapperExt.Dialects.SQLServer);
                 }
                 DbConnection.Open();
             }

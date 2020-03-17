@@ -22,7 +22,7 @@ namespace Nista.Jottre.Core
         {
             try
             {
-                Context = new DbContext(SimpleCRUD.Dialects.SQLite);
+                Context = new DbContext(DapperExt.Dialects.SQLite);
                 Database = new DatabaseController(Context);
                 Repository = new RepositoryController(Context);
                 ViewModels = new ViewModelController(this);
