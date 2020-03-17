@@ -15,6 +15,8 @@ namespace Nista.Jottre.Core
         public readonly DatabaseController Database;
         public readonly RepositoryController Repository;
         public readonly ViewModelController ViewModels;
+        public ViewController Views { get; protected set; }
+        public bool IsInit { get; private set; } = false;
 
         public Application(bool isConsole) : base(isConsole)
         {
@@ -31,11 +33,12 @@ namespace Nista.Jottre.Core
             }
         }
 
-        public virtual void Run()
+        public void Init(ViewController views)
         {
             try
-            {                 
-                ViewModels.Login.Run();
+            {
+                Views = views;
+                IsInit = true;
             }
             catch (Exception ex)
             {
@@ -43,19 +46,20 @@ namespace Nista.Jottre.Core
             }
         }
 
-        public virtual void ShowLogin()
+        public virtual void Run()
         {
-
-        }
-
-        public virtual void SetupAdmin()
-        {
-
-        }
-
-        public virtual void SetupOrg()
-        {
-
+            try
+            {                 
+                if (!IsInit)
+                {
+                    throw new NotImplementedException();
+                }
+                ViewModels.Login.Run();
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
         }
 
         public virtual bool Quit()

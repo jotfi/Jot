@@ -1,4 +1,5 @@
 ﻿using Nista.Jottre.Console.Windows.Base;
+using Nista.Jottre.Core.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,14 +7,14 @@ using Terminal.Gui;
 
 namespace Nista.Jottre.Console.Windows.System
 {
-    public class LoginWindow : BaseWindow
+    public class LoginWindow : BaseWindow, ILoginView
     {
         public LoginWindow(WindowController win) : base(win, "Jottre Login")
         {
             
         }
 
-        public void Run()
+        public void ShowLogin()
         {
             App.Top.Add(Window);
             var menu = new MenuBar(new MenuBarItem[] {

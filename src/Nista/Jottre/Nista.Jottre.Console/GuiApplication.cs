@@ -16,24 +16,13 @@ namespace Nista.Jottre.Console
             Terminal.Gui.Application.Init();
             Top = Terminal.Gui.Application.Top;
             Win = new WindowController(this);
+            Init(Win);
         }
 
         public override void Run()
         {
             base.Run();            
             Terminal.Gui.Application.Run();
-        }
-
-        public override void ShowLogin()
-        {
-            base.ShowLogin();
-            Win.Login.Run();
-        }
-
-        public override void SetupAdmin()
-        {
-            base.SetupAdmin();
-            Win.Login.Run();
         }
 
         public override bool Quit()

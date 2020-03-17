@@ -16,13 +16,17 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         public void Run()
         {
-            var tables = App.Repository.TableNames.GetList(new { Type = "table" });
-            App.Database.Setup(tables.ToList());
+            App.Database.Setup(GetTableNames());
             if (!App.Repository.Users.Exists())
             {
-                App.SetupAdmin();
+                //App.Views.Setup.SetupAdmin();
             }
         }
 
+        public List<TableName> GetTableNames(object whereConditions = null)
+        {
+            whereConditions ??= new { Type = "table" };
+            return App.Repository.TableNames.GetList(whereConditions).ToList();
+        }
     }
 }

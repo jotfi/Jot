@@ -15,7 +15,7 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         public void Run()
         {
-            App.ShowLogin();
+            App.Views.Login.ShowLogin();
             App.ViewModels.Setup.Run();
         }
 
