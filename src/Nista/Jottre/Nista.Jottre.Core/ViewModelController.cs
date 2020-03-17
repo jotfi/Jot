@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Nista.Jottre.Core.ViewModels.Base
+namespace Nista.Jottre.Core
 {
     public class ViewModelController
     {

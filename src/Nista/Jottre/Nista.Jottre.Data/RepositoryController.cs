@@ -6,12 +6,12 @@ using System.Text;
 
 namespace Nista.Jottre.Data
 {
-    public class Repositories
+    public class RepositoryController
     {
         public readonly UserRepository Users;
         public readonly OrganizationRepository Organizations;
 
-        public Repositories(IConnectionContext context)
+        public RepositoryController(IConnectionContext context)
         {
             Organizations = new OrganizationRepository(context);
         }
