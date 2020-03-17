@@ -11,6 +11,10 @@ namespace Nista.Jottre.Model.Base
         public string EmailAddress { get; set; }
 
         public Email(Entity entity, string emailAddress) => (Entity, EmailAddress) = (entity, emailAddress);
-        
+
+        public override string CreateTable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

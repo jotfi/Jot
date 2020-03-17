@@ -21,6 +21,10 @@ namespace Nista.Jottre.Model.Base
         {
             Entity = entity;
         }
-        
+
+        public override string CreateTable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

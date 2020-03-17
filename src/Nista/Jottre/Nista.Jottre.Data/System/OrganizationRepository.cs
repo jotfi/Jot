@@ -15,13 +15,5 @@ namespace Nista.Jottre.Data.System
         {
 
         }
-
-        public async Task<Organization> GetOrDefaultAsync(int id)
-        {
-            return await Context.GetConnection().QuerySingleOrDefaultAsync<Organization>(
-                @"
-select * from Entity where Id = @id
-", new { id });
-        }
     }
 }

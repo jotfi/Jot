@@ -10,5 +10,10 @@ namespace Nista.Jottre.Model.Base
         public string SecurityQuestion1 { get; set; }
         public string SecurityQuestion2 { get; set; }
         public string SecurityQuestion3 { get; set; }
+
+        public override string CreateTable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

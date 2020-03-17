@@ -6,6 +6,7 @@ namespace Nista.Jottre.Model.Base
 {
     public interface ITransaction
     {
-        static string CreateTable() => throw new NotImplementedException();
+        string TableName();
+        string CreateTable();
     }
 }

@@ -24,6 +24,12 @@ namespace Nista.Jottre.Console
             Terminal.Gui.Application.Run();
         }
 
+        public override void ShowLogin()
+        {
+            base.ShowLogin();
+            Win.Login.Run();
+        }
+
         public override void SetupAdmin()
         {
             base.SetupAdmin();

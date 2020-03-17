@@ -14,5 +14,10 @@ namespace Nista.Jottre.Model.System
 
         [Column("type")]
         public string Type { get; set; }
+
+        public override string CreateTable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,12 +14,5 @@ namespace Nista.Jottre.Data.System
 
         }
 
-        public void GetList()
-        {
-            using (Context.Create())
-            {
-                var list = Context.GetConnection().GetList<TableName>(new { Type = "table" });
-            }
-        }
     }
 }

@@ -26,8 +26,6 @@ namespace Nista.Jottre.Base
             IsConsole = isConsole;
         }
 
-        //TODO: support Exception param
-
         public void WriteLine(string message)
         {
             if (!IsConsole)

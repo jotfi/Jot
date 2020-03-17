@@ -2,9 +2,12 @@
 using Nista.Jottre.Base;
 using Nista.Jottre.Database.Base;
 using Nista.Jottre.Model;
+using Nista.Jottre.Model.Base;
+using Nista.Jottre.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using System.Text;
 
 namespace Nista.Jottre.Database
@@ -14,31 +17,34 @@ namespace Nista.Jottre.Database
     public class DatabaseController : Logger
     {
         private readonly IDbContext Context;
-        private readonly List<string> CreateTables;
+        private readonly List<ITransaction> Models;
         
         public DatabaseController(IDbContext context)
         {
             Context = context;
-            CreateTables = new List<string>()
+            Models = new List<ITransaction>()
             {
-                Model.System.Organization.CreateTable(),
-                Model.System.Person.CreateTable(),
-                Model.System.User.CreateTable(),
+                new User(),
+                new Person(),
+                new Organization()
             };
         }
 
-        public void Setup()
+        public void Setup(List<TableName> tableNames)
         {
             using var uow = Context.Create();
-            foreach (var table in CreateTables)
+            foreach (var table in Models)
             {
                 try
                 {
-                    Context.GetConnection().Execute(table);
+                    if (!tableNames.Any(p => p.Name == table.TableName()))
+                    {
+                        Context.GetConnection().Execute(table.CreateTable());
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Log(ex, table);
+                    Log(ex, table.CreateTable());
                 }
             }
             uow.CommitAsync().Wait();

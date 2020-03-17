@@ -9,10 +9,13 @@ namespace Nista.Jottre.Core
     {
         public readonly Application App;
         public readonly LoginViewModel Login;
+        public readonly SetupViewModel Setup;
+
         public ViewModelController(Application app)
         {
             App = app;
             Login = new LoginViewModel(this);
+            Setup = new SetupViewModel(this);
         }
     }
 }

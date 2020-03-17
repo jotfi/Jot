@@ -11,9 +11,9 @@ namespace Nista.Jottre.Model.System
         public Person Person { get; set; }
         public Password Password { get; set; }
 
-        public static string CreateTable()
+        public override string CreateTable()
         {
-            return $@"create table if not exists User({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
+            return $@"create table {TableName()}({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
         }
     }
 }

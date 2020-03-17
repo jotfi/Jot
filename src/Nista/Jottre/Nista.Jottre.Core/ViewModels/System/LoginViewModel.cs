@@ -15,12 +15,8 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         public void Run()
         {
-            App.Database.Setup();
-            App.Repository.TableNames.GetList();
-            if (!App.Repository.Users.Exists())
-            {
-                App.SetupAdmin();
-            }
+            App.ShowLogin();
+            App.ViewModels.Setup.Run();
         }
 
     }
