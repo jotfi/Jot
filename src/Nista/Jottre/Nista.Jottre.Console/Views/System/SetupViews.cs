@@ -9,7 +9,7 @@ namespace Nista.Jottre.Console.Views.System
 {
     public class SetupViews : BaseView, ISetupViews
     {
-        public SetupViews(ConsoleViewController win) : base(win, "Jottre - Setup")
+        public SetupViews(ConsoleApplication app) : base(app)
         {
 
         }

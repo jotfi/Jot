@@ -1,4 +1,4 @@
-﻿using Nista.Jottre.Base.Log;
+﻿using Nista.Jottre.Base.System;
 using Nista.Jottre.Core;
 using Nista.Jottre.Core.Views.Base;
 using System;
@@ -7,16 +7,23 @@ using System.Text;
 
 namespace Nista.Jottre.Console.Views.Base
 {
-    public abstract class BaseView : Logging, IBaseView
+    public abstract class BaseView : Logger, IBaseView
     {
-        protected readonly ConsoleApplication App;
-        protected readonly Terminal.Gui.Window Window;
+        protected readonly ConsoleApplication Application;
         
-        public BaseView(ConsoleViewController win, string title,
-            bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
+        public BaseView(ConsoleApplication app, LogOpts opts = null) : base(opts)
         {
-            App = win.App;
-            Window = new Terminal.Gui.Window(title)
+            Application = app;
+        }
+
+        protected virtual void AddToTop(Terminal.Gui.View view)
+        {
+            Application.Top.Add(view);
+        }
+
+        protected virtual Terminal.Gui.Window GetWindow(string title = "")
+        {
+            return new Terminal.Gui.Window(title)
             {
                 X = 0,
                 Y = 1,
@@ -25,9 +32,17 @@ namespace Nista.Jottre.Console.Views.Base
             };
         }
 
+        protected virtual void Quit()
+        {
+            if (Application.Quit())
+            {
+                Application.Top.Running = false;
+            }
+        }
+
         public Application GetApp()
         {
-            return App;
+            return Application;
         }
 
     }

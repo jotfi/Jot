@@ -1,11 +1,13 @@
-﻿using Nista.Jottre.Base.Log;
+﻿using Nista.Jottre.Base.System;
+using Nista.Jottre.Core.ViewModels;
+using Nista.Jottre.Core.Views;
 using Nista.Jottre.Data;
 using Nista.Jottre.Database;
 using System;
 
 namespace Nista.Jottre.Core
 {
-    public class Application : Logging
+    public class Application : Logger
     {
         public readonly DatabaseController Database;
         public readonly RepositoryController Repository;
@@ -13,23 +15,19 @@ namespace Nista.Jottre.Core
         public ViewController Views { get; protected set; }
         public bool IsInit { get; private set; } = false;
 
-        public Application(bool isConsole) : base(isConsole)
+        public Application(bool isConsole) : base()
         {
             try
             {
-                Database = new DatabaseController(isConsole, MessageBox);
-                Repository = new RepositoryController(Database, isConsole, MessageBox);
+                Opts = new LogOpts(isConsole, MessageBox);
+                Database = new DatabaseController(Opts);
+                Repository = new RepositoryController(Database, Opts);
                 ViewModels = new ViewModelController(this);                
             }
             catch (Exception ex)
             {
                 Log(ex);
             }
-        }
-
-        public override void InitLog()
-        {
-            Logger = new Logger(this, IsConsole, MessageBox);
         }
 
         public virtual void MessageBox(string message)

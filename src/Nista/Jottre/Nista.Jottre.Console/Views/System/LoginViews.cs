@@ -9,20 +9,21 @@ namespace Nista.Jottre.Console.Views.System
 {
     public class LoginViews : BaseView, ILoginViews
     {
-        public LoginViews(ConsoleViewController win) : base(win, "Jottre Login")
+        public LoginViews(ConsoleApplication app) : base(app)
         {
             
         }
 
         public void ShowLogin()
         {
-            App.Top.Add(Window);
+            var window = GetWindow("Jottre Login");
+            AddToTop(window);
             var menu = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
-                    new MenuItem ("_Quit", "", () => { if (App.Quit()) App.Top.Running = false; })
+                    new MenuItem ("_Quit", "", () => Quit())
                 })
             });
-            App.Top.Add(menu);
+            AddToTop(menu);
 
             var login = new Label("Login: ") { X = 3, Y = 2 };
             var password = new Label("Password: ")
@@ -45,7 +46,7 @@ namespace Nista.Jottre.Console.Views.System
             };
 
             // Add some controls, 
-            Window.Add(
+            window.Add(
                 // The ones with my favorite layout system
                 login, password, loginText, passText,
                         new Button(3, 14, "Ok", true)
@@ -55,7 +56,7 @@ namespace Nista.Jottre.Console.Views.System
                             MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
                         }
                         },
-                        new Button(13, 14, "Quit") { Clicked = () => { if (App.Quit()) App.Top.Running = false; } },
+                        new Button(13, 14, "Quit") { Clicked = () => Quit() },
                         new Label(3, 18, "Press F9 or ESC plus 9 to activate the menubar"));            
         }
     }

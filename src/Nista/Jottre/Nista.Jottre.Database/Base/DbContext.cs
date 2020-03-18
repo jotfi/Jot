@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using Nista.Jottre.Base.Log;
+using Nista.Jottre.Base.System;
 using Npgsql;
 using System;
 using System.Data;
@@ -9,7 +9,7 @@ using System.Data.SQLite;
 
 namespace Nista.Jottre.Database.Base
 {
-    public class DbContext : Logging, IDbContext
+    public class DbContext : Logger, IDbContext
     {
         private readonly DatabaseController Db;
         private readonly DbConnection DbConnection;
@@ -17,7 +17,7 @@ namespace Nista.Jottre.Database.Base
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
-        public DbContext(DatabaseController db, bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
+        public DbContext(DatabaseController db, LogOpts opts = null) : base(opts)
         {
             try
             {

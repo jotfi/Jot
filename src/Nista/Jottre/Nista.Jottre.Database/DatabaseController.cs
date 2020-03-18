@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Nista.Jottre.Base;
-using Nista.Jottre.Base.Log;
+using Nista.Jottre.Base.System;
 using Nista.Jottre.Database.Base;
 using Nista.Jottre.Model;
 using Nista.Jottre.Model.Base;
@@ -15,17 +15,17 @@ namespace Nista.Jottre.Database
 {
     //TODO: potentially abstract Database to not include Dapper, could use MongoDB in future, etc.
     
-    public class DatabaseController : Logging
+    public class DatabaseController : Logger
     {
         public DapperExt.Dialects Dialect;
         public readonly IDbContext Context;
         public readonly List<ITransaction> Models;
 
-        public DatabaseController(bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
+        public DatabaseController(LogOpts opts = null) : base(opts)
         {
             //Todo: get from settings
             Dialect = DapperExt.Dialects.SQLite;
-            Context = new DbContext(this, isConsole, showLog);
+            Context = new DbContext(this, opts);
             Models = new List<ITransaction>()
             {
                 new User(),

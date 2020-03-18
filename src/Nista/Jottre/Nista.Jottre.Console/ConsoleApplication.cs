@@ -1,4 +1,5 @@
-﻿
+﻿using Nista.Jottre.Console.Views;
+
 namespace Nista.Jottre.Console
 {
     public class ConsoleApplication : Core.Application

@@ -1,10 +1,7 @@
 ﻿using Nista.Jottre.Console.Views.System;
-using Nista.Jottre.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Nista.Jottre.Core.Views;
 
-namespace Nista.Jottre.Console
+namespace Nista.Jottre.Console.Views
 {
     public class ConsoleViewController : ViewController
     {
@@ -13,8 +10,8 @@ namespace Nista.Jottre.Console
         public ConsoleViewController(ConsoleApplication app)
         {
             App = app;
-            Login = new LoginViews(this);
-            Setup = new SetupViews(this);
+            Login = new LoginViews(app);
+            Setup = new SetupViews(app);
             Init();
         }
     }

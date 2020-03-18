@@ -1,4 +1,4 @@
-﻿using Nista.Jottre.Base.Log;
+﻿using Nista.Jottre.Base.System;
 using Nista.Jottre.Database.Base;
 using Nista.Jottre.Model.Base;
 using System;
@@ -7,12 +7,11 @@ using System.Linq;
 
 namespace Nista.Jottre.Data.Base
 {
-    public abstract class BaseRepository<T> : Logging where T : Transaction
+    public abstract class BaseRepository<T> : Logger where T : Transaction
     {
         protected readonly RepositoryController Data;
 
-        public BaseRepository(RepositoryController data, 
-            bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
+        public BaseRepository(RepositoryController data, LogOpts opts = null) : base(opts)
         {
             Data = data;
         }

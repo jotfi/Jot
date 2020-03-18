@@ -1,18 +1,12 @@
-﻿using Dapper;
+﻿using Nista.Jottre.Base.System;
 using Nista.Jottre.Data.Base;
-using Nista.Jottre.Database.Base;
 using Nista.Jottre.Model.System;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Nista.Jottre.Data.System
 {
     public class UserRepository : BaseRepository<User>
     {
-        public UserRepository(RepositoryController data,
-            bool isConsole = true, Action<string> showLog = null) : base(data, isConsole, showLog)
+        public UserRepository(RepositoryController data, LogOpts opts = null) : base(data, opts)
         {
 
         }
