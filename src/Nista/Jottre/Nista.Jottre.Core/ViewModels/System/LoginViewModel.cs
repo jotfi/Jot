@@ -1,4 +1,5 @@
-﻿using Nista.Jottre.Core.ViewModels.Base;
+﻿using Nista.Jottre.Base.System;
+using Nista.Jottre.Core.ViewModels.Base;
 using Nista.Jottre.Model.System;
 using System;
 using System.Collections.Generic;
@@ -8,15 +9,15 @@ namespace Nista.Jottre.Core.ViewModels.System
 {
     public class LoginViewModel : BaseViewModel
     {
-        public LoginViewModel(ViewModelController viewmodels) : base(viewmodels)
+        public LoginViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
 
         public void Run()
         {
-            App.Views.Login.ShowLogin();
-            App.ViewModels.Setup.Run();
+            Application.Views.Login.ShowLogin();
+            Application.ViewModels.Setup.Run();
         }
 
     }

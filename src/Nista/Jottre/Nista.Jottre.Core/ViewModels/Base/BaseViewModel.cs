@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nista.Jottre.Base.System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -6,15 +7,13 @@ using System.Text;
 
 namespace Nista.Jottre.Core.ViewModels.Base
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : Logger, INotifyPropertyChanged
     {
-        protected readonly ViewModelController ViewModels;
-        protected readonly Application App;
+        protected readonly Application Application;
 
-        public BaseViewModel(ViewModelController viewmodels)
+        public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
         {
-            ViewModels = viewmodels;
-            App = viewmodels.App;
+            Application = app;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

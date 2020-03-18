@@ -1,4 +1,5 @@
-﻿using Nista.Jottre.Core.ViewModels.Base;
+﻿using Nista.Jottre.Base.System;
+using Nista.Jottre.Core.ViewModels.Base;
 using Nista.Jottre.Model.System;
 using System;
 using System.Collections.Generic;
@@ -9,24 +10,24 @@ namespace Nista.Jottre.Core.ViewModels.System
 {
     public class SetupViewModel : BaseViewModel
     {
-        public SetupViewModel(ViewModelController viewmodels) : base(viewmodels)
+        public SetupViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
 
         public void Run()
         {
-            App.Database.Setup(GetTableNames());
-            if (!App.Repository.System.Users.Exists())
+            Application.Database.Setup(GetTableNames());
+            if (!Application.Repository.System.Users.Exists())
             {
-                //App.Views.Setup.SetupAdmin();
+                //Application.Views.Setup.SetupAdmin();
             }
         }
 
         public List<TableName> GetTableNames(object whereConditions = null)
         {
             whereConditions ??= new { Type = "table" };
-            return App.Repository.System.TableNames.GetList(whereConditions).ToList();
+            return Application.Repository.System.TableNames.GetList(whereConditions).ToList();
         }
     }
 }

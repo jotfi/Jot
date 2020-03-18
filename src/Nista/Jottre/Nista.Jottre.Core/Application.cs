@@ -22,7 +22,7 @@ namespace Nista.Jottre.Core
                 Opts = new LogOpts(isConsole, MessageBox);
                 Database = new DatabaseController(Opts);
                 Repository = new RepositoryController(Database, Opts);
-                ViewModels = new ViewModelController(this);                
+                ViewModels = new ViewModelController(this, Opts);                
             }
             catch (Exception ex)
             {
