@@ -19,7 +19,7 @@ namespace Nista.Jottre.Core
         {
             try
             {
-                Opts = new LogOpts(isConsole, MessageBox);
+                Opts = new LogOpts(isConsole, ShowError);
                 Database = new DatabaseController(Opts);
                 Repository = new RepositoryController(Database, Opts);
                 ViewModels = new ViewModelController(this, Opts);                
@@ -30,7 +30,7 @@ namespace Nista.Jottre.Core
             }
         }
 
-        public virtual void MessageBox(string message)
+        public virtual void ShowError(string message)
         {
 
         }
@@ -62,7 +62,7 @@ namespace Nista.Jottre.Core
                 {
                     throw new NotImplementedException();
                 }
-                ViewModels.Login.Run();
+                ViewModels.Start.Run();
             }
             catch (Exception ex)
             {

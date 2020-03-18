@@ -9,22 +9,22 @@ namespace Nista.Jottre.Core.Views
 {
     public abstract class ViewController : Logger
     {
-        public readonly Application Application;
+        public readonly Application Jottre;
         public List<IBaseView> Items { get; private set; }
+        public IStartViews Start { get; protected set; }
         public ILoginViews Login { get; protected set; }
-        public ISetupViews Setup { get; protected set; }
 
-        public ViewController(Application app, LogOpts opts = null) : base(opts)
+        public ViewController(Application jottre, LogOpts opts = null) : base(opts)
         {
-            Application = app;
+            Jottre = jottre;
         }
 
         public void Init()
         {
             Items = new List<IBaseView>()
             {
-                Login,
-                Setup
+                Start,
+                Login
             };
         }
     }

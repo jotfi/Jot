@@ -2,8 +2,9 @@
 
 namespace Nista.Jottre.Core.Views.System
 {
-    public interface ISetupViews : IBaseView
+    public interface IStartViews : IBaseView
     {
+        void ApplicationStart();
         void SetupAdmin();
     }
 }

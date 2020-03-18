@@ -9,15 +9,14 @@ namespace Nista.Jottre.Core.ViewModels.System
 {
     public class LoginViewModel : BaseViewModel
     {
-        public LoginViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public LoginViewModel(Application jottre, LogOpts opts = null) : base(jottre, opts)
         {
 
         }
 
         public void Run()
         {
-            Application.Views.Login.ShowLogin();
-            Application.ViewModels.Setup.Run();
+            Jottre.Views.Login.ShowLogin();
         }
 
     }

@@ -8,15 +8,15 @@ namespace Nista.Jottre.Core.ViewModels
 {
     public class ViewModelController : Logger
     {
-        public readonly Application App;
+        public readonly Application Jottre;
         public readonly LoginViewModel Login;
-        public readonly SetupViewModel Setup;
+        public readonly StartViewModel Start;
 
-        public ViewModelController(Application app, LogOpts opts = null) : base(opts)
+        public ViewModelController(Application jottre, LogOpts opts = null) : base(opts)
         {
-            App = app;
-            Login = new LoginViewModel(app);
-            Setup = new SetupViewModel(app);
+            Jottre = jottre;
+            Login = new LoginViewModel(jottre);
+            Start = new StartViewModel(jottre);
         }
     }
 }

@@ -8,11 +8,16 @@ using Terminal.Gui;
 
 namespace Nista.Jottre.Console.Views.System
 {
-    public class SetupViews : BaseView, ISetupViews
+    public class StartViews : BaseView, IStartViews
     {
-        public SetupViews(ConsoleApplication app, LogOpts opts = null) : base(app, opts)
+        public StartViews(ConsoleApplication jottre, LogOpts opts = null) : base(jottre, opts)
         {
 
+        }
+
+        public void ApplicationStart()
+        {
+            Application.Run();
         }
 
         public void SetupAdmin()

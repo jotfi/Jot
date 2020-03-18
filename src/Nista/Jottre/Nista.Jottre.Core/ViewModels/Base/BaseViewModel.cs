@@ -9,11 +9,11 @@ namespace Nista.Jottre.Core.ViewModels.Base
 {
     public class BaseViewModel : Logger, INotifyPropertyChanged
     {
-        protected readonly Application Application;
+        protected readonly Application Jottre;
 
-        public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
+        public BaseViewModel(Application jottre, LogOpts opts = null) : base(opts)
         {
-            Application = app;
+            Jottre = jottre;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

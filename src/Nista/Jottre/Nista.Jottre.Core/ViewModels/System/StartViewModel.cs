@@ -8,26 +8,28 @@ using System.Text;
 
 namespace Nista.Jottre.Core.ViewModels.System
 {
-    public class SetupViewModel : BaseViewModel
+    public class StartViewModel : BaseViewModel
     {
-        public SetupViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public StartViewModel(Application jottre, LogOpts opts = null) : base(jottre, opts)
         {
 
         }
 
         public void Run()
         {
-            Application.Database.Setup(GetTableNames());
-            if (!Application.Repository.System.Users.Exists())
+            Jottre.Database.Setup(GetTableNames());
+            if (!Jottre.Repository.System.Users.Exists())
             {
                 //Application.Views.Setup.SetupAdmin();
             }
+            Jottre.ViewModels.Login.Run();
+            Jottre.Views.Start.ApplicationStart();
         }
 
         public List<TableName> GetTableNames(object whereConditions = null)
         {
             whereConditions ??= new { Type = "table" };
-            return Application.Repository.System.TableNames.GetList(whereConditions).ToList();
+            return Jottre.Repository.System.TableNames.GetList(whereConditions).ToList();
         }
     }
 }

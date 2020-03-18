@@ -1,19 +1,19 @@
 ﻿using Nista.Jottre.Base.System;
-using Nista.Jottre.Core;
 using Nista.Jottre.Core.Views.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Terminal.Gui;
 
 namespace Nista.Jottre.Console.Views.Base
 {
     public abstract class BaseView : Logger, IBaseView
     {
-        protected readonly ConsoleApplication Application;
-        
-        public BaseView(ConsoleApplication app, LogOpts opts = null) : base(opts)
+        protected readonly ConsoleApplication Jottre;
+
+        public BaseView(ConsoleApplication jottre, LogOpts opts = null) : base(opts)
         {
-            Application = app;
+            Jottre = jottre;
         }
 
         protected virtual void AddToTop(Terminal.Gui.View view)
@@ -21,28 +21,18 @@ namespace Nista.Jottre.Console.Views.Base
             Application.Top.Add(view);
         }
 
-        protected virtual Terminal.Gui.Window GetWindow(string title = "")
-        {
-            return new Terminal.Gui.Window(title)
-            {
-                X = 0,
-                Y = 1,
-                Width = Terminal.Gui.Dim.Fill(),
-                Height = Terminal.Gui.Dim.Fill()
-            };
-        }
 
         protected virtual void Quit()
         {
-            if (Application.Quit())
+            if (Jottre.Quit())
             {
                 Application.Top.Running = false;
             }
         }
 
-        public Application GetApp()
+        public Core.Application GetApp()
         {
-            return Application;
+            return Jottre;
         }
 
     }
