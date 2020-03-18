@@ -9,7 +9,7 @@ namespace Nista.Jottre.Console.Views.System
 {
     public class LoginViews : BaseView, ILoginViews
     {
-        public LoginViews(WindowController win) : base(win, "Jottre Login")
+        public LoginViews(ConsoleViewController win) : base(win, "Jottre Login")
         {
             
         }

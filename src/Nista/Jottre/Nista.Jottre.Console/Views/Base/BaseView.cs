@@ -9,10 +9,10 @@ namespace Nista.Jottre.Console.Views.Base
 {
     public abstract class BaseView : Logging, IBaseView
     {
-        protected readonly GuiApplication App;
+        protected readonly ConsoleApplication App;
         protected readonly Terminal.Gui.Window Window;
         
-        public BaseView(WindowController win, string title,
+        public BaseView(ConsoleViewController win, string title,
             bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
         {
             App = win.App;

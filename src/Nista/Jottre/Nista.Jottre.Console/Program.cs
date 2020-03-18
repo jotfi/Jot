@@ -5,7 +5,7 @@ namespace Nista.Jottre.Console
 	{
 		static void Main(string[] args)
 		{
-			var app = new GuiApplication();
+			var app = new ConsoleApplication();
 			app.Run();
 		}
 	}

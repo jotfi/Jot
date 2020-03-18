@@ -6,11 +6,11 @@ using System.Text;
 
 namespace Nista.Jottre.Console
 {
-    public class WindowController : ViewController
+    public class ConsoleViewController : ViewController
     {
-        public readonly GuiApplication App;
+        public readonly ConsoleApplication App;
 
-        public WindowController(GuiApplication app)
+        public ConsoleViewController(ConsoleApplication app)
         {
             App = app;
             Login = new LoginViews(this);

@@ -1,16 +1,16 @@
 ﻿
 namespace Nista.Jottre.Console
 {
-    public class GuiApplication : Core.Application
+    public class ConsoleApplication : Core.Application
     {
         public readonly Terminal.Gui.Toplevel Top;
-        public readonly WindowController Win;
+        public readonly ConsoleViewController Win;
 
-        public GuiApplication() : base(true)
+        public ConsoleApplication() : base(true)
         {
             Terminal.Gui.Application.Init();
             Top = Terminal.Gui.Application.Top;
-            Win = new WindowController(this);
+            Win = new ConsoleViewController(this);
             Init(Win);
         }
 
