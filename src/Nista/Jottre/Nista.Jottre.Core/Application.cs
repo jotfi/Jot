@@ -1,31 +1,25 @@
-﻿using Nista.Jottre.Base;
-using Nista.Jottre.Core.ViewModels.Base;
+﻿using Nista.Jottre.Base.Log;
 using Nista.Jottre.Data;
 using Nista.Jottre.Database;
-using Nista.Jottre.Database.Base;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Nista.Jottre.Core
 {
-    public class Application : Logger
+    public class Application : Logging
     {
-        public readonly DbContext Context;
-        public readonly DatabaseController Database;
-        public readonly RepositoryController Repository;
-        public readonly ViewModelController ViewModels;
-        public ViewController Views { get; protected set; }
+        public DatabaseController Database { get; private set; }
+        public RepositoryController Repository { get; private set; }
+        public ViewModelController ViewModels { get; private set; }
+        public ViewController Views { get; private set; }
         public bool IsInit { get; private set; } = false;
 
         public Application(bool isConsole) : base(isConsole)
         {
             try
             {
-                Context = new DbContext(DapperExt.Dialects.SQLite);
-                Database = new DatabaseController(Context);
-                Repository = new RepositoryController(Context);
-                ViewModels = new ViewModelController(this);
+                Database = new DatabaseController(isConsole, MessageBox);
+                Repository = new RepositoryController(Database, isConsole, MessageBox);
+                ViewModels = new ViewModelController(this);                
             }
             catch (Exception ex)
             {
@@ -33,10 +27,27 @@ namespace Nista.Jottre.Core
             }
         }
 
+        public override void InitLog()
+        {
+            Logger = new Logger(this, IsConsole, MessageBox);
+        }
+
+        public virtual void MessageBox(string message)
+        {
+
+        }
+
         public void Init(ViewController views)
         {
             try
             {
+                foreach (var view in views.Items)
+                {
+                    if (view == null)
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
                 Views = views;
                 IsInit = true;
             }
@@ -66,5 +77,6 @@ namespace Nista.Jottre.Core
         {
             return true;
         }
+
     }
 }

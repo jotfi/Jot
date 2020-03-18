@@ -17,7 +17,7 @@ namespace Nista.Jottre.Core.ViewModels.System
         public void Run()
         {
             App.Database.Setup(GetTableNames());
-            if (!App.Repository.Users.Exists())
+            if (!App.Repository.System.Users.Exists())
             {
                 //App.Views.Setup.SetupAdmin();
             }
@@ -26,7 +26,7 @@ namespace Nista.Jottre.Core.ViewModels.System
         public List<TableName> GetTableNames(object whereConditions = null)
         {
             whereConditions ??= new { Type = "table" };
-            return App.Repository.TableNames.GetList(whereConditions).ToList();
+            return App.Repository.System.TableNames.GetList(whereConditions).ToList();
         }
     }
 }

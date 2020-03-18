@@ -1,8 +1,4 @@
-﻿using Mono.Terminal;
-using Nista.Jottre.Console.Views.System;
-using System;
-using System.Collections.Generic;
-
+﻿
 namespace Nista.Jottre.Console
 {
 	public class Program

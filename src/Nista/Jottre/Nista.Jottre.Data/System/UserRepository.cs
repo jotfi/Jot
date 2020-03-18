@@ -11,7 +11,8 @@ namespace Nista.Jottre.Data.System
 {
     public class UserRepository : BaseRepository<User>
     {
-        public UserRepository(IDbContext context) : base(context)
+        public UserRepository(RepositoryController data,
+            bool isConsole = true, Action<string> showLog = null) : base(data, isConsole, showLog)
         {
 
         }

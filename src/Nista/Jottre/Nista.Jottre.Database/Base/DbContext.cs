@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using Nista.Jottre.Base;
+using Nista.Jottre.Base.Log;
 using Npgsql;
 using System;
 using System.Data;
@@ -9,25 +9,25 @@ using System.Data.SQLite;
 
 namespace Nista.Jottre.Database.Base
 {
-    public class DbContext : Logger, IDbContext
+    public class DbContext : Logging, IDbContext
     {
+        private readonly DatabaseController Db;
         private readonly DbConnection DbConnection;
-        private readonly DapperExt.Dialects DbType;
         private UnitOfWork UnitOfWork;        
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
-        public DbContext(DapperExt.Dialects dbType)
+        public DbContext(DatabaseController db, bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
         {
             try
             {
-                DbType = dbType;
-                if (DbType == DapperExt.Dialects.PostgreSQL)
+                Db = db;
+                if (Db.Dialect == DapperExt.Dialects.PostgreSQL)
                 {
                     DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JottreDb"));
                     DapperExt.SetDialect(DapperExt.Dialects.PostgreSQL);
                 }
-                else if (DbType == DapperExt.Dialects.SQLite)
+                else if (Db.Dialect == DapperExt.Dialects.SQLite)
                 {
                     var builder = new SQLiteConnectionStringBuilder
                     {
@@ -36,7 +36,7 @@ namespace Nista.Jottre.Database.Base
                     DbConnection = new SQLiteConnection(builder.ConnectionString);                    
                     DapperExt.SetDialect(DapperExt.Dialects.SQLite);
                 }
-                else if (DbType == DapperExt.Dialects.MySQL)
+                else if (Db.Dialect == DapperExt.Dialects.MySQL)
                 {
                     DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JottreDb"));
                     DapperExt.SetDialect(DapperExt.Dialects.MySQL);

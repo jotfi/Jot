@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Nista.Jottre.Core.Views.Base;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Nista.Jottre.Core.Views.System
 {
-    public interface ISetupViews
+    public interface ISetupViews : IBaseView
     {
         void SetupAdmin();
     }

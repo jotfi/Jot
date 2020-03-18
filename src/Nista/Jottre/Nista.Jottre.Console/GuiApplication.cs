@@ -1,9 +1,4 @@
-﻿using Nista.Jottre.Console.Views.Base;
-using Nista.Jottre.Console.Views.System;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Nista.Jottre.Console
 {
     public class GuiApplication : Core.Application
@@ -30,6 +25,12 @@ namespace Nista.Jottre.Console
             base.Quit();
             var n = Terminal.Gui.MessageBox.Query(50, 7, "Quit Demo", "Are you sure you want to quit this demo?", "Yes", "No");
             return n == 0;
+        }
+
+        public override void MessageBox(string message)
+        {
+            base.MessageBox(message);
+            Terminal.Gui.MessageBox.ErrorQuery(50, 7, "Jottre Error", message);
         }
     }
 }

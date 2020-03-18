@@ -1,20 +1,20 @@
-﻿using Nista.Jottre.Base;
+﻿using Nista.Jottre.Base.Log;
 using Nista.Jottre.Database.Base;
 using Nista.Jottre.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Nista.Jottre.Data.Base
 {
-    public abstract class BaseRepository<T> : Logger where T : Transaction
+    public abstract class BaseRepository<T> : Logging where T : Transaction
     {
-        protected readonly IDbContext Context;
+        protected readonly RepositoryController Data;
 
-        public BaseRepository(IDbContext context)
+        public BaseRepository(RepositoryController data, 
+            bool isConsole = true, Action<string> showLog = null) : base(isConsole, showLog)
         {
-            Context = context;
+            Data = data;
         }
 
         //Todo: support async methods
@@ -33,9 +33,9 @@ namespace Nista.Jottre.Data.Base
         {
             try
             {
-                using (Context.Create())
+                using (Data.Db.Context.Create())
                 {
-                    return Context.GetConnection().GetList<T>(whereConditions);
+                    return Data.Db.Context.GetConnection().GetList<T>(whereConditions);
                 }
             }
             catch (Exception ex)
@@ -49,9 +49,9 @@ namespace Nista.Jottre.Data.Base
         {
             try
             {
-                using (Context.Create())
+                using (Data.Db.Context.Create())
                 {
-                    return Context.GetConnection().Get<T>(id);
+                    return Data.Db.Context.GetConnection().Get<T>(id);
                 }
             }
             catch (Exception ex)

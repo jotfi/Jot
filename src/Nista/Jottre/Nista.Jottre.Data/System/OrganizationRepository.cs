@@ -11,7 +11,8 @@ namespace Nista.Jottre.Data.System
 {
     public class OrganizationRepository : BaseRepository<Organization>
     {
-        public OrganizationRepository(IDbContext context) : base(context)
+        public OrganizationRepository(RepositoryController data,
+            bool isConsole = true, Action<string> showLog = null) : base(data, isConsole, showLog)
         {
 
         }

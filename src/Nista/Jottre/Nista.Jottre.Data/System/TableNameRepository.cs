@@ -9,7 +9,8 @@ namespace Nista.Jottre.Data.System
 {
     public class TableNameRepository : BaseRepository<TableName>
     {
-        public TableNameRepository(IDbContext context) : base(context)
+        public TableNameRepository(RepositoryController data,
+            bool isConsole = true, Action<string> showLog = null) : base(data, isConsole, showLog)
         {
 
         }
