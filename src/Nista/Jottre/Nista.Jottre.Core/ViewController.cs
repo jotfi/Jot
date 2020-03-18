@@ -8,11 +8,11 @@ namespace Nista.Jottre.Core
 {
     public abstract class ViewController
     {
-        public readonly List<IBaseView> Items;
+        public List<IBaseView> Items { get; private set; }
         public ILoginViews Login { get; protected set; }
         public ISetupViews Setup { get; protected set; }
 
-        public ViewController()
+        public void Init()
         {
             Items = new List<IBaseView>()
             {

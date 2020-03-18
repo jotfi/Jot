@@ -18,7 +18,7 @@ namespace Nista.Jottre.Model.Base
 
         public virtual string TableName()
         {
-            return GetType().ToString();
+            return GetType().Name;
         }
 
         public abstract string CreateTable();

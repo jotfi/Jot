@@ -7,10 +7,10 @@ namespace Nista.Jottre.Core
 {
     public class Application : Logging
     {
-        public DatabaseController Database { get; private set; }
-        public RepositoryController Repository { get; private set; }
-        public ViewModelController ViewModels { get; private set; }
-        public ViewController Views { get; private set; }
+        public readonly DatabaseController Database;
+        public readonly RepositoryController Repository;
+        public readonly ViewModelController ViewModels;
+        public ViewController Views { get; protected set; }
         public bool IsInit { get; private set; } = false;
 
         public Application(bool isConsole) : base(isConsole)
@@ -37,18 +37,17 @@ namespace Nista.Jottre.Core
 
         }
 
-        public void Init(ViewController views)
+        public void Init()
         {
             try
             {
-                foreach (var view in views.Items)
+                foreach (var view in Views.Items)
                 {
                     if (view == null)
                     {
                         throw new NotImplementedException();
                     }
                 }
-                Views = views;
                 IsInit = true;
             }
             catch (Exception ex)

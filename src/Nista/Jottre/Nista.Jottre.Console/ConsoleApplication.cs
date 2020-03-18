@@ -4,14 +4,13 @@ namespace Nista.Jottre.Console
     public class ConsoleApplication : Core.Application
     {
         public readonly Terminal.Gui.Toplevel Top;
-        public readonly ConsoleViewController Win;
 
         public ConsoleApplication() : base(true)
         {
             Terminal.Gui.Application.Init();
             Top = Terminal.Gui.Application.Top;
-            Win = new ConsoleViewController(this);
-            Init(Win);
+            Views = new ConsoleViewController(this);
+            Init();
         }
 
         public override void Run()

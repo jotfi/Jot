@@ -15,6 +15,7 @@ namespace Nista.Jottre.Console
             App = app;
             Login = new LoginViews(this);
             Setup = new SetupViews(this);
+            Init();
         }
     }
 }
