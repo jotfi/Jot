@@ -12,7 +12,11 @@ namespace Nista.Jottre.Model.System
 
         public override string CreateTable()
         {
-            return $@"create table {TableName()}({TransactionFields()}, {EntityFields()}, Name text not null);";
+            return $@"
+create table {TableName()}(
+{TransactionFields()}, 
+{EntityFields()}, 
+Name text not null);";
         }
     }
 }

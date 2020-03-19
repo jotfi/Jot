@@ -18,12 +18,29 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         public void Run()
         {
-            GetDatabase().Setup(GetTableNames());
-            if (!GetRepository().System.Users.Exists())
+            if (!GetDatabase().CheckTables(GetTableNames()))
             {
-                //Application.Views.Setup.SetupAdmin();
+                return;
             }
-            GetViewModels().Login.ShowLogin();
+            if (!CheckAdministrator())
+            {
+                return;
+            }
+            if (!CheckOrganization())
+            {
+                return;
+            }
+            while (!GetApp().IsLoggedIn())
+            {
+                if (!GetViewModels().Login.PerformLogin())
+                {
+                    break;
+                }
+            }            
+            if (!GetApp().IsLoggedIn())
+            {
+                return;
+            }
             GetViews().Start.ApplicationStart();
         }
 
@@ -31,6 +48,37 @@ namespace Nista.Jottre.Core.ViewModels.System
         {
             whereConditions ??= new { Type = "table" };
             return GetRepository().System.TableNames.GetList(whereConditions).ToList();
+        }
+
+        bool CheckAdministrator()
+        {
+            if (GetRepository().System.Users.Exists())
+            {
+                return true;
+            }
+            return GetViews().Start.SetupAdministrator();
+        }
+
+        public bool SaveAdministrator()
+        {
+            return false;
+        }
+
+        bool CheckOrganization()
+        {
+            if (GetRepository().System.Organizations.Exists())
+            {
+                return true;
+            }
+            return GetViews().Start.SetupOrganization();
+        }
+
+        public string CreateAdministratorText()
+        {
+            return @"
+Setting up Jottre for the first time.
+To get started, an Administrator account with full access will be created.
+This account should only be used for system administration.";
         }
     }
 }

@@ -21,10 +21,12 @@ namespace Nista.Jottre.Core.ViewModels.System
             return (ILoginViews)GetView();
         }
 
-        public void ShowLogin()
+        public bool PerformLogin()
         {
-            GetLoginView().ShowLogin();
+            return GetLoginView().PerformLogin();
         }
+
+        
 
     }
 }

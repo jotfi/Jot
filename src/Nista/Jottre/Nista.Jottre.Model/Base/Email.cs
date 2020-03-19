@@ -1,20 +1,21 @@
-﻿using Nista.Jottre.Model.Base;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Nista.Jottre.Model.Base
 {
-    public class Email : Transaction
+    public class Email : EntityData
     {
-        public Entity Entity { get; set; }
         public string EmailAddress { get; set; }
-
-        public Email(Entity entity, string emailAddress) => (Entity, EmailAddress) = (entity, emailAddress);
 
         public override string CreateTable()
         {
-            throw new NotImplementedException();
+            return $@"
+create table {TableName()}(
+{TransactionFields()},
+{EntityDataFields()},
+EmailAddress text not null);"; 
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Nista.Jottre.Database
             };
         }
 
-        public void Setup(List<TableName> tableNames)
+        public bool CheckTables(List<TableName> tableNames)
         {
             using var uow = Context.Create();
             foreach (var table in Models)
@@ -49,9 +49,11 @@ namespace Nista.Jottre.Database
                 catch (Exception ex)
                 {
                     Log(ex, table.CreateTable());
+                    return false;
                 }
             }
             uow.CommitAsync().Wait();
+            return true;
         }
     }
 }

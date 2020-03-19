@@ -7,6 +7,7 @@ namespace Nista.Jottre.Core.Views.System
     {
         StartViewModel GetStartViewModel();
         void ApplicationStart();
-        void SetupAdmin();
+        bool SetupAdministrator();
+        bool SetupOrganization();
     }
 }

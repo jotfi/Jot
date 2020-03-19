@@ -69,5 +69,10 @@ namespace Nista.Jottre.Core
             return true;
         }
 
+        public virtual bool IsLoggedIn()
+        {
+            return false;
+        }
+
     }
 }

@@ -6,6 +6,8 @@ namespace Nista.Jottre.Core.Views.System
     public interface ILoginViews : IBaseView
     {
         LoginViewModel GetLoginViewModel();
-        void ShowLogin();
+        bool PerformLogin();
+        void AddMainMenu();
+
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 
 namespace Nista.Jottre.Model.Base
 {
@@ -8,12 +7,18 @@ namespace Nista.Jottre.Model.Base
     {
         public long Id { get; set; }
         public string Hash { get; set; }
+
+        [ReadOnly(true)]
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public static string TransactionFields()
         {
-            return @"Id integer primary key autoincrement, Hash varchar(64) not null, CreatedDate datetime default current_timestamp, ModifiedDate datetime";
+            return @"
+Id integer primary key autoincrement, 
+Hash varchar(64) not null, 
+CreatedDate datetime default current_timestamp, 
+ModifiedDate datetime";
         }
 
         public virtual string TableName()

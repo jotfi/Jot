@@ -24,7 +24,7 @@ namespace Nista.Jottre.Console.Views.System
             return (LoginViewModel)GetViewModel();
         }
 
-        public void ShowLogin()
+        public void PerformLogin()
         {
             var menu = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
@@ -73,10 +73,10 @@ namespace Nista.Jottre.Console.Views.System
         {
             return new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
-                    new MenuItem ("_Quit", "", () => Quit())
+                    new MenuItem ("_Quit", "", Quit)
                 }),
                 new MenuBarItem ("_Help", new MenuItem [] {
-                    new MenuItem ("_About", "", () => Quit())
+                    new MenuItem ("_About", "", Quit)
                 })
             });
         }
@@ -86,6 +86,16 @@ namespace Nista.Jottre.Console.Views.System
             var mainMenuItems = new List<MenuBarItem>();
 
             return mainMenuItems;
+        }
+
+        public void AddMainMenu()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ILoginViews.PerformLogin()
+        {
+            throw new NotImplementedException();
         }
     }
 }
