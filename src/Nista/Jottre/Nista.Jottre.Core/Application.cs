@@ -22,7 +22,7 @@ namespace Nista.Jottre.Core
                 Opts = new LogOpts(isConsole, ShowError);
                 Database = new DatabaseController(Opts);
                 Repository = new RepositoryController(Database, Opts);
-                ViewModels = new ViewModelController(this, Opts);                
+                ViewModels = new ViewModelController(this, Opts);
             }
             catch (Exception ex)
             {
@@ -38,14 +38,8 @@ namespace Nista.Jottre.Core
         public void Init()
         {
             try
-            {
-                foreach (var view in Views.Items)
-                {
-                    if (view == null)
-                    {
-                        throw new NotImplementedException();
-                    }
-                }
+            {                
+                ViewModels.SetupViews();
                 IsInit = true;
             }
             catch (Exception ex)

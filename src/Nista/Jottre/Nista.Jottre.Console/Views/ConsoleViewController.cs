@@ -6,10 +6,10 @@ namespace Nista.Jottre.Console.Views
 {
     public class ConsoleViewController : ViewController
     {
-        public ConsoleViewController(ConsoleApplication jottre, LogOpts opts = null) : base(jottre, opts)
+        public ConsoleViewController(ConsoleApplication app, LogOpts opts = null) : base(app, opts)
         {
-            Start = new StartViews(jottre, opts);
-            Login = new LoginViews(jottre, opts);
+            Start = new StartViews(app, app.ViewModels.Start, opts);
+            Login = new LoginViews(app, app.ViewModels.Login, opts);
             Init();
         }
     }

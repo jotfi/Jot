@@ -1,4 +1,5 @@
 ﻿using Nista.Jottre.Base.System;
+using Nista.Jottre.Core.ViewModels.Base;
 using Nista.Jottre.Core.Views.Base;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,16 @@ namespace Nista.Jottre.Console.Views.Base
 {
     public abstract class BaseView : Logger, IBaseView
     {
-        protected readonly ConsoleApplication Jottre;
+        private readonly ConsoleApplication App;
+        private readonly BaseViewModel ViewModel;
 
-        public BaseView(ConsoleApplication jottre, LogOpts opts = null) : base(opts)
+        public BaseView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null) : base(opts)
         {
-            Jottre = jottre;
+            App = app;
+            ViewModel = vm;
         }
 
-        protected virtual void AddToTop(Terminal.Gui.View view)
+        protected virtual void AddToTop(View view)
         {
             Application.Top.Add(view);
         }
@@ -24,16 +27,25 @@ namespace Nista.Jottre.Console.Views.Base
 
         protected virtual void Quit()
         {
-            if (Jottre.Quit())
+            if (App.Quit())
             {
                 Application.Top.Running = false;
             }
         }
 
-        public Core.Application GetApp()
+        public ConsoleApplication GetConsoleApp()
         {
-            return Jottre;
+            return App;
         }
 
+        public Core.Application GetApp()
+        {
+            return App;
+        }
+
+        public BaseViewModel GetViewModel()
+        {
+            return ViewModel;
+        }
     }
 }

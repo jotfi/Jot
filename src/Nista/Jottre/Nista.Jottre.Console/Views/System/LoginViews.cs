@@ -1,5 +1,7 @@
 ﻿using Nista.Jottre.Base.System;
 using Nista.Jottre.Console.Views.Base;
+using Nista.Jottre.Core.ViewModels.Base;
+using Nista.Jottre.Core.ViewModels.System;
 using Nista.Jottre.Core.Views.System;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,16 @@ namespace Nista.Jottre.Console.Views.System
 {
     public class LoginViews : BaseView, ILoginViews
     {
-        public LoginViews(ConsoleApplication jottre, LogOpts opts = null) : base(jottre, opts)
+
+        public LoginViews(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
+            : base(app, vm, opts)
         {
             
+        }
+
+        public LoginViewModel GetLoginViewModel()
+        {
+            return (LoginViewModel)GetViewModel();
         }
 
         public void ShowLogin()
@@ -44,10 +53,10 @@ namespace Nista.Jottre.Console.Views.System
                 Width = Dim.Width(loginText)
             };
 
-            Jottre.AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
+            GetConsoleApp().AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
 
             // Add some controls, 
-            Jottre.AddMain(
+            GetConsoleApp().AddMain(
                 // The ones with my favorite layout system
                 login, password, loginText, passText,
                         new Button(3, 14, "Ok", true)
@@ -58,6 +67,25 @@ namespace Nista.Jottre.Console.Views.System
                         }
                         },
                         new Button(13, 14, "Quit") { Clicked = () => Quit() });            
+        }
+
+        public MenuBar GetMainMenu()
+        {
+            return new MenuBar(new MenuBarItem[] {
+                new MenuBarItem ("_File", new MenuItem [] {
+                    new MenuItem ("_Quit", "", () => Quit())
+                }),
+                new MenuBarItem ("_Help", new MenuItem [] {
+                    new MenuItem ("_About", "", () => Quit())
+                })
+            });
+        }
+
+        public List<MenuBarItem> GetMainMenuItems()
+        {
+            var mainMenuItems = new List<MenuBarItem>();
+
+            return mainMenuItems;
         }
     }
 }

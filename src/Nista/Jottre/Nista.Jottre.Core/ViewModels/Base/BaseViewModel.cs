@@ -1,4 +1,8 @@
 ﻿using Nista.Jottre.Base.System;
+using Nista.Jottre.Core.Views;
+using Nista.Jottre.Core.Views.Base;
+using Nista.Jottre.Data;
+using Nista.Jottre.Database;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,11 +13,47 @@ namespace Nista.Jottre.Core.ViewModels.Base
 {
     public class BaseViewModel : Logger, INotifyPropertyChanged
     {
-        protected readonly Application Jottre;
+        private readonly Application App;
+        private IBaseView View;
 
-        public BaseViewModel(Application jottre, LogOpts opts = null) : base(opts)
+        public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
         {
-            Jottre = jottre;
+            App = app;            
+        }
+
+        public void SetView(IBaseView view)
+        {
+            View = view;
+        }
+
+        protected Application GetApp()
+        {
+            return App;
+        }
+
+        protected DatabaseController GetDatabase()
+        {
+            return App.Database;
+        }
+
+        protected RepositoryController GetRepository()
+        {
+            return App.Repository;
+        }
+
+        protected ViewModelController GetViewModels()
+        {
+            return App.ViewModels;
+        }
+
+        protected ViewController GetViews()
+        {
+            return App.Views;
+        }
+
+        protected IBaseView GetView()
+        {
+            return View;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
