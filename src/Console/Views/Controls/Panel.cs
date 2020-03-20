@@ -9,11 +9,35 @@ namespace johncocom.Jot.Console.Views.Controls
     public class Panel
     {
         public string Id { get; }
+        public string Title { get; private set; } = "";
+        public (int, int) Size { get; set; } = (80, 24);
         public List<Field> Fields { get; } = new List<Field>();
 
         public Panel(string id)
         {
             Id = id;
+        }
+
+        public bool ShowDialog()
+        {
+            var cancel = false;
+            var saveButton = new Button(3, 14, "Save")
+            {
+                Clicked = () => Application.RequestStop()
+            };
+            var cancelButton = new Button(10, 14, "Cancel")
+            {
+                Clicked = () => { Application.RequestStop(); cancel = true; }
+            };
+            var dialog = new Dialog(Title, Size.Item1, Size.Item2, saveButton, cancelButton);
+            dialog.Add(GetViews());
+            Application.Run(dialog);
+            return cancel;
+        }
+
+        public void SetTitle(string title)
+        {
+            Title = title;
         }
 
         public View[] GetViews()
@@ -23,36 +47,19 @@ namespace johncocom.Jot.Console.Views.Controls
             {
                 return views.ToArray();
             }
-            var maxLabel = new Label("");
+            int maxLength = 0;
             foreach (var field in Fields.Where(p => p.AutoAlign))
             {
-                if (field.Text.Length > maxLabel.Text.Length)
+                if (field.LabelText.Length > maxLength)
                 {
-                    maxLabel = field;
+                    maxLength = field.LabelText.Length;
                 }
             }
-            var currentField = Fields[0];
+            View previous = null;
             foreach (var field in Fields)
             {
-                if (field.ShowLabel)
-                {
-                    views.Add(field);
-                    if (field.AutoAlign)
-                    {
-                        if (field != currentField)
-                        {
-                            field.Y = Pos.Bottom(currentField) + 1;
-                        }                        
-                    }
-                }
-                if (field.ShowTextField)
-                {
-                    views.Add(field.TextField);
-                    if (field.AutoAlign)
-                    {
-                        field.TextField.Y = Pos.Right(maxLabel);
-                    }
-                }                
+                field.Create(views, previous, maxLength);
+                previous = (View)field.Label ?? field.TextField;
             }
             return views.ToArray();
         }

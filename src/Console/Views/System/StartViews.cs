@@ -1,5 +1,6 @@
 ﻿using johncocom.Jot.Base.System;
 using johncocom.Jot.Console.Views.Base;
+using johncocom.Jot.Console.Views.Controls;
 using johncocom.Jot.Core.ViewModels.Base;
 using johncocom.Jot.Core.ViewModels.System;
 using johncocom.Jot.Core.Views.System;
@@ -48,52 +49,17 @@ namespace johncocom.Jot.Console.Views.System
 
         bool SetupAdministratorDialog(User user)
         {
-            bool cancel = false;
-            var saveButton = new Button(3, 14, "Save")
+            SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
+            AddToPanel(new Field("info", GetStartViewModel().CreateAdministratorText())
             {
-                Clicked = () => Application.RequestStop()
-            };
-            var cancelButton = new Button(10, 14, "Cancel")
-            {
-                Clicked = () => { Application.RequestStop(); cancel = true; }
-            };
-            var dialog = new Dialog($"Welcome to {Constants.DefaultApplicationName}", 80, 24, saveButton, cancelButton);
-            var infoLabel = new Label(GetStartViewModel().CreateAdministratorText())
-            {
-                X = 1,
-                Y = 1,
-                Width = Dim.Fill(),
-                Height = 4
-            };
-            var passLabel = new Label("Administrator Password: ")
-            {
-                X = Pos.Left(infoLabel),
-                Y = Pos.Bottom(infoLabel) + 1,
-            };
-            var passText = new TextField("")
-            {
-                Secret = true,
-                X = Pos.Right(passLabel),
-                Y = Pos.Top(passLabel),
-                Width = Dim.Fill()
-            };
-            var repeatLabel = new Label("Repeat Password: ")
-            {
-                X = Pos.Left(passLabel),
-                Y = Pos.Bottom(passLabel) + 1,
-                Width = Dim.Width(passLabel)
-            };
-            var repeatText = new TextField("")
-            {
-                Secret = true,
-                X = Pos.Right(repeatLabel),
-                Y = Pos.Top(repeatLabel),
-                Width = Dim.Fill()
-            };
-            dialog.Add(infoLabel, passLabel, passText, repeatLabel, repeatText);
-            dialog.SetFocus(passText);
-            Application.Run(dialog);
-            return cancel;
+                AutoAlign = false,
+                ShowTextField = false,
+                LabelPos = (1, 1),
+                LabelSize = (Dim.Fill(), 4)
+            });
+            AddToPanel(new Field("password", "Administrator Password: "));
+            AddToPanel(new Field("confpass", "Confirm Password: "));            
+            return ShowPanelDialog();
         }
 
         bool IsAdministratorValid(User user)

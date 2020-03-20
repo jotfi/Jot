@@ -30,11 +30,28 @@ namespace johncocom.Jot.Console.Views.Base
 
         protected virtual void AddToPanel(Field field, string panel = "main")
         {
+            GetPanel(panel).Fields.Add(field);
+        }
+
+        protected virtual void SetPanelTitle(string title, string panel = "main")
+        {
+            GetPanel(panel).SetTitle(title);
+        }
+
+        protected virtual bool ShowPanelDialog(string panel = "main")
+        {
+            return GetPanel(panel).ShowDialog();
+        }
+
+        protected Panel GetPanel(string panel)
+        {
             if (!Panels.Any(p => p.Id == panel))
             {
-                Panels.Add(new Panel(panel));
+                var newPanel = new Panel(panel);
+                Panels.Add(newPanel);
+                return newPanel;
             }
-            Panels.Find(p => p.Id == panel).Fields.Add(field);
+            return Panels.Find(p => p.Id == panel);
         }
 
         protected virtual void Quit()
