@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Nista.Jottre.Model\Nista.Jottre.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Settings\" />
+  </ItemGroup>
+
 </Project>

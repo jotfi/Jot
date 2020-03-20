@@ -75,8 +75,8 @@ namespace Nista.Jottre.Core.ViewModels.System
 
         public string CreateAdministratorText()
         {
-            return @"
-Setting up Jottre for the first time.
+            return $@"
+Setting up {Constants.DefaultApplicationName} for the first time.
 To get started, an Administrator account with full access will be created.
 This account should only be used for system administration.";
         }

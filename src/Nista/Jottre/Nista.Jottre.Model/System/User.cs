@@ -7,19 +7,19 @@ namespace Nista.Jottre.Model.System
 {
     public class User : Entity, ITransaction
     {
-        public User()
-        {
-            Person = new Person(this);
-            Password = new Password(this);
-        }
-
         public string UserName { get; set; }
-        public Person Person { get; set; }
-        public Password Password { get; set; }
+        public Person Person { get; } = new Person();
+        public Password Password { get; } = new Password();
 
         public override string CreateTable()
         {
-            return $@"create table {TableName()}({TransactionFields()}, {EntityFields()}, UserName varchar(100) not null, PersonId integer, PasswordId integer);";
+            return $@"
+create table {TableName()}(
+{TransactionFields()}, 
+{EntityFields()}, 
+UserName varchar(100) not null, 
+PersonId integer, 
+PasswordId integer);";
         }
     }
 }
