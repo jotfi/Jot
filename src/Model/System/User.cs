@@ -8,6 +8,8 @@ namespace johncocom.Jot.Model.System
     public class User : Entity, ITransaction
     {
         public string UserName { get; set; }
+
+        //Person contains 
         public Person Person { get; } = new Person();
         public Password Password { get; } = new Password();
 
