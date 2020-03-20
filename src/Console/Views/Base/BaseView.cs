@@ -43,6 +43,16 @@ namespace johncocom.Jot.Console.Views.Base
             return GetPanel(panel).GetText(id);
         }
 
+        protected virtual void SetPanelText(string id, string text, string panel = "main")
+        {
+            GetPanel(panel).SetText(id, text);
+        }
+
+        protected virtual void SetPanelLabel(string id, string text, string panel = "main")
+        {
+            GetPanel(panel).SetLabel(id, text);
+        }
+
         protected virtual bool ShowPanelDialog(string panel = "main")
         {
             return GetPanel(panel).ShowDialog();

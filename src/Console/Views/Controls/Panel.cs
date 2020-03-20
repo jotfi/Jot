@@ -49,6 +49,24 @@ namespace johncocom.Jot.Console.Views.Controls
             return Fields.Find(p => p.Id == id).GetText();
         }
 
+        public void SetText(string id, string text)
+        {
+            if (!Fields.Any(p => p.Id == id))
+            {
+                return;
+            }
+            Fields.Find(p => p.Id == id).SetText(text);
+        }
+
+        public void SetLabel(string id, string text)
+        {
+            if (!Fields.Any(p => p.Id == id))
+            {
+                return;
+            }
+            Fields.Find(p => p.Id == id).SetLabel(text);
+        }
+
         public View[] GetViews()
         {
             var views = new List<View>();
@@ -68,7 +86,7 @@ namespace johncocom.Jot.Console.Views.Controls
             foreach (var field in Fields)
             {
                 field.Create(views, previous, maxLength);
-                previous = (View)field.Label ?? field.TextField;
+                previous = (View)field.Label ?? field.TextBox;
             }
             return views.ToArray();
         }

@@ -53,12 +53,22 @@ namespace johncocom.Jot.Console.Views.System
             AddToPanel(new Field("info", GetStartViewModel().CreateAdministratorText())
             {
                 AutoAlign = false,
+                AutoSize = false,
                 ShowTextField = false,
                 LabelPos = (1, 1),
                 LabelSize = (Dim.Fill(), 4)
             });
-            AddToPanel(new Field("password", "Administrator Password: ", user.Password.CreatePassword));
+            AddToPanel(new Field("password", "Administrator Password: ", user.Password.CreatePassword)
+            {
+                TextChanged = PasswordChanged
+            });
             AddToPanel(new Field("confpass", "Confirm Password: ", user.Password.ConfirmPassword));            
+            AddToPanel(new Field("pwdstr")
+            {
+                AutoSize = false,
+                ShowTextField = false,
+                LabelSize = (Dim.Fill(), 1)
+            });
             if (ShowPanelDialog())
             {
                 return true;
@@ -66,6 +76,11 @@ namespace johncocom.Jot.Console.Views.System
             user.Password.CreatePassword = GetPanelText("password");
             user.Password.ConfirmPassword = GetPanelText("confpass");
             return false;
+        }
+
+        void PasswordChanged(TextBox tb)
+        {
+            Application.MainLoop.Invoke(() => SetPanelLabel("pwdstr", $"Hello World {tb.Text}"));
         }
 
         bool IsAdministratorValid(User user)

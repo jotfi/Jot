@@ -12,9 +12,11 @@ namespace johncocom.Jot.Console.Views.Controls
         public string LabelText { get; set; }
         public bool ShowLabel { get; set; } = true;
         public bool AutoAlign { get; set; } = true;
+        public bool AutoSize{ get; set; } = true;
         public (Pos, Pos) LabelPos { get; set; }
         public (Dim, Dim) LabelSize { get; set; }        
-        public TextField TextField { get; private set; }
+        public TextBox TextBox { get; private set; }
+        public Action<TextBox> TextChanged { get; set; }
         public string Text { get; set; }
         public bool ShowTextField { get; set; } = true;
         public (Pos, Pos) TextPos { get; set; }
@@ -30,11 +32,29 @@ namespace johncocom.Jot.Console.Views.Controls
 
         public string GetText()
         {
-            if (TextField == null)
+            if (TextBox == null)
             {
                 return string.Empty;
             }
-            return TextField.Text.ToString();
+            return TextBox.Text.ToString();
+        }
+
+        public void SetText(string text)
+        {
+            if (TextBox == null)
+            {
+                return;
+            }
+            TextBox.Text = text;
+        }
+
+        public void SetLabel(string text)
+        {
+            if (Label == null)
+            {
+                return;
+            }
+            Label.Text = text;
         }
 
         public void Create(List<View> views, View previous, int maxLength)
@@ -48,44 +68,57 @@ namespace johncocom.Jot.Console.Views.Controls
                     {
                         (Label.X, Label.Y) = (Pos.Left(previous), Pos.Bottom(previous) + 1);
                     }
+                }
+                else
+                {
+                    (Label.X, Label.Y) = LabelPos;;
+                }
+                if (AutoSize)
+                {
                     Label.Width = Dim.Sized(maxLength);
                 }
                 else
                 {
-                    (Label.X, Label.Y) = LabelPos;
                     (Label.Width, Label.Height) = LabelSize;
                 }
             }
             if (ShowTextField)
             {
-                views.Add(TextField = new TextField(Text) { Id = Id });
-                TextField.Secret = Secret;
+                views.Add(TextBox = new TextBox(Text) { Id = Id });
+                TextBox.Secret = Secret;
+                TextBox.TextChanged = TextChanged;
                 if (AutoAlign)
                 {
                     if (Label != null)
                     {
-                        TextField.Y = Pos.Top(Label);
-                        TextField.X = Pos.Right(Label);
+                        TextBox.Y = Pos.Top(Label);
+                        TextBox.X = Pos.Right(Label);
                     }
                     else if (previous != null)
                     {
-                        TextField.Y = Pos.Top(previous);
+                        TextBox.Y = Pos.Top(previous);
                         if (previous is TextField)
                         {
-                            TextField.X = Pos.Left(previous);
+                            TextBox.X = Pos.Left(previous);
                         }
                         else
                         {
-                            TextField.X = Pos.Right(previous);
+                            TextBox.X = Pos.Right(previous);
                         }
                     }
-                    TextField.Height = 1;
-                    TextField.Width = Dim.Fill();
                 }
                 else
                 {
-                    (TextField.X, TextField.Y) = TextPos;
-                    (TextField.Width, TextField.Height) = TextSize;
+                    (TextBox.X, TextBox.Y) = TextPos;
+                }
+                if (AutoSize)
+                {
+                    TextBox.Height = 1;
+                    TextBox.Width = Dim.Fill();
+                }
+                else
+                {
+                    (TextBox.Width, TextBox.Height) = TextSize;
                 }
             }
         }
