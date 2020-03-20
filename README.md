@@ -1,3 +1,3 @@
-# Nista 
+# Jot
 
-## Jottre
+Jot is a postmodern ERP application
