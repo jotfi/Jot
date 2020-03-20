@@ -9,14 +9,14 @@ namespace johncocom.Jot.Core.Views
 {
     public abstract class ViewController : Logger
     {
-        public readonly Application Jottre;
+        public readonly Application App;
         public List<IBaseView> Items { get; private set; }
         public IStartViews Start { get; protected set; }
         public ILoginViews Login { get; protected set; }
 
-        public ViewController(Application jottre, LogOpts opts = null) : base(opts)
+        public ViewController(Application app, LogOpts opts = null) : base(opts)
         {
-            Jottre = jottre;
+            App = app;
         }
 
         public void Init()

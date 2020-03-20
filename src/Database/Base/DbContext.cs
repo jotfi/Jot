@@ -24,26 +24,26 @@ namespace johncocom.Jot.Database.Base
                 Db = db;
                 if (Db.Dialect == DapperExt.Dialects.PostgreSQL)
                 {
-                    DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JottreDb"));
+                    DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JotDb"));
                     DapperExt.SetDialect(DapperExt.Dialects.PostgreSQL);
                 }
                 else if (Db.Dialect == DapperExt.Dialects.SQLite)
                 {
                     var builder = new SQLiteConnectionStringBuilder
                     {
-                        DataSource = "./Jottre.db"                         
+                        DataSource = "./Jot.db"                         
                     };
                     DbConnection = new SQLiteConnection(builder.ConnectionString);                    
                     DapperExt.SetDialect(DapperExt.Dialects.SQLite);
                 }
                 else if (Db.Dialect == DapperExt.Dialects.MySQL)
                 {
-                    DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JottreDb"));
+                    DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JotDb"));
                     DapperExt.SetDialect(DapperExt.Dialects.MySQL);
                 }
                 else
                 {
-                    DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JottreDb;Integrated Security=True;MultipleActiveResultSets=true;");
+                    DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JotDb;Integrated Security=True;MultipleActiveResultSets=true;");
                     DapperExt.SetDialect(DapperExt.Dialects.SQLServer);
                 }
                 DbConnection.Open();

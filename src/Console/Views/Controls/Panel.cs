@@ -18,19 +18,23 @@ namespace johncocom.Jot.Console.Views.Controls
             Id = id;
         }
 
-        public bool ShowDialog()
+        public bool ShowDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
         {
+            if (Fields.Count() == 0)
+            {
+                return true;
+            }
             var cancel = false;
-            var saveButton = new Button(3, 14, "Save")
+            var saveButton = new Button(3, 14, saveCaption)
             {
                 Clicked = () => Application.RequestStop()
             };
-            var cancelButton = new Button(10, 14, "Cancel")
+            var cancelButton = new Button(10, 14, cancelCaption)
             {
                 Clicked = () => { Application.RequestStop(); cancel = true; }
             };
             var dialog = new Dialog(Title, Size.Item1, Size.Item2, saveButton, cancelButton);
-            dialog.Add(GetViews());
+            AddFields(dialog);
             Application.Run(dialog);
             return cancel;
         }
@@ -67,12 +71,12 @@ namespace johncocom.Jot.Console.Views.Controls
             Fields.Find(p => p.Id == id).SetLabel(text);
         }
 
-        public View[] GetViews()
+        public void AddFields(Dialog dialog)
         {
             var views = new List<View>();
             if (Fields.Count == 0)
             {
-                return views.ToArray();
+                return;
             }
             int maxLength = 0;
             foreach (var field in Fields.Where(p => p.AutoAlign))
@@ -83,12 +87,21 @@ namespace johncocom.Jot.Console.Views.Controls
                 }
             }
             View previous = null;
+            View defaultView = null;
             foreach (var field in Fields)
             {
                 field.Create(views, previous, maxLength);
                 previous = (View)field.Label ?? field.TextBox;
+                if (defaultView == null && field.TextBox != null)
+                {
+                    defaultView = field.TextBox;
+                }
             }
-            return views.ToArray();
+            dialog.Add(views.ToArray());
+            if (defaultView != null)
+            {
+                dialog.SetFocus(defaultView);
+            }
         }
     }
 }
