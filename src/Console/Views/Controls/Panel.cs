@@ -40,6 +40,15 @@ namespace johncocom.Jot.Console.Views.Controls
             Title = title;
         }
 
+        public string GetText(string id)
+        {
+            if (!Fields.Any(p => p.Id == id))
+            {
+                return string.Empty;
+            }
+            return Fields.Find(p => p.Id == id).GetText();
+        }
+
         public View[] GetViews()
         {
             var views = new List<View>();

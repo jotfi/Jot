@@ -6,6 +6,8 @@ namespace johncocom.Jot.Model.Base
 {
     public class Password : EntityData
     {
+        public string CreatePassword { get; set; } = "";
+        public string ConfirmPassword { get; set; } = "";
         public string PasswordHash { get; set; }
         public string SecurityQuestion1 { get; set; }
         public string SecurityQuestion2 { get; set; }

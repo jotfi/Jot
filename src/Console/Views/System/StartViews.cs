@@ -57,9 +57,15 @@ namespace johncocom.Jot.Console.Views.System
                 LabelPos = (1, 1),
                 LabelSize = (Dim.Fill(), 4)
             });
-            AddToPanel(new Field("password", "Administrator Password: "));
-            AddToPanel(new Field("confpass", "Confirm Password: "));            
-            return ShowPanelDialog();
+            AddToPanel(new Field("password", "Administrator Password: ", user.Password.CreatePassword));
+            AddToPanel(new Field("confpass", "Confirm Password: ", user.Password.ConfirmPassword));            
+            if (ShowPanelDialog())
+            {
+                return true;
+            }
+            user.Password.CreatePassword = GetPanelText("password");
+            user.Password.ConfirmPassword = GetPanelText("confpass");
+            return false;
         }
 
         bool IsAdministratorValid(User user)

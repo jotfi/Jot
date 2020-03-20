@@ -1,4 +1,5 @@
-﻿using johncocom.Jot.Console.Views;
+﻿using johncocom.Jot.Base.System;
+using johncocom.Jot.Console.Views;
 using Terminal.Gui;
 
 namespace johncocom.Jot.Console
@@ -12,7 +13,7 @@ namespace johncocom.Jot.Console
         {
             Views = new ConsoleViewController(this);
             Application.Init();
-            Application.Top.Add(MainWindow = new Terminal.Gui.Window("Jottre")
+            Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
             {
                 X = 0,
                 Y = 1,
@@ -32,14 +33,15 @@ namespace johncocom.Jot.Console
         public override bool Quit()
         {
             base.Quit();
-            var n = MessageBox.Query(50, 7, "Quit Jottre", "Are you sure you want to quit Jottre?", "Yes", "No");
+            var n = MessageBox.Query(50, 7, $"Quit {Constants.DefaultApplicationName}", 
+                $"Are you sure you want to quit {Constants.DefaultApplicationName}?", "Yes", "No");
             return n == 0;
         }
 
         public override void ShowError(string message)
         {
             base.ShowError(message);
-            MessageBox.ErrorQuery(50, 7, "Jottre Error", message);
+            MessageBox.ErrorQuery(50, 7, $"{Constants.DefaultApplicationName} Error", message);
         }
 
         public void AddMain(params View[] views)

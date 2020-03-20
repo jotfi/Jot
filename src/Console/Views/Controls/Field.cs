@@ -28,6 +28,15 @@ namespace johncocom.Jot.Console.Views.Controls
             Text = text;
         }
 
+        public string GetText()
+        {
+            if (TextField == null)
+            {
+                return string.Empty;
+            }
+            return TextField.Text.ToString();
+        }
+
         public void Create(List<View> views, View previous, int maxLength)
         {
             if (ShowLabel)
