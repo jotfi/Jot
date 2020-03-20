@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PropertyChanged.Fody" Version="3.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Settings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj" />
+    <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+  </ItemGroup>
+
+</Project>
