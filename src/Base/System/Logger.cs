@@ -1,7 +1,7 @@
-﻿using johncocom.Jot.Base.System;
+﻿using jotfi.Jot.Base.System;
 using System;
 
-namespace johncocom.Jot.Base.System
+namespace jotfi.Jot.Base.System
 {
     public enum LogLevels
     {

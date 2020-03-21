@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using johncocom.Jot.Web.Data;
+using jotfi.Jot.Web.Data;
 
-namespace johncocom.Jot.Web
+namespace jotfi.Jot.Web
 {
     public class Startup
     {

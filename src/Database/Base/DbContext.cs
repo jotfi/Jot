@@ -1,5 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using johncocom.Jot.Base.System;
+using jotfi.Jot.Base.System;
 using Npgsql;
 using System;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 
-namespace johncocom.Jot.Database.Base
+namespace jotfi.Jot.Database.Base
 {
     public class DbContext : Logger, IDbContext
     {

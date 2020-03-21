@@ -1,7 +1,7 @@
 ﻿
-using johncocom.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.ViewModels.Base;
 
-namespace johncocom.Jot.Core.Views.Base
+namespace jotfi.Jot.Core.Views.Base
 {
     public interface IBaseView
     {

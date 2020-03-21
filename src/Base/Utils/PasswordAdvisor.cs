@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace johncocom.Jot.Base.Utils
+namespace jotfi.Jot.Base.Utils
 {
     public enum PasswordScore
     {

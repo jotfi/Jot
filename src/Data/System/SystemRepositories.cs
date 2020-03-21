@@ -1,10 +1,10 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Database.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Database.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Data.System
+namespace jotfi.Jot.Data.System
 {
     public class SystemRepositories : Logger
     {

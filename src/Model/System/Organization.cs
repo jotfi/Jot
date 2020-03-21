@@ -1,9 +1,9 @@
-﻿using johncocom.Jot.Model.Base;
+﻿using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Model.System
+namespace jotfi.Jot.Model.System
 {
     public class Organization : Entity
     {

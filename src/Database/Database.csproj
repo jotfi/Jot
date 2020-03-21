@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>johncocom.Jot.Database</RootNamespace>
+    <RootNamespace>jotfi.Jot.Database</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

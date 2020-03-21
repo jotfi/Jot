@@ -1,17 +1,17 @@
 ﻿using Dapper;
-using johncocom.Jot.Base;
-using johncocom.Jot.Base.System;
-using johncocom.Jot.Database.Base;
-using johncocom.Jot.Model;
-using johncocom.Jot.Model.Base;
-using johncocom.Jot.Model.System;
+using jotfi.Jot.Base;
+using jotfi.Jot.Base.System;
+using jotfi.Jot.Database.Base;
+using jotfi.Jot.Model;
+using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
 
-namespace johncocom.Jot.Database
+namespace jotfi.Jot.Database
 {
     //TODO: potentially abstract Database to not include Dapper, could use MongoDB in future, etc.
     

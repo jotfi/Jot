@@ -1,11 +1,11 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Core.ViewModels.System;
-using johncocom.Jot.Core.Views.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Core.Views.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Core.ViewModels
+namespace jotfi.Jot.Core.ViewModels
 {
     public class ViewModelController : Logger
     {

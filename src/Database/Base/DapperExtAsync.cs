@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace johncocom.Jot.Database.Base
+namespace jotfi.Jot.Database.Base
 {
     /// <summary>
     /// Main class for Dapper extensions

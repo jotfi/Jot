@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Model.Base
+namespace jotfi.Jot.Model.Base
 {
     public interface ITransaction
     {

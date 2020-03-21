@@ -1,5 +1,5 @@
 ﻿
-namespace johncocom.Jot.Console
+namespace jotfi.Jot.Console
 {
 	public class Program
 	{

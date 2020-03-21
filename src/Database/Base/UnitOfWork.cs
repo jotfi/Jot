@@ -2,7 +2,7 @@
 using System.Data.Common;
 using System.Threading.Tasks;
 
-namespace johncocom.Jot.Database.Base
+namespace jotfi.Jot.Database.Base
 {
     public class UnitOfWork : IDisposable
     {

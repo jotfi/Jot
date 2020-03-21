@@ -1,10 +1,10 @@
-﻿using johncocom.Jot.Model.Base;
+﻿using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace johncocom.Jot.Model.System
+namespace jotfi.Jot.Model.System
 {
     [Table("sqlite_master")]
     public class TableName : Transaction

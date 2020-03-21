@@ -1,8 +1,8 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Console.Views;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Views;
 using Terminal.Gui;
 
-namespace johncocom.Jot.Console
+namespace jotfi.Jot.Console
 {
     public class ConsoleApplication : Core.Application
     {

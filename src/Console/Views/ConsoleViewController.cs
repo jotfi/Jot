@@ -1,8 +1,8 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Console.Views.System;
-using johncocom.Jot.Core.Views;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Views.System;
+using jotfi.Jot.Core.Views;
 
-namespace johncocom.Jot.Console.Views
+namespace jotfi.Jot.Console.Views
 {
     public class ConsoleViewController : ViewController
     {

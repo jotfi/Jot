@@ -9,7 +9,7 @@ using System.Text;
 using Dapper;
 using Microsoft.CSharp.RuntimeBinder;
 
-namespace johncocom.Jot.Database.Base
+namespace jotfi.Jot.Database.Base
 {
     /// <summary>
     /// Main class for Dapper extensions

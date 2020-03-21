@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace johncocom.Jot.Database.Base
+namespace jotfi.Jot.Database.Base
 {
     public interface IDbContext
     {

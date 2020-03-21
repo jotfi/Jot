@@ -1,6 +1,6 @@
 using System;
 
-namespace johncocom.Jot.Web.Data
+namespace jotfi.Jot.Web.Data
 {
     public class WeatherForecast
     {

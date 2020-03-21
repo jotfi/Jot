@@ -14,9 +14,9 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 
-[assembly: HostingStartup(typeof(johncocom.Jot.Web.DevExpressHostingStartup))]
+[assembly: HostingStartup(typeof(jotfi.Jot.Web.DevExpressHostingStartup))]
 
-namespace johncocom.Jot.Web {
+namespace jotfi.Jot.Web {
     public partial class DevExpressHostingStartup : IHostingStartup {
         void IHostingStartup.Configure(IWebHostBuilder builder) {
             builder.ConfigureServices((serviceCollection) => {

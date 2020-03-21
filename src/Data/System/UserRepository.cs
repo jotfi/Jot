@@ -1,8 +1,8 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Data.Base;
-using johncocom.Jot.Model.System;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Data.Base;
+using jotfi.Jot.Model.System;
 
-namespace johncocom.Jot.Data.System
+namespace jotfi.Jot.Data.System
 {
     public class UserRepository : BaseRepository<User>
     {

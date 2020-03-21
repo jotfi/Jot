@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace johncocom.Jot.Model.Base
+namespace jotfi.Jot.Model.Base
 {
     public abstract class Transaction : ITransaction
     {

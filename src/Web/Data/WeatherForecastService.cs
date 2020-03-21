@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace johncocom.Jot.Web.Data
+namespace jotfi.Jot.Web.Data
 {
     public class WeatherForecastService
     {

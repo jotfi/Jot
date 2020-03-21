@@ -1,11 +1,11 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Database.Base;
-using johncocom.Jot.Model.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Database.Base;
+using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace johncocom.Jot.Data.Base
+namespace jotfi.Jot.Data.Base
 {
     public abstract class BaseRepository<T> : Logger where T : Transaction
     {

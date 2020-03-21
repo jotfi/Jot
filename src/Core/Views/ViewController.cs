@@ -1,11 +1,11 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Core.Views.Base;
-using johncocom.Jot.Core.Views.System;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.Views.Base;
+using jotfi.Jot.Core.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Core.Views
+namespace jotfi.Jot.Core.Views
 {
     public abstract class ViewController : Logger
     {

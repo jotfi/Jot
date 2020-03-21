@@ -1,15 +1,15 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Core.Views;
-using johncocom.Jot.Core.Views.Base;
-using johncocom.Jot.Data;
-using johncocom.Jot.Database;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.Views;
+using jotfi.Jot.Core.Views.Base;
+using jotfi.Jot.Data;
+using jotfi.Jot.Database;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace johncocom.Jot.Core.ViewModels.Base
+namespace jotfi.Jot.Core.ViewModels.Base
 {
     public class BaseViewModel : Logger, INotifyPropertyChanged
     {

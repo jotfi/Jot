@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Terminal.Gui;
 
-namespace johncocom.Jot.Console.Views.Controls
+namespace jotfi.Jot.Console.Views.Controls
 {
     public class Panel
     {

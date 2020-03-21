@@ -1,12 +1,12 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Data.System;
-using johncocom.Jot.Database;
-using johncocom.Jot.Database.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Data.System;
+using jotfi.Jot.Database;
+using jotfi.Jot.Database.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Data
+namespace jotfi.Jot.Data
 {
     public class RepositoryController : Logger
     {

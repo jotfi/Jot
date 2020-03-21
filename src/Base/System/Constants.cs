@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace johncocom.Jot.Base.System
+namespace jotfi.Jot.Base.System
 {
     public class Constants
     {

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace johncocom.Jot.Web
+namespace jotfi.Jot.Web
 {
     public class Program
     {

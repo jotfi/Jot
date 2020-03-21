@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace johncocom.Jot.Desktop
+namespace jotfi.Jot.Desktop
 {
     /// <summary>
     /// Interaction logic for App.xaml

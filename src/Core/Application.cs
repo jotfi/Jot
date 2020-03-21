@@ -1,11 +1,11 @@
-﻿using johncocom.Jot.Base.System;
-using johncocom.Jot.Core.ViewModels;
-using johncocom.Jot.Core.Views;
-using johncocom.Jot.Data;
-using johncocom.Jot.Database;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.ViewModels;
+using jotfi.Jot.Core.Views;
+using jotfi.Jot.Data;
+using jotfi.Jot.Database;
 using System;
 
-namespace johncocom.Jot.Core
+namespace jotfi.Jot.Core
 {
     public class Application : Logger
     {
