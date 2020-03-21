@@ -102,5 +102,14 @@ namespace jotfi.Jot.Console.Views.Controls
             }
             Fields.Find(p => p.Id == id).SetLabel(text);
         }
+
+        public void SetColor(string id, ColorScheme color)
+        {
+            if (!Fields.Any(p => p.Id == id))
+            {
+                return;
+            }
+            Fields.Find(p => p.Id == id).SetColor(color);
+        }
     }
 }

@@ -53,6 +53,11 @@ namespace jotfi.Jot.Console.Views.Base
             GetPanel(panelId).SetLabel(id, text);
         }
 
+        protected virtual void SetPanelColor(string id, ColorScheme color, string panelId = "main")
+        {
+            GetPanel(panelId).SetColor(id, color);
+        }
+
         protected virtual bool ShowPanelDialog(string panelId = "main")
         {
             var panel = GetPanel(panelId);

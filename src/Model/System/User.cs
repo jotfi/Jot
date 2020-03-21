@@ -8,9 +8,9 @@ namespace jotfi.Jot.Model.System
     public class User : Entity, ITransaction
     {
         public string UserName { get; set; }
-
-        //Person contains 
+        public long PersonId { get; set; }
         public Person Person { get; } = new Person();
+        public long PasswordId { get; set; }
         public Password Password { get; } = new Password();
 
         public override string CreateTable()

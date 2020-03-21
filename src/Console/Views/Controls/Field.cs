@@ -10,6 +10,7 @@ namespace jotfi.Jot.Console.Views.Controls
         public string Id { get; }
         public Label Label { get; private set; }
         public string LabelText { get; set; }
+        public ColorScheme ColorScheme { get; set; }
         public bool ShowLabel { get; set; } = true;
         public bool AutoAlign { get; set; } = true;
         public bool AutoSize{ get; set; } = true;
@@ -57,11 +58,21 @@ namespace jotfi.Jot.Console.Views.Controls
             Label.Text = text;
         }
 
+        public void SetColor(ColorScheme color)
+        {
+            if (Label == null)
+            {
+                return;
+            }
+            Label.ColorScheme = color;
+        }
+
         public void Create(List<View> views, View previous, int maxLength)
         {
             if (ShowLabel)
             {
                 views.Add(Label = new Label(LabelText) { Id = Id + "Label" });
+                Label.ColorScheme = ColorScheme;
                 if (AutoAlign && previous != null)
                 {
                     LabelPos = (Pos.Left(previous), Pos.Bottom(previous) + 1);

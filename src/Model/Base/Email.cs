@@ -1,13 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
     public class Email : EntityData
     {
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; } = "";
 
         public override string CreateTable()
         {
@@ -17,5 +18,8 @@ create table {TableName()}(
 {EntityDataFields()},
 EmailAddress text not null);"; 
         }
+
+        [NotMapped]
+        public string ConfirmEmail { get; set; } = "";
     }
 }

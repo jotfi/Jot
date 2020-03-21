@@ -7,10 +7,12 @@ namespace jotfi.Jot.Model.Base
 {
     public class Person : Entity 
     {
-        public string FirstNames { get; set; }
-        public string LastName { get; set; }
+        public string FirstNames { get; set; } = "";
+        public string LastName { get; set; } = "";
         public long EmailId { get; set; }
+        public Email Email { get; set; } = new Email();
         public long AddressId { get; set; }
+        public Address Address { get; set; } = new Address();
 
         public override string CreateTable()
         {

@@ -15,6 +15,9 @@ namespace jotfi.Jot.Console.Views.System
 {
     public class StartViews : BaseView, IStartViews
     {
+        private bool ValidPassword;
+        private bool ValidEmail;
+
         public StartViews(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
             : base(app, vm, opts)
         { 
@@ -67,14 +70,27 @@ namespace jotfi.Jot.Console.Views.System
             AddToPanel(new Field("confirmPassword", "Confirm Password", user.Password.ConfirmPassword)
             {
                 Secret = true,
-                TextChanged = CheckConfirm
-            });            
+                TextChanged = CheckPasswordConfirm
+            });
             AddToPanel(new Field("passwordInfo")
             {
-                Secret = true,
                 AutoSize = false,
                 ShowTextField = false,
-                LabelSize = (Dim.Fill(), 1)
+                ColorScheme = Colors.Error
+            });
+            AddToPanel(new Field("email", "Administrator Email", user.Person.Email.EmailAddress)
+            {
+                TextChanged = CheckEmail
+            });
+            AddToPanel(new Field("confirmEmail", "Confirm Email", user.Person.Email.ConfirmEmail)
+            {
+                TextChanged = CheckEmailConfirm
+            });
+            AddToPanel(new Field("emailInfo")
+            {
+                AutoSize = false,
+                ShowTextField = false,
+                ColorScheme = Colors.Error
             });
             if (ShowPanelDialog())
             {
@@ -82,20 +98,49 @@ namespace jotfi.Jot.Console.Views.System
             }
             user.Password.CreatePassword = GetPanelText("password");
             user.Password.ConfirmPassword = GetPanelText("confirmPassword");
+            user.Person.Email.EmailAddress = GetPanelText("email");
+            user.Person.Email.ConfirmEmail = GetPanelText("confirmEmail");
             return false;
         }
 
         void CheckPassword(string password)
         {
+            ValidPassword = GetStartViewModel().GetPasswordValid(password);
             var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(password);
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
         }
 
-        void CheckConfirm(string password)
+        void CheckEmail(string email)
         {
+            ValidEmail = GetStartViewModel().GetPasswordValid(email);
+            var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(email);
+            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", passwordInfo));
+        }
+
+        void CheckPasswordConfirm(string password)
+        {
+            if (!ValidPassword || string.IsNullOrEmpty(password))
+            {
+                return;
+            }
             var passwordsMatch = GetPanelText("password") == password;
             var passwordInfo = passwordsMatch ? "Passwords Match" : "Passwords do not match";
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
+            var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
+            Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
+        }
+
+        void CheckEmailConfirm(string password)
+        {
+            if (!ValidPassword || string.IsNullOrEmpty(password))
+            {
+                return;
+            }
+            var passwordsMatch = GetPanelText("password") == password;
+            var passwordInfo = passwordsMatch ? "Passwords Match" : "Passwords do not match";
+            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", passwordInfo));
+            var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
+            Application.MainLoop.Invoke(() => SetPanelColor("emailInfo", infoColor));
         }
 
         bool IsAdministratorValid(User user)

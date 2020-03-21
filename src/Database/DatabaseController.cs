@@ -23,13 +23,16 @@ namespace jotfi.Jot.Database
 
         public DatabaseController(LogOpts opts = null) : base(opts)
         {
-            //Todo: get from settings
+            //Todo: get Dialect from settings
             Dialect = DapperExt.Dialects.SQLite;
             Context = new DbContext(this, opts);
             Models = new List<ITransaction>()
             {
                 new User(),
                 new Person(),
+                new Email(),
+                new Address(),
+                new Password(),
                 new Organization()
             };
         }

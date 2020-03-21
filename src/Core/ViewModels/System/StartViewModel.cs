@@ -82,6 +82,18 @@ To get started, an Administrator account with full access will be created.
 This account should only be used for system administration.";
         }
 
+        public bool GetPasswordValid(string password)
+        {
+            var passwordScore = PasswordAdvisor.CheckStrength(password);
+            return passwordScore switch
+            {
+                PasswordScore.Blank => false,
+                PasswordScore.VeryWeak => false,
+                PasswordScore.Weak => false,
+                _ => true
+            };
+        }
+
         public string GetPasswordScoreInfo(string password)
         {
             var passwordScore = PasswordAdvisor.CheckStrength(password);
