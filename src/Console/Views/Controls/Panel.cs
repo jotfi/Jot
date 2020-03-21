@@ -6,11 +6,10 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Controls
 {
-    public class Panel
+    public class Panel : BaseControl
     {
         public string Id { get; }
         public string Title { get; private set; } = "";
-        public bool Cancel { get; private set; }
         public (int, int) Size { get; set; } = (80, 24);
         public List<Field> Fields { get; } = new List<Field>();
 
@@ -19,18 +18,12 @@ namespace jotfi.Jot.Console.Views.Controls
             Id = id;
         }
 
-        public void ShowDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
+        public bool ShowDialog(string okCaption = "Ok", string cancelCaption = "Cancel")
         {
             if (Fields.Count() == 0)
             {
-                return;
+                return false;
             }
-            Cancel = false;
-            Application.Run(GetDialog(saveCaption, cancelCaption));
-        }
-
-        public Dialog GetDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
-        {
             var views = new List<View>();
             int maxLength = 0;
             foreach (var field in Fields.Where(p => p.AutoAlign))
@@ -41,35 +34,21 @@ namespace jotfi.Jot.Console.Views.Controls
                 }
             }
             View previous = null;
-            View defaultView = null;
             foreach (var field in Fields)
             {
                 field.Create(views, previous, maxLength);
                 previous = (View)field.Label ?? field.TextBox;
-                if (defaultView == null && field.TextBox != null)
-                {
-                    defaultView = field.TextBox;
-                }
             }
             var dialog = new Dialog(Title, Size.Item1, Size.Item2)
             {
                 views.ToArray()
             };
-            dialog.AddButton(new Button(3, 14, saveCaption)
-            {
-                Clicked = () => Application.RequestStop()
-            });
-            dialog.AddButton(new Button(10, 14, cancelCaption)
-            {
-                Clicked = () => { Application.RequestStop(); Cancel = true; }
-            });
-            
-            if (defaultView != null)
-            {
-                //dialog.SetFocus(defaultView);
-            }
-            return dialog;
+            dialog.AddButton(GetOkButton(okCaption));
+            dialog.AddButton(GetCancelButton(cancelCaption));
+            Application.Run(dialog);
+            return OkClicked;
         }
+
 
         public void SetTitle(string title)
         {

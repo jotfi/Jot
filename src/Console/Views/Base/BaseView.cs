@@ -28,6 +28,11 @@ namespace jotfi.Jot.Console.Views.Base
             Application.Top.Add(view);
         }
 
+        protected virtual void ClearPanel(string panelId = "main")
+        {
+            GetPanel(panelId).Fields.Clear();
+        }
+
         protected virtual void AddToPanel(Field field, string panelId = "main")
         {
             GetPanel(panelId).Fields.Add(field);
@@ -58,11 +63,9 @@ namespace jotfi.Jot.Console.Views.Base
             GetPanel(panelId).SetColor(id, color);
         }
 
-        protected virtual bool ShowPanelDialog(string panelId = "main")
+        protected virtual bool ShowPanelDialog(string panelId = "main", string okCaption = "Ok", string cancelCaption = "Cancel")
         {
-            var panel = GetPanel(panelId);
-            panel.ShowDialog();
-            return panel.Cancel;
+            return GetPanel(panelId).ShowDialog(okCaption, cancelCaption);
         }
 
         protected Panel GetPanel(string panel)

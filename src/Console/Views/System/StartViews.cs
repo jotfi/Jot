@@ -37,14 +37,17 @@ namespace jotfi.Jot.Console.Views.System
         public bool SetupAdministrator()
         {
             var user = new User();
-            var cancel = false;
-            var complete = false;
-            while (!cancel && !complete)
+            var ok = false;
+            while (!ok)
             {
-                cancel = SetupAdministratorDialog(user);
-                complete = IsAdministratorValid(user);
+                ok = SetupAdministratorDialog(user);
+                if (!ok)
+                {
+                    break;
+                }
+                ok = IsAdministratorValid(user);
             }
-            if (cancel)
+            if (!ok)
             {
                 return false;
             }
@@ -53,6 +56,7 @@ namespace jotfi.Jot.Console.Views.System
 
         bool SetupAdministratorDialog(User user)
         {
+            ClearPanel();
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
             AddToPanel(new Field("infoText", GetStartViewModel().CreateAdministratorText())
             {
@@ -92,15 +96,15 @@ namespace jotfi.Jot.Console.Views.System
                 ShowTextField = false,
                 ColorScheme = Colors.Error
             });
-            if (ShowPanelDialog())
+            if (!ShowPanelDialog())
             {
-                return true;
+                return false;
             }
             user.Password.CreatePassword = GetPanelText("password");
             user.Password.ConfirmPassword = GetPanelText("confirmPassword");
             user.Person.Email.EmailAddress = GetPanelText("email");
             user.Person.Email.ConfirmEmail = GetPanelText("confirmEmail");
-            return false;
+            return true;
         }
 
         void CheckPassword(string password)
