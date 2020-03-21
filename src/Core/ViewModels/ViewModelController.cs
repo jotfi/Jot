@@ -10,14 +10,16 @@ namespace jotfi.Jot.Core.ViewModels
     public class ViewModelController : Logger
     {
         public readonly Application App;
-        public readonly LoginViewModel Login;
         public readonly StartViewModel Start;
+        public readonly UserViewModel User;
+        public readonly LoginViewModel Login;
 
         public ViewModelController(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;
-            Login = new LoginViewModel(app, opts);
             Start = new StartViewModel(app, opts);
+            User = new UserViewModel(app, opts);
+            Login = new LoginViewModel(app, opts);
         }
 
         //
@@ -32,8 +34,9 @@ namespace jotfi.Jot.Core.ViewModels
                     throw new NotImplementedException();
                 }
             }
-            Login.SetView(App.Views.Login);
             Start.SetView(App.Views.Start);
+            User.SetView(App.Views.User);
+            Login.SetView(App.Views.Login);
         }
     }
 }

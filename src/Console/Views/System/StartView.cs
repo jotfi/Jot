@@ -13,12 +13,12 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class StartViews : BaseView, IStartViews
+    public class StartView : BaseView, IStartView
     {
         private bool ValidPassword;
         private bool ValidEmail;
 
-        public StartViews(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
+        public StartView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
             : base(app, vm, opts)
         { 
 
@@ -110,9 +110,9 @@ namespace jotfi.Jot.Console.Views.System
 
         void CheckPassword(string password)
         {
-            ValidPassword = GetStartViewModel().GetPasswordValid(password);
+            ValidPassword = GetViewModels().User.GetPasswordValid(password);
             var passwordsMatch = GetPanelText("confirmPassword") == password;
-            var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(password);
+            var passwordInfo = GetViewModels().User.GetPasswordScoreInfo(password);
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
             var infoColor = ValidPassword && passwordsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
@@ -125,7 +125,7 @@ namespace jotfi.Jot.Console.Views.System
                 return;
             }
             var passwordsMatch = GetPanelText("password") == password;
-            var passwordInfo = passwordsMatch ? GetStartViewModel().GetPasswordScoreInfo(password) : "Passwords do not match";
+            var passwordInfo = passwordsMatch ? GetViewModels().User.GetPasswordScoreInfo(password) : "Passwords do not match";
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
             var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
@@ -133,7 +133,7 @@ namespace jotfi.Jot.Console.Views.System
 
         void CheckEmail(string email)
         {
-            ValidEmail = GetStartViewModel().GetPasswordValid(email);
+            ValidEmail = GetViewModels().User.GetPasswordValid(email);
             var emailsMatch = GetPanelText("confirmEmail") == email;
             var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
             Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", emailInfo));

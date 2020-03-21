@@ -12,6 +12,7 @@ namespace jotfi.Jot.Core.ViewModels.System
 {
     public class StartViewModel : BaseViewModel
     {
+
         public StartViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
@@ -69,10 +70,10 @@ namespace jotfi.Jot.Core.ViewModels.System
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!GetPasswordValid(user.Password.CreatePassword))
+            if (!GetViewModels().User.GetPasswordValid(user.Password.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += GetPasswordScoreInfo(user.Password.CreatePassword);
+                error += GetViewModels().User.GetPasswordScoreInfo(user.Password.CreatePassword);
                 return false;
             }
             if (user.Password.CreatePassword != user.Password.ConfirmPassword)
@@ -80,7 +81,7 @@ namespace jotfi.Jot.Core.ViewModels.System
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!GetEmailValid(user.Person.Email.EmailAddress))
+            if (!GetViewModels().User.GetEmailValid(user.Person.Email.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
@@ -118,43 +119,6 @@ namespace jotfi.Jot.Core.ViewModels.System
 Setting up {Constants.DefaultApplicationName} for the first time.
 To get started, an Administrator account with full access will be created.
 This account should only be used for system administration.";
-        }
-
-        public bool GetPasswordValid(string password)
-        {
-            var passwordScore = PasswordAdvisor.CheckStrength(password);
-            return passwordScore switch
-            {
-                PasswordScore.Blank => false,
-                PasswordScore.VeryWeak => false,
-                PasswordScore.Weak => false,
-                _ => true
-            };
-        }
-
-        public string GetPasswordScoreInfo(string password)
-        {
-            var passwordScore = PasswordAdvisor.CheckStrength(password);
-            var passwordInfo = $"Password Strength: {passwordScore}";
-            switch (passwordScore)
-            {
-                case PasswordScore.Blank:
-                case PasswordScore.VeryWeak:
-                case PasswordScore.Weak:
-                    passwordInfo += ", must be at least 8 characters.";
-                    break;
-                case PasswordScore.Medium:
-                case PasswordScore.Strong:
-                case PasswordScore.VeryStrong:
-                    // Password deemed strong enough, allow user to be added to database etc
-                    break;
-            }
-            return passwordInfo;
-        }
-
-        public bool GetEmailValid(string email)
-        {
-            return EmailValidator.IsEmailValid(email);
         }
     }
 }

@@ -16,9 +16,9 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         }
 
-        ILoginViews GetLoginView()
+        ILoginView GetLoginView()
         {
-            return (ILoginViews)GetView();
+            return (ILoginView)GetView();
         }
 
         public bool PerformLogin()

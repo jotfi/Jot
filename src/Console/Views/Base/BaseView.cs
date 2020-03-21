@@ -1,5 +1,6 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views.Controls;
+using jotfi.Jot.Core.ViewModels;
 using jotfi.Jot.Core.ViewModels.Base;
 using jotfi.Jot.Core.Views.Base;
 using System;
@@ -95,6 +96,11 @@ namespace jotfi.Jot.Console.Views.Base
         public Core.Application GetApp()
         {
             return App;
+        }
+
+        public ViewModelController GetViewModels()
+        {
+            return App.ViewModels;
         }
 
         public BaseViewModel GetViewModel()

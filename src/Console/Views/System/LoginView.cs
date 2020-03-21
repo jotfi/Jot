@@ -10,10 +10,10 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class LoginViews : BaseView, ILoginViews
+    public class LoginView : BaseView, ILoginView
     {
 
-        public LoginViews(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
+        public LoginView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
             : base(app, vm, opts)
         {
             
@@ -93,7 +93,7 @@ namespace jotfi.Jot.Console.Views.System
             throw new NotImplementedException();
         }
 
-        bool ILoginViews.PerformLogin()
+        bool ILoginView.PerformLogin()
         {
             throw new NotImplementedException();
         }

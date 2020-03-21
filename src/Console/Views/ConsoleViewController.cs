@@ -8,8 +8,9 @@ namespace jotfi.Jot.Console.Views
     {
         public ConsoleViewController(ConsoleApplication app, LogOpts opts = null) : base(app, opts)
         {
-            Start = new StartViews(app, app.ViewModels.Start, opts);
-            Login = new LoginViews(app, app.ViewModels.Login, opts);
+            Start = new StartView(app, app.ViewModels.Start, opts);
+            User = new UserView(app, app.ViewModels.User, opts);
+            Login = new LoginView(app, app.ViewModels.Login, opts);
             Init();
         }
     }

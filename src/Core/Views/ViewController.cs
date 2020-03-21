@@ -11,8 +11,9 @@ namespace jotfi.Jot.Core.Views
     {
         public readonly Application App;
         public List<IBaseView> Items { get; private set; }
-        public IStartViews Start { get; protected set; }
-        public ILoginViews Login { get; protected set; }
+        public IStartView Start { get; protected set; }
+        public IUserView User { get; protected set; }
+        public ILoginView Login { get; protected set; }
 
         public ViewController(Application app, LogOpts opts = null) : base(opts)
         {
@@ -24,6 +25,7 @@ namespace jotfi.Jot.Core.Views
             Items = new List<IBaseView>()
             {
                 Start,
+                User,
                 Login
             };
         }
