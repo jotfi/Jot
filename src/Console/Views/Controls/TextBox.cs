@@ -7,7 +7,7 @@ namespace jotfi.Jot.Console.Views.Controls
 {
     public class TextBox : TextField
     {
-        public Action<TextBox> TextChanged { get; set; }
+        public Action<string> TextChanged { get; set; }
 
         public TextBox(string text) : base(text)
         {
@@ -17,7 +17,7 @@ namespace jotfi.Jot.Console.Views.Controls
         public override bool ProcessKey(KeyEvent kb)
         {
             var procKey = base.ProcessKey(kb);
-            TextChanged?.Invoke(this);
+            TextChanged?.Invoke(Text.ToString());
             return procKey;
         }
     }

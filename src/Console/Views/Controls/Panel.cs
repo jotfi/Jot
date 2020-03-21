@@ -10,6 +10,7 @@ namespace jotfi.Jot.Console.Views.Controls
     {
         public string Id { get; }
         public string Title { get; private set; } = "";
+        public bool Cancel { get; private set; }
         public (int, int) Size { get; set; } = (80, 24);
         public List<Field> Fields { get; } = new List<Field>();
 
@@ -18,25 +19,56 @@ namespace jotfi.Jot.Console.Views.Controls
             Id = id;
         }
 
-        public bool ShowDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
+        public void ShowDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
         {
             if (Fields.Count() == 0)
             {
-                return true;
+                return;
             }
-            var cancel = false;
-            var saveButton = new Button(3, 14, saveCaption)
+            Cancel = false;
+            Application.Run(GetDialog(saveCaption, cancelCaption));
+        }
+
+        public Dialog GetDialog(string saveCaption = "Save", string cancelCaption = "Cancel")
+        {
+            var views = new List<View>();
+            int maxLength = 0;
+            foreach (var field in Fields.Where(p => p.AutoAlign))
+            {
+                if (field.LabelText.Length > maxLength)
+                {
+                    maxLength = field.LabelText.Length;
+                }
+            }
+            View previous = null;
+            View defaultView = null;
+            foreach (var field in Fields)
+            {
+                field.Create(views, previous, maxLength);
+                previous = (View)field.Label ?? field.TextBox;
+                if (defaultView == null && field.TextBox != null)
+                {
+                    defaultView = field.TextBox;
+                }
+            }
+            var dialog = new Dialog(Title, Size.Item1, Size.Item2)
+            {
+                views.ToArray()
+            };
+            dialog.AddButton(new Button(3, 14, saveCaption)
             {
                 Clicked = () => Application.RequestStop()
-            };
-            var cancelButton = new Button(10, 14, cancelCaption)
+            });
+            dialog.AddButton(new Button(10, 14, cancelCaption)
             {
-                Clicked = () => { Application.RequestStop(); cancel = true; }
-            };
-            var dialog = new Dialog(Title, Size.Item1, Size.Item2, saveButton, cancelButton);
-            AddFields(dialog);
-            Application.Run(dialog);
-            return cancel;
+                Clicked = () => { Application.RequestStop(); Cancel = true; }
+            });
+            
+            if (defaultView != null)
+            {
+                //dialog.SetFocus(defaultView);
+            }
+            return dialog;
         }
 
         public void SetTitle(string title)
@@ -69,39 +101,6 @@ namespace jotfi.Jot.Console.Views.Controls
                 return;
             }
             Fields.Find(p => p.Id == id).SetLabel(text);
-        }
-
-        public void AddFields(Dialog dialog)
-        {
-            var views = new List<View>();
-            if (Fields.Count == 0)
-            {
-                return;
-            }
-            int maxLength = 0;
-            foreach (var field in Fields.Where(p => p.AutoAlign))
-            {
-                if (field.LabelText.Length > maxLength)
-                {
-                    maxLength = field.LabelText.Length;
-                }
-            }
-            View previous = null;
-            View defaultView = null;
-            foreach (var field in Fields)
-            {
-                field.Create(views, previous, maxLength);
-                previous = (View)field.Label ?? field.TextBox;
-                if (defaultView == null && field.TextBox != null)
-                {
-                    defaultView = field.TextBox;
-                }
-            }
-            dialog.Add(views.ToArray());
-            if (defaultView != null)
-            {
-                dialog.SetFocus(defaultView);
-            }
         }
     }
 }

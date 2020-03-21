@@ -13,14 +13,14 @@ namespace jotfi.Jot.Console.Views.Controls
         public bool ShowLabel { get; set; } = true;
         public bool AutoAlign { get; set; } = true;
         public bool AutoSize{ get; set; } = true;
-        public (Pos, Pos) LabelPos { get; set; }
-        public (Dim, Dim) LabelSize { get; set; }        
+        public (Pos, Pos) LabelPos { get; set; } =  (1, 1);
+        public (Dim, Dim) LabelSize { get; set; } = (Dim.Fill(), 1);
         public TextBox TextBox { get; private set; }
-        public Action<TextBox> TextChanged { get; set; }
+        public Action<string> TextChanged { get; set; }
         public string Text { get; set; }
         public bool ShowTextField { get; set; } = true;
-        public (Pos, Pos) TextPos { get; set; }
-        public (Dim, Dim) TextSize { get; set; }
+        public (Pos, Pos) TextPos { get; set; } = (1, 1);
+        public (Dim, Dim) TextSize { get; set; } = (Dim.Fill(), 1);
         public bool Secret { get; set; } = false;        
 
         public Field(string id, string labelText = "", string text = "")
@@ -62,25 +62,16 @@ namespace jotfi.Jot.Console.Views.Controls
             if (ShowLabel)
             {
                 views.Add(Label = new Label(LabelText) { Id = Id + "Label" });
-                if (AutoAlign)
+                if (AutoAlign && previous != null)
                 {
-                    if (previous != null)
-                    {
-                        (Label.X, Label.Y) = (Pos.Left(previous), Pos.Bottom(previous) + 1);
-                    }
-                }
-                else
-                {
-                    (Label.X, Label.Y) = LabelPos;;
+                    LabelPos = (Pos.Left(previous), Pos.Bottom(previous) + 1);
                 }
                 if (AutoSize)
                 {
-                    Label.Width = Dim.Sized(maxLength);
-                }
-                else
-                {
-                    (Label.Width, Label.Height) = LabelSize;
-                }
+                    LabelSize = (Dim.Sized(maxLength), 1);
+                }                
+                (Label.X, Label.Y) = LabelPos;
+                (Label.Width, Label.Height) = LabelSize;
             }
             if (ShowTextField)
             {
@@ -91,35 +82,16 @@ namespace jotfi.Jot.Console.Views.Controls
                 {
                     if (Label != null)
                     {
-                        TextBox.Y = Pos.Top(Label);
-                        TextBox.X = Pos.Right(Label);
+                        TextPos = (Pos.Right(Label) + 2, Pos.Top(Label));
                     }
                     else if (previous != null)
                     {
-                        TextBox.Y = Pos.Top(previous);
-                        if (previous is TextField)
-                        {
-                            TextBox.X = Pos.Left(previous);
-                        }
-                        else
-                        {
-                            TextBox.X = Pos.Right(previous);
-                        }
+                        var xPos = (previous is TextField) ? Pos.Left(previous) : Pos.Right(previous);
+                        TextPos = (xPos, Pos.Top(previous));                        
                     }
                 }
-                else
-                {
-                    (TextBox.X, TextBox.Y) = TextPos;
-                }
-                if (AutoSize)
-                {
-                    TextBox.Height = 1;
-                    TextBox.Width = Dim.Fill();
-                }
-                else
-                {
-                    (TextBox.Width, TextBox.Height) = TextSize;
-                }
+                (TextBox.X, TextBox.Y) = TextPos;
+                (TextBox.Width, TextBox.Height) = TextSize;                
             }
         }
     }

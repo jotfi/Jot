@@ -1,4 +1,5 @@
 ﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Console.Views.Controls;
 using jotfi.Jot.Core.ViewModels.Base;
@@ -50,7 +51,7 @@ namespace jotfi.Jot.Console.Views.System
         bool SetupAdministratorDialog(User user)
         {
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
-            AddToPanel(new Field("info", GetStartViewModel().CreateAdministratorText())
+            AddToPanel(new Field("infoText", GetStartViewModel().CreateAdministratorText())
             {
                 AutoAlign = false,
                 AutoSize = false,
@@ -58,13 +59,19 @@ namespace jotfi.Jot.Console.Views.System
                 LabelPos = (1, 1),
                 LabelSize = (Dim.Fill(), 4)
             });
-            AddToPanel(new Field("password", "Administrator Password: ", user.Password.CreatePassword)
+            AddToPanel(new Field("password", "Administrator Password", user.Password.CreatePassword)
             {
-                TextChanged = PasswordChanged
+                Secret = true,
+                TextChanged = CheckPassword
             });
-            AddToPanel(new Field("confpass", "Confirm Password: ", user.Password.ConfirmPassword));            
-            AddToPanel(new Field("pwdstr")
+            AddToPanel(new Field("confirmPassword", "Confirm Password", user.Password.ConfirmPassword)
             {
+                Secret = true,
+                TextChanged = CheckConfirm
+            });            
+            AddToPanel(new Field("passwordInfo")
+            {
+                Secret = true,
                 AutoSize = false,
                 ShowTextField = false,
                 LabelSize = (Dim.Fill(), 1)
@@ -74,13 +81,21 @@ namespace jotfi.Jot.Console.Views.System
                 return true;
             }
             user.Password.CreatePassword = GetPanelText("password");
-            user.Password.ConfirmPassword = GetPanelText("confpass");
+            user.Password.ConfirmPassword = GetPanelText("confirmPassword");
             return false;
         }
 
-        void PasswordChanged(TextBox tb)
+        void CheckPassword(string password)
         {
-            Application.MainLoop.Invoke(() => SetPanelLabel("pwdstr", $"Hello World {tb.Text}"));
+            var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(password);
+            Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
+        }
+
+        void CheckConfirm(string password)
+        {
+            var passwordsMatch = GetPanelText("password") == password;
+            var passwordInfo = passwordsMatch ? "Passwords Match" : "Passwords do not match";
+            Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
         }
 
         bool IsAdministratorValid(User user)

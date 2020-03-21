@@ -28,34 +28,36 @@ namespace jotfi.Jot.Console.Views.Base
             Application.Top.Add(view);
         }
 
-        protected virtual void AddToPanel(Field field, string panel = "main")
+        protected virtual void AddToPanel(Field field, string panelId = "main")
         {
-            GetPanel(panel).Fields.Add(field);
+            GetPanel(panelId).Fields.Add(field);
         }
 
-        protected virtual void SetPanelTitle(string title, string panel = "main")
+        protected virtual void SetPanelTitle(string title, string panelId = "main")
         {
-            GetPanel(panel).SetTitle(title);
+            GetPanel(panelId).SetTitle(title);
         }
 
-        protected virtual string GetPanelText(string id, string panel = "main")
+        protected virtual string GetPanelText(string id, string panelId = "main")
         {
-            return GetPanel(panel).GetText(id);
+            return GetPanel(panelId).GetText(id);
         }
 
-        protected virtual void SetPanelText(string id, string text, string panel = "main")
+        protected virtual void SetPanelText(string id, string text, string panelId = "main")
         {
-            GetPanel(panel).SetText(id, text);
+            GetPanel(panelId).SetText(id, text);
         }
 
-        protected virtual void SetPanelLabel(string id, string text, string panel = "main")
+        protected virtual void SetPanelLabel(string id, string text, string panelId = "main")
         {
-            GetPanel(panel).SetLabel(id, text);
+            GetPanel(panelId).SetLabel(id, text);
         }
 
-        protected virtual bool ShowPanelDialog(string panel = "main")
+        protected virtual bool ShowPanelDialog(string panelId = "main")
         {
-            return GetPanel(panel).ShowDialog();
+            var panel = GetPanel(panelId);
+            panel.ShowDialog();
+            return panel.Cancel;
         }
 
         protected Panel GetPanel(string panel)
