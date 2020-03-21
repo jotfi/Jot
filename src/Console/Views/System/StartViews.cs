@@ -106,15 +106,11 @@ namespace jotfi.Jot.Console.Views.System
         void CheckPassword(string password)
         {
             ValidPassword = GetStartViewModel().GetPasswordValid(password);
+            var passwordsMatch = GetPanelText("confirmPassword") == password;
             var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(password);
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
-        }
-
-        void CheckEmail(string email)
-        {
-            ValidEmail = GetStartViewModel().GetPasswordValid(email);
-            var passwordInfo = GetStartViewModel().GetPasswordScoreInfo(email);
-            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", passwordInfo));
+            var infoColor = ValidPassword && passwordsMatch ? Colors.Menu : Colors.Error;
+            Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
         }
 
         void CheckPasswordConfirm(string password)
@@ -124,28 +120,60 @@ namespace jotfi.Jot.Console.Views.System
                 return;
             }
             var passwordsMatch = GetPanelText("password") == password;
-            var passwordInfo = passwordsMatch ? "Passwords Match" : "Passwords do not match";
+            var passwordInfo = passwordsMatch ? GetStartViewModel().GetPasswordScoreInfo(password) : "Passwords do not match";
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
             var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
         }
 
-        void CheckEmailConfirm(string password)
+        void CheckEmail(string email)
         {
-            if (!ValidPassword || string.IsNullOrEmpty(password))
+            ValidEmail = GetStartViewModel().GetPasswordValid(email);
+            var emailsMatch = GetPanelText("confirmEmail") == email;
+            var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
+            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", emailInfo));
+            var infoColor = ValidEmail && emailsMatch ? Colors.Menu : Colors.Error;
+            Application.MainLoop.Invoke(() => SetPanelColor("emailInfo", infoColor));
+        }
+
+        void CheckEmailConfirm(string email)
+        {
+            if (!ValidEmail || string.IsNullOrEmpty(email))
             {
                 return;
             }
-            var passwordsMatch = GetPanelText("password") == password;
-            var passwordInfo = passwordsMatch ? "Passwords Match" : "Passwords do not match";
-            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", passwordInfo));
-            var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
+            var emailsMatch = GetPanelText("email") == email;
+            var emailInfo = emailsMatch ? "" : "Emails do not match";
+            Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", emailInfo));
+            var infoColor = emailsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("emailInfo", infoColor));
         }
 
         bool IsAdministratorValid(User user)
         {
-            return false;
+            if (!GetStartViewModel().GetPasswordValid(user.Password.CreatePassword))
+            {
+                var passwordInfo = "Invalid password. Password must not be too weak.\r\n";
+                passwordInfo += GetStartViewModel().GetPasswordScoreInfo(user.Password.CreatePassword);
+                GetApp().ShowError(passwordInfo);
+                return false;
+            }
+            if (user.Password.CreatePassword != user.Password.ConfirmPassword)
+            {
+                GetApp().ShowError("Invalid password. Confirm password does not match.");
+                return false;
+            }
+            if (!GetStartViewModel().GetEmailValid(user.Person.Email.EmailAddress))
+            {
+                GetApp().ShowError("Invalid email. Please check email address.");
+                return false;
+            }
+            if (user.Person.Email.EmailAddress != user.Person.Email.ConfirmEmail)
+            {
+                GetApp().ShowError("Invalid email. Confirm email does not match.");
+                return false;
+            }
+            return true;
         }
 
         public bool SetupOrganization()

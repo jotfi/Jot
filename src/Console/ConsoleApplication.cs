@@ -41,7 +41,7 @@ namespace jotfi.Jot.Console
         public override void ShowError(string message)
         {
             base.ShowError(message);
-            MessageBox.ErrorQuery(50, 7, $"{Constants.DefaultApplicationName} Error", message);
+            MessageBox.ErrorQuery(50, 7, $"{Constants.DefaultApplicationName} Error", message, "Ok");
         }
 
         public void AddMain(params View[] views)

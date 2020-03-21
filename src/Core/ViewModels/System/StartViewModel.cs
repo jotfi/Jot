@@ -113,5 +113,10 @@ This account should only be used for system administration.";
             }
             return passwordInfo;
         }
+
+        public bool GetEmailValid(string email)
+        {
+            return EmailValidator.IsEmailValid(email);
+        }
     }
 }

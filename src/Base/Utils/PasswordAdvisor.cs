@@ -18,13 +18,19 @@ namespace jotfi.Jot.Base.Utils
     //
     public class PasswordAdvisor
     {
+        /// <summary>
+        /// Checks password length and contains: a number, both lower and upper case, a symbol
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns>PasswordScore enum value from 0 - 5</returns>
         public static PasswordScore CheckStrength(string password)
-        {
-            int score = 1;
+        {            
             if (password.Length < 1)
                 return PasswordScore.Blank;
             if (password.Length < 4)
                 return PasswordScore.VeryWeak;
+
+            int score = 2;
             if (password.Length >= 8) 
                 score++;
             if (password.Length >= 12) 
