@@ -7,6 +7,11 @@ namespace jotfi.Jot.Model.Base
 {
     public class Person : Entity 
     {
+        public Person(string code = "", string description = "") : base(code, description)
+        {
+
+        }
+
         public string FirstNames { get; set; } = "";
         public string LastName { get; set; } = "";
         public long EmailId { get; set; }

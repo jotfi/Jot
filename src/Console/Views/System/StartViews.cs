@@ -34,27 +34,31 @@ namespace jotfi.Jot.Console.Views.System
             Application.Run();
         }
 
-        public bool SetupAdministrator()
+        public bool SetupAdministrator(User admin, out string error)
         {
-            var user = new User();
+            error = string.Empty;
             var ok = false;
             while (!ok)
             {
-                ok = SetupAdministratorDialog(user);
+                ok = SetupAdministratorDialog(admin);
                 if (!ok)
                 {
                     break;
                 }
-                ok = IsAdministratorValid(user);
+                ok = GetStartViewModel().IsAdministratorValid(admin, out error);
+                if (!ok)
+                {
+                    GetApp().ShowError(error);
+                }
             }
             if (!ok)
             {
                 return false;
             }
-            return GetStartViewModel().SaveAdministrator();
+            return GetStartViewModel().SaveAdministrator(admin, out error);
         }
 
-        bool SetupAdministratorDialog(User user)
+        bool SetupAdministratorDialog(User admin)
         {
             ClearPanel();
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
@@ -63,15 +67,14 @@ namespace jotfi.Jot.Console.Views.System
                 AutoAlign = false,
                 AutoSize = false,
                 ShowTextField = false,
-                LabelPos = (1, 1),
                 LabelSize = (Dim.Fill(), 4)
             });
-            AddToPanel(new Field("password", "Administrator Password", user.Password.CreatePassword)
+            AddToPanel(new Field("password", "Administrator Password", admin.Password.CreatePassword)
             {
                 Secret = true,
                 TextChanged = CheckPassword
             });
-            AddToPanel(new Field("confirmPassword", "Confirm Password", user.Password.ConfirmPassword)
+            AddToPanel(new Field("confirmPassword", "Confirm Password", admin.Password.ConfirmPassword)
             {
                 Secret = true,
                 TextChanged = CheckPasswordConfirm
@@ -79,31 +82,29 @@ namespace jotfi.Jot.Console.Views.System
             AddToPanel(new Field("passwordInfo")
             {
                 AutoSize = false,
-                ShowTextField = false,
-                ColorScheme = Colors.Error
+                ShowTextField = false
             });
-            AddToPanel(new Field("email", "Administrator Email", user.Person.Email.EmailAddress)
+            AddToPanel(new Field("email", "Administrator Email", admin.Person.Email.EmailAddress)
             {
                 TextChanged = CheckEmail
             });
-            AddToPanel(new Field("confirmEmail", "Confirm Email", user.Person.Email.ConfirmEmail)
+            AddToPanel(new Field("confirmEmail", "Confirm Email", admin.Person.Email.ConfirmEmail)
             {
                 TextChanged = CheckEmailConfirm
             });
             AddToPanel(new Field("emailInfo")
             {
                 AutoSize = false,
-                ShowTextField = false,
-                ColorScheme = Colors.Error
+                ShowTextField = false
             });
             if (!ShowPanelDialog())
             {
                 return false;
             }
-            user.Password.CreatePassword = GetPanelText("password");
-            user.Password.ConfirmPassword = GetPanelText("confirmPassword");
-            user.Person.Email.EmailAddress = GetPanelText("email");
-            user.Person.Email.ConfirmEmail = GetPanelText("confirmEmail");
+            admin.Password.CreatePassword = GetPanelText("password");
+            admin.Password.ConfirmPassword = GetPanelText("confirmPassword");
+            admin.Person.Email.EmailAddress = GetPanelText("email");
+            admin.Person.Email.ConfirmEmail = GetPanelText("confirmEmail");
             return true;
         }
 
@@ -151,33 +152,6 @@ namespace jotfi.Jot.Console.Views.System
             Application.MainLoop.Invoke(() => SetPanelLabel("emailInfo", emailInfo));
             var infoColor = emailsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("emailInfo", infoColor));
-        }
-
-        bool IsAdministratorValid(User user)
-        {
-            if (!GetStartViewModel().GetPasswordValid(user.Password.CreatePassword))
-            {
-                var passwordInfo = "Invalid password. Password must not be too weak.\r\n";
-                passwordInfo += GetStartViewModel().GetPasswordScoreInfo(user.Password.CreatePassword);
-                GetApp().ShowError(passwordInfo);
-                return false;
-            }
-            if (user.Password.CreatePassword != user.Password.ConfirmPassword)
-            {
-                GetApp().ShowError("Invalid password. Confirm password does not match.");
-                return false;
-            }
-            if (!GetStartViewModel().GetEmailValid(user.Person.Email.EmailAddress))
-            {
-                GetApp().ShowError("Invalid email. Please check email address.");
-                return false;
-            }
-            if (user.Person.Email.EmailAddress != user.Person.Email.ConfirmEmail)
-            {
-                GetApp().ShowError("Invalid email. Confirm email does not match.");
-                return false;
-            }
-            return true;
         }
 
         public bool SetupOrganization()

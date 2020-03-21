@@ -7,6 +7,11 @@ namespace jotfi.Jot.Model.System
 {
     public class Organization : Entity
     {
+        public Organization(string code = "", string description = "") : base(code, description)
+        {
+
+        }
+
         public string Name { get; set; }
         public bool CanLogin { get; set; }
         public List<Person> Contacts { get; set; }

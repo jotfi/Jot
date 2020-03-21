@@ -23,8 +23,12 @@ namespace jotfi.Jot.Core.ViewModels.System
             {
                 return;
             }
-            if (!CheckAdministrator())
+            if (!CheckAdministrator(out string error))
             {
+                if (!string.IsNullOrEmpty(error))
+                {
+                    GetApp().ShowError(error);
+                }
                 return;
             }
             if (!CheckOrganization())
@@ -51,18 +55,52 @@ namespace jotfi.Jot.Core.ViewModels.System
             return GetRepository().System.TableNames.GetList(whereConditions).ToList();
         }
 
-        bool CheckAdministrator()
+        bool CheckAdministrator(out string error)
         {
+            error = string.Empty;
             if (GetRepository().System.Users.Exists())
             {
                 return true;
             }
-            return GetViews().Start.SetupAdministrator();
+            var admin = new User("Administrator", "System Administrator");
+            return GetViews().Start.SetupAdministrator(admin, out error);
         }
 
-        public bool SaveAdministrator()
+        public bool IsAdministratorValid(User user, out string error)
         {
-            return false;
+            error = string.Empty;
+            if (!GetPasswordValid(user.Password.CreatePassword))
+            {
+                error += "Invalid password. Password must not be too weak.\r\n";
+                error += GetPasswordScoreInfo(user.Password.CreatePassword);
+                return false;
+            }
+            if (user.Password.CreatePassword != user.Password.ConfirmPassword)
+            {
+                error += "Invalid password. Confirm password does not match.";
+                return false;
+            }
+            if (!GetEmailValid(user.Person.Email.EmailAddress))
+            {
+                error += "Invalid email. Please check email address.";
+                return false;
+            }
+            if (user.Person.Email.EmailAddress != user.Person.Email.ConfirmEmail)
+            {
+                error += "Invalid email. Confirm email does not match.";
+                return false;
+            }
+            return true;
+        }
+
+        public bool SaveAdministrator(User admin, out string error)
+        {
+            if (!IsAdministratorValid(admin, out error))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         bool CheckOrganization()

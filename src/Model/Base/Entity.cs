@@ -6,6 +6,7 @@ namespace jotfi.Jot.Model.Base
 {
     public abstract class Entity : Transaction
     {
+        public Entity(string code = "", string description = "") => (Code, Description) = (code, description);
         public string Code { get; set; }
         public string Description { get; set; }
 

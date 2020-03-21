@@ -1,5 +1,6 @@
 ﻿using jotfi.Jot.Core.ViewModels.System;
 using jotfi.Jot.Core.Views.Base;
+using jotfi.Jot.Model.System;
 
 namespace jotfi.Jot.Core.Views.System
 {
@@ -7,7 +8,7 @@ namespace jotfi.Jot.Core.Views.System
     {
         StartViewModel GetStartViewModel();
         void ApplicationStart();
-        bool SetupAdministrator();
+        bool SetupAdministrator(User admin, out string error);
         bool SetupOrganization();
     }
 }
