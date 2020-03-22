@@ -5,7 +5,7 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Password : EntityData
+    public class Password : SubTransaction
     {
         public string PasswordHash { get; set; } = "";
 
@@ -26,7 +26,7 @@ namespace jotfi.Jot.Model.Base
             return $@"
 create table {TableName()}(
 {TransactionFields()},
-{EntityDataFields()},
+{SubTransactionFields()},
 PasswordHash varchar(64) not null);";
 
 //SecurityQuestion1 text,

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Email : EntityData
+    public class Email : SubTransaction
     {
         public string EmailAddress { get; set; } = "";
 
@@ -18,7 +18,7 @@ namespace jotfi.Jot.Model.Base
             return $@"
 create table {TableName()}(
 {TransactionFields()},
-{EntityDataFields()},
+{SubTransactionFields()},
 EmailAddress text not null);"; 
         }
     }

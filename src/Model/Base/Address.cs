@@ -5,7 +5,7 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Address : EntityData
+    public class Address : SubTransaction
     {
         public string Lot { get; set; } = "";
         public string Unit { get; set; } = "";
@@ -21,7 +21,7 @@ namespace jotfi.Jot.Model.Base
             return $@"
 create table {TableName()}(
 {TransactionFields()},
-{EntityDataFields()},
+{SubTransactionFields()},
 Lot varchar(50) not null, 
 Unit varchar(50) not null, 
 Number varchar(50) not null, 
