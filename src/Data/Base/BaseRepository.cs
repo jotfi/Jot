@@ -3,6 +3,7 @@ using jotfi.Jot.Database.Base;
 using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 
 namespace jotfi.Jot.Data.Base
@@ -58,6 +59,19 @@ namespace jotfi.Jot.Data.Base
                 Log(ex);
             }
             return null;
+        }
+
+        public virtual long Insert(DbConnection conn, T obj)
+        {
+            try
+            {
+                return conn.Insert<long, T>(obj);
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
+            return 0;
         }
     }
 }

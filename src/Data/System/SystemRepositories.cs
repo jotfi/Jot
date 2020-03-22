@@ -9,18 +9,16 @@ namespace jotfi.Jot.Data.System
     public class SystemRepositories : Logger
     {
         public readonly RepositoryController Data;
-        public readonly TableNameRepository TableNames;
-        public readonly UserRepository Users;
-        public readonly OrganizationRepository Organizations;
+        public readonly OrganizationRepository Organization;
+        public readonly TableNameRepository TableName;
+        public readonly UserRepository User;
 
         public SystemRepositories(RepositoryController data, LogOpts opts = null) : base(opts)
         {
             Data = data;
-            TableNames = new TableNameRepository(data, opts);
-            Users = new UserRepository(data, opts);
-            Organizations = new OrganizationRepository(data, opts);
+            Organization = new OrganizationRepository(data, opts);
+            TableName = new TableNameRepository(data, opts);
+            User = new UserRepository(data, opts);
         }
-
     }
-
 }

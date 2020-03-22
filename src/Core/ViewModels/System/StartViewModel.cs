@@ -53,13 +53,13 @@ namespace jotfi.Jot.Core.ViewModels.System
         public List<TableName> GetTableNames(object whereConditions = null)
         {
             whereConditions ??= new { Type = "table" };
-            return GetRepository().System.TableNames.GetList(whereConditions).ToList();
+            return GetRepository().System.TableName.GetList(whereConditions).ToList();
         }
 
         bool CheckAdministrator(out string error)
         {
             error = string.Empty;
-            if (GetRepository().System.Users.Exists())
+            if (GetRepository().System.User.Exists())
             {
                 return true;
             }
@@ -73,7 +73,7 @@ namespace jotfi.Jot.Core.ViewModels.System
             if (!GetViewModels().User.GetPasswordValid(user.Password.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += GetViewModels().User.GetPasswordScoreInfo(user.Password.CreatePassword);
+                error += GetViewModels().User.GetPasswordInfo(user.Password.CreatePassword);
                 return false;
             }
             if (user.Password.CreatePassword != user.Password.ConfirmPassword)
@@ -106,7 +106,7 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         bool CheckOrganization()
         {
-            if (GetRepository().System.Organizations.Exists())
+            if (GetRepository().System.Organization.Exists())
             {
                 return true;
             }

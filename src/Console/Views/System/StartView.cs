@@ -112,7 +112,7 @@ namespace jotfi.Jot.Console.Views.System
         {
             ValidPassword = GetViewModels().User.GetPasswordValid(password);
             var passwordsMatch = GetPanelText("confirmPassword") == password;
-            var passwordInfo = GetViewModels().User.GetPasswordScoreInfo(password);
+            var passwordInfo = GetViewModels().User.GetPasswordInfo(password);
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
             var infoColor = ValidPassword && passwordsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
@@ -125,7 +125,7 @@ namespace jotfi.Jot.Console.Views.System
                 return;
             }
             var passwordsMatch = GetPanelText("password") == password;
-            var passwordInfo = passwordsMatch ? GetViewModels().User.GetPasswordScoreInfo(password) : "Passwords do not match";
+            var passwordInfo = passwordsMatch ? GetViewModels().User.GetPasswordInfo(password) : "Passwords do not match";
             Application.MainLoop.Invoke(() => SetPanelLabel("passwordInfo", passwordInfo));
             var infoColor = passwordsMatch ? Colors.Menu : Colors.Error;
             Application.MainLoop.Invoke(() => SetPanelColor("passwordInfo", infoColor));
