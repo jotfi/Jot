@@ -7,7 +7,7 @@ namespace jotfi.Jot.Model.Base
     public abstract class EntityData : Transaction
     {
         public long EntityId { get; set; }
-        public string EntityType { get; set; }
+        public string EntityType { get; set; } = "";
 
         public static string EntityDataFields()
         {

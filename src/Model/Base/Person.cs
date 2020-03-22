@@ -5,13 +5,8 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Person : Entity 
+    public class Person : Transaction 
     {
-        public Person(string code = "", string description = "") : base(code, description)
-        {
-
-        }
-
         public string FirstNames { get; set; } = "";
         public string LastName { get; set; } = "";
         public long EmailId { get; set; }
@@ -23,8 +18,7 @@ namespace jotfi.Jot.Model.Base
         {
             return $@"
 create table {TableName()}(
-{TransactionFields()}, 
-{EntityFields()}, 
+{TransactionFields()},
 FirstNames varchar(255) not null, 
 LastName varchar(255) not null, 
 EmailId integer,

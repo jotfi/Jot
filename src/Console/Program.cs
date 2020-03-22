@@ -1,12 +1,10 @@
-﻿
-namespace jotfi.Jot.Console
+﻿namespace jotfi.Jot.Console
 {
     public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            var app = new ConsoleApplication();
-            app.Run();
+            new ConsoleApplication().Run();
         }
     }
 }

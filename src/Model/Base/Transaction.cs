@@ -6,11 +6,11 @@ namespace jotfi.Jot.Model.Base
     public abstract class Transaction : ITransaction
     {
         public long Id { get; set; }
-        public string Hash { get; set; }
+        public string Hash { get; set; } = "";
 
         [ReadOnly(true)]
         public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; } = DateTime.MinValue;
 
         public static string TransactionFields()
         {

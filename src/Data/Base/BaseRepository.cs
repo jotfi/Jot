@@ -45,10 +45,14 @@ namespace jotfi.Jot.Data.Base
             return new List<T>();
         }
 
-        public virtual T GetById(int id)
+        public virtual T GetById(long id, DbConnection conn = null)
         {
             try
             {
+                if (conn != null)
+                {
+                    return conn.Get<T>(id);
+                }
                 using (Data.Db.Context.Create())
                 {
                     return Data.Db.Context.GetConnection().Get<T>(id);
@@ -61,11 +65,19 @@ namespace jotfi.Jot.Data.Base
             return null;
         }
 
-        public virtual long Insert(DbConnection conn, T obj)
+        public virtual long Insert(T obj, DbConnection conn = null)
         {
             try
             {
-                return conn.Insert<long, T>(obj);
+                obj.Init();
+                if (conn != null)
+                {
+                    return conn.Insert<long, T>(obj);
+                }
+                using (Data.Db.Context.Create())
+                {
+                    return Data.Db.Context.GetConnection().Insert<long, T>(obj);
+                }
             }
             catch (Exception ex)
             {

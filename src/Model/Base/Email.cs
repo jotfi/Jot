@@ -10,6 +10,9 @@ namespace jotfi.Jot.Model.Base
     {
         public string EmailAddress { get; set; } = "";
 
+        [NotMapped]
+        public string ConfirmEmail { get; set; } = "";
+
         public override string CreateTable()
         {
             return $@"
@@ -18,8 +21,5 @@ create table {TableName()}(
 {EntityDataFields()},
 EmailAddress text not null);"; 
         }
-
-        [NotMapped]
-        public string ConfirmEmail { get; set; } = "";
     }
 }

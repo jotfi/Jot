@@ -63,7 +63,7 @@ namespace jotfi.Jot.Core.ViewModels.System
             {
                 return true;
             }
-            var admin = new User("Administrator", "System Administrator");
+            var admin = new User() { UserName = "Administrator " }; 
             return GetViews().Start.SetupAdministrator(admin, out error);
         }
 
@@ -100,8 +100,7 @@ namespace jotfi.Jot.Core.ViewModels.System
             {
                 return false;
             }
-
-            return true;
+            return GetViewModels().User.CreateUser(admin);
         }
 
         bool CheckOrganization()

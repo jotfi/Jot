@@ -4,11 +4,10 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public abstract class Entity : Transaction
+    public abstract class Entity : Transaction, ITransaction
     {
-        public Entity(string code = "", string description = "") => (Code, Description) = (code, description);
-        public string Code { get; set; }
-        public string Description { get; set; }
+        public string Code { get; set; } = "";
+        public string Description { get; set; } = "";
 
         public static string EntityFields()
         {

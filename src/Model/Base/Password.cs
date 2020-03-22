@@ -9,15 +9,17 @@ namespace jotfi.Jot.Model.Base
     {
         public string PasswordHash { get; set; } = "";
 
-        //
-        // Below may be optional, reset from email perferred
-        //
-        public string SecurityQuestion1 { get; set; }
-        public string SecurityQuestion2 { get; set; }
-        public string SecurityQuestion3 { get; set; }
-        public string SecurityAnswer1 { get; set; }
-        public string SecurityAnswer2 { get; set; }
-        public string SecurityAnswer3 { get; set; }
+        [NotMapped]
+        public string CreatePassword { get; set; } = "";
+        [NotMapped]
+        public string ConfirmPassword { get; set; } = "";
+
+        //public string SecurityQuestion1 { get; set; } = "";
+        //public string SecurityQuestion2 { get; set; } = "";
+        //public string SecurityQuestion3 { get; set; } = "";
+        //public string SecurityAnswer1 { get; set; } = "";
+        //public string SecurityAnswer2 { get; set; } = "";
+        //public string SecurityAnswer3 { get; set; } = "";
 
         public override string CreateTable()
         {
@@ -25,18 +27,15 @@ namespace jotfi.Jot.Model.Base
 create table {TableName()}(
 {TransactionFields()},
 {EntityDataFields()},
-PasswordHash varchar(64) not null, 
-SecurityQuestion1 text not null,
-SecurityQuestion2 text not null,
-SecurityQuestion3 text not null,
-SecurityAnswer1 text not null,
-SecurityAnswer2 text not null,
-SecurityAnswer3 text not null);";
-        }
+PasswordHash varchar(64) not null);";
 
-        [NotMapped]
-        public string CreatePassword { get; set; } = "";
-        [NotMapped]
-        public string ConfirmPassword { get; set; } = "";
+//SecurityQuestion1 text,
+//SecurityQuestion2 text,
+//SecurityQuestion3 text,
+//SecurityAnswer1 text,
+//SecurityAnswer2 text,
+//SecurityAnswer3 text
+
+        }
     }
 }

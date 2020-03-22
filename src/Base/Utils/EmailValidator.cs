@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NLog;
+using System;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace jotfi.Jot.Base.Utils
@@ -11,6 +10,8 @@ namespace jotfi.Jot.Base.Utils
     //
     public class EmailValidator
     {
+        static Logger Log { get; } = LogManager.GetLogger(typeof(EmailValidator).FullName);
+
         /// <summary>
         /// Uses a regular expression to verify that a string is in valid email format
         /// </summary>
@@ -28,7 +29,7 @@ namespace jotfi.Jot.Base.Utils
                                       RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
                 // Examines the domain part of the email and normalizes it.
-                string DomainMapper(Match match)
+                static string DomainMapper(Match match)
                 {
                     // Use IdnMapping class to convert Unicode domain names.
                     var idn = new IdnMapping();
@@ -41,10 +42,12 @@ namespace jotfi.Jot.Base.Utils
             }
             catch (RegexMatchTimeoutException e)
             {
+                Log.Error(e.Message);
                 return false;
             }
             catch (ArgumentException e)
             {
+                Log.Error(e.Message);
                 return false;
             }
 

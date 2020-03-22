@@ -1,13 +1,9 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.ViewModels.Base;
-using jotfi.Jot.Core.Views.Base;
 using jotfi.Jot.Model.System;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using System.Data.Common;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
@@ -49,36 +45,43 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         public bool CreateUser(User user)
         {
-            using var uow = GetDatabase().Context.Create();
-            var conn = GetDatabase().Context.GetConnection();
             try
             {
-                var addressId = GetRepository().Base.Address.Insert(conn, user.Person.Address);
-                var emailId = GetRepository().Base.Email.Insert(conn, user.Person.Email);
+                using var uow = GetDatabase().Context.Create();
+                var conn = GetDatabase().Context.GetConnection();
+                var addressId = GetRepository().Base.Address.Insert(user.Person.Address, conn);
+                var emailId = GetRepository().Base.Email.Insert(user.Person.Email, conn);
                 user.Person.AddressId = addressId;
                 user.Person.EmailId = emailId;
-                var personId = GetRepository().Base.Person.Insert(conn, user.Person);
+                var personId = GetRepository().Base.Person.Insert(user.Person, conn);
                 user.PersonId = personId;
-                user.Password.PasswordHash = GetPasswordHash(user.Password.CreatePassword);
-                var passwordId = GetRepository().Base.Password.Insert(conn, user.Password);
+                user.Password.PasswordHash = HashUtils.GetSHA256Hash(user.Password.CreatePassword);
+                var passwordId = GetRepository().Base.Password.Insert(user.Password, conn);
                 user.PasswordId = passwordId;
-                var userId = GetRepository().System.User.Insert(conn, user);
+                var userId = GetRepository().System.User.Insert(user, conn);
+                AssertNewUser(userId, user, conn);
+                uow.CommitAsync().Wait();
             }
             catch (Exception ex)
             {
                 Log(ex);
                 return false;
             }
-            uow.CommitAsync().Wait();
             return true;
         }
 
-        public string GetPasswordHash(string password)
+        void AssertNewUser(long userId, User user, DbConnection conn = null)
         {
-            byte[] passwordBytes = Encoding.Default.GetBytes(password);
-            using var SH256Password = SHA256.Create();
-            byte[] hashValue = SH256Password.ComputeHash(passwordBytes);
-            return Convert.ToBase64String(hashValue);
+            var newUser = GetRepository().System.User.GetById(userId, conn);
+            newUser.UserName.IsEqualTo(user.UserName);
+            var password = GetRepository().Base.Password.GetById(newUser.PasswordId, conn);
+            password.PasswordHash.IsEqualTo(user.Password.PasswordHash);
+            var person = GetRepository().Base.Person.GetById(newUser.PersonId, conn);
+            person.Hash.IsEqualTo(user.Person.Hash);
+            var email = GetRepository().Base.Email.GetById(person.EmailId, conn);
+            email.EmailAddress.IsEqualTo(user.Person.Email.EmailAddress);
+            var address = GetRepository().Base.Address.GetById(person.AddressId, conn);
+            address.Hash.IsEqualTo(user.Person.Address.Hash);
         }
     }
 }
