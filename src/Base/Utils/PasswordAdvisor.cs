@@ -13,13 +13,11 @@ namespace jotfi.Jot.Base.Utils
         VeryStrong = 5
     }
 
-    //
-    // Source: http://social.msdn.microsoft.com/Forums/is/csharpgeneral/thread/5e3f27d2-49af-410a-85a2-3c47e3f77fb1
-    //
     public class PasswordAdvisor
     {
         /// <summary>
         /// Checks password length and contains: a number, both lower and upper case, a symbol
+        /// http://social.msdn.microsoft.com/Forums/is/csharpgeneral/thread/5e3f27d2-49af-410a-85a2-3c47e3f77fb1
         /// </summary>
         /// <param name="password"></param>
         /// <returns>PasswordScore enum value from 0 - 5</returns>

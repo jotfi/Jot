@@ -5,15 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace jotfi.Jot.Base.Utils
 {
-    //
-    // Source: https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
-    //
     public class EmailValidator
     {
         static Logger Log { get; } = LogManager.GetLogger(typeof(EmailValidator).FullName);
 
         /// <summary>
         /// Uses a regular expression to verify that a string is in valid email format
+        /// https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
         /// </summary>
         /// <param name="email"></param>
         /// <returns>true if valid email address passed</returns>
@@ -25,8 +23,7 @@ namespace jotfi.Jot.Base.Utils
             try
             {
                 // Normalize the domain
-                email = Regex.Replace(email, @"(@)(.+)$", DomainMapper,
-                                      RegexOptions.None, TimeSpan.FromMilliseconds(200));
+                email = Regex.Replace(email, @"(@)(.+)$", DomainMapper, RegexOptions.None, TimeSpan.FromMilliseconds(200));
 
                 // Examines the domain part of the email and normalizes it.
                 static string DomainMapper(Match match)

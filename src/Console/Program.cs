@@ -4,6 +4,7 @@ using NLog;
 using System;
 using System.IO;
 using System.Reflection;
+using Terminal.Gui;
 
 namespace jotfi.Jot.Console
 {
@@ -13,15 +14,16 @@ namespace jotfi.Jot.Console
 
         static void Main()
         {
-            var settings = new AppSettings();
-            var appPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(Program)).CodeBase);
+            Application.Init();
+            var appSettings = new AppSettings();
+            var appPath = Directory.GetParent(Assembly.GetExecutingAssembly().Location).FullName;
             var settingsFile = Path.Combine(appPath, "appsettings.json");
             if (File.Exists(settingsFile))
             {
                 var settingsString = File.ReadAllText(settingsFile);
                 try
                 {
-                    settings = (AppSettings)JsonConvert.DeserializeObject(settingsString, typeof(AppSettings));
+                    appSettings = (AppSettings)JsonConvert.DeserializeObject(settingsString, typeof(AppSettings));
                 }
                 catch (Exception ex)
                 {
@@ -30,9 +32,9 @@ namespace jotfi.Jot.Console
             }
             else
             {
-                File.WriteAllText(settingsFile, JsonConvert.SerializeObject(settings));
+                File.WriteAllText(settingsFile, JsonConvert.SerializeObject(appSettings));
             }
-            new ConsoleApplication(settings.IsClient).Run();
+            new ConsoleApplication(appSettings).Run();
         }
     }
 }

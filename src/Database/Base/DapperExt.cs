@@ -980,10 +980,10 @@ namespace jotfi.Jot.Database.Base
         /// </summary>
         public enum Dialects
         {
-            SQLServer,
-            PostgreSQL,
-            SQLite,
-            MySQL,
+            SQLite = 0,
+            SQLServer = 1,
+            PostgreSQL = 2,            
+            MySQL = 3
         }
 
         public interface ITableNameResolver

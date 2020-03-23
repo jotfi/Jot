@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using jotfi.Jot.Base;
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Database.Base;
 using jotfi.Jot.Model;
@@ -17,14 +18,15 @@ namespace jotfi.Jot.Database
     
     public class DatabaseController : Logger
     {
-        public DapperExt.Dialects Dialect;
+        public readonly BaseSettings Settings;
+        public readonly DapperExt.Dialects Dialect;        
         public readonly IDbContext Context;
         public readonly List<ITransaction> Models;
 
-        public DatabaseController(LogOpts opts = null) : base(opts)
+        public DatabaseController(BaseSettings settings, LogOpts opts = null) : base(opts)
         {
-            //Todo: get Dialect from settings
-            Dialect = DapperExt.Dialects.SQLite;
+            Settings = settings;
+            Dialect = (DapperExt.Dialects)settings.DbDialect;
             Context = new DbContext(this, opts);
             Models = new List<ITransaction>()
             {

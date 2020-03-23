@@ -1,5 +1,6 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views;
+using jotfi.Jot.Core.Settings;
 using Terminal.Gui;
 
 namespace jotfi.Jot.Console
@@ -9,10 +10,9 @@ namespace jotfi.Jot.Console
         readonly Toplevel StatusBar;
         readonly Window MainWindow;
 
-        public ConsoleApplication(bool isClient) : base(isClient, true)
+        public ConsoleApplication(AppSettings appSettings) : base(appSettings)
         {
-            Views = new ConsoleViewController(this);
-            Application.Init();
+            Views = new ConsoleViewController(this);            
             Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
             {
                 X = 0,
@@ -42,12 +42,7 @@ namespace jotfi.Jot.Console
         {
             base.ShowError(message);
             var width = 50;
-            var height = 7;
-            var messageLines = message.Split("\r\n").Length;
-            if (messageLines > height)
-            {
-                height = messageLines;
-            }
+            var height = message.Split("\r\n").Length + 6;
             var title = $"{Constants.DefaultApplicationName} Error";
             MessageBox.ErrorQuery(width, height, title, message, "Ok");
         }

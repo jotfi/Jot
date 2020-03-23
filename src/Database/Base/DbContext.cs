@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.IO;
 
 namespace jotfi.Jot.Database.Base
 {
@@ -29,9 +30,19 @@ namespace jotfi.Jot.Database.Base
                 }
                 else if (Db.Dialect == DapperExt.Dialects.SQLite)
                 {
+                    var dbDirectory = db.Settings.DbDirectory;
+                    if (string.IsNullOrEmpty(dbDirectory))
+                    {
+                        dbDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                        dbDirectory = Path.Combine(dbDirectory, "jotfi");
+                    }
+                    if (!Directory.Exists(dbDirectory))
+                    {
+                        Directory.CreateDirectory(dbDirectory);
+                    }
                     var builder = new SQLiteConnectionStringBuilder
                     {
-                        DataSource = "./Jot.db"                         
+                        DataSource = Path.Combine(dbDirectory, "Jot.db")
                     };
                     DbConnection = new SQLiteConnection(builder.ConnectionString);                    
                     DapperExt.SetDialect(DapperExt.Dialects.SQLite);

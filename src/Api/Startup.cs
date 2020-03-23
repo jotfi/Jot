@@ -22,7 +22,7 @@ namespace jotfi.Jot.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Application = new Core.Application(false, false);
+            Application = new Core.Application(new Core.Settings.AppSettings());
         }
 
         public IConfiguration Configuration { get; }

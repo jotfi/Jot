@@ -1,4 +1,5 @@
 ﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.Settings;
 using jotfi.Jot.Core.ViewModels;
 using jotfi.Jot.Core.Views;
 using jotfi.Jot.Data;
@@ -9,20 +10,20 @@ namespace jotfi.Jot.Core
 {
     public class Application : Logger
     {
-        public readonly bool IsClient;
+        public readonly AppSettings AppSettings;
         public readonly DatabaseController Database;
         public readonly RepositoryController Repository;
         public readonly ViewModelController ViewModels;
         public ViewController Views { get; protected set; }
         public bool IsInit { get; private set; } = false;
 
-        public Application(bool isClient, bool isConsole) : base()
+        public Application(AppSettings appSettings) : base()
         {
             try
             {
-                IsClient = isClient;
-                Opts = new LogOpts(isConsole, ShowError);
-                Database = new DatabaseController(Opts);
+                AppSettings = appSettings;
+                Opts = new LogOpts(appSettings.IsConsole, ShowError);
+                Database = new DatabaseController(appSettings, Opts);
                 Repository = new RepositoryController(Database, Opts);
                 ViewModels = new ViewModelController(this, Opts);
             }
