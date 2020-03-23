@@ -7,12 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Dapper;
+using jotfi.Jot.Base.System;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace jotfi.Jot.Database.Base
 {
     /// <summary>
     /// Main class for Dapper extensions
+    /// https://github.com/ericdc1/Dapper.SimpleCRUD
     /// </summary>
     public static partial class DapperExt
     {
@@ -22,7 +24,7 @@ namespace jotfi.Jot.Database.Base
             SetDialect(Dialect);
         }
 
-        private static Dialects Dialect = Dialects.SQLServer;
+        private static DbDialects Dialect = DbDialects.SQLServer;
         private static string Encapsulation;
         private static string GetIdentitySql;
         private static string GetPagedListSql;
@@ -70,30 +72,30 @@ namespace jotfi.Jot.Database.Base
         /// Sets the database dialect 
         /// </summary>
         /// <param name="dialect"></param>
-        public static void SetDialect(Dialects dialect)
+        public static void SetDialect(DbDialects dialect)
         {
             switch (dialect)
             {
-                case Dialects.PostgreSQL:
-                    Dialect = Dialects.PostgreSQL;
+                case DbDialects.PostgreSQL:
+                    Dialect = DbDialects.PostgreSQL;
                     Encapsulation = "\"{0}\"";
                     GetIdentitySql = string.Format("SELECT LASTVAL() AS id");
                     GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
                     break;
-                case Dialects.SQLite:
-                    Dialect = Dialects.SQLite;
+                case DbDialects.SQLite:
+                    Dialect = DbDialects.SQLite;
                     Encapsulation = "\"{0}\"";
                     GetIdentitySql = string.Format("SELECT LAST_INSERT_ROWID() AS id");
                     GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {RowsPerPage} OFFSET (({PageNumber}-1) * {RowsPerPage})";
                     break;
-                case Dialects.MySQL:
-                    Dialect = Dialects.MySQL;
+                case DbDialects.MySQL:
+                    Dialect = DbDialects.MySQL;
                     Encapsulation = "`{0}`";
                     GetIdentitySql = string.Format("SELECT LAST_INSERT_ID() AS id");
                     GetPagedListSql = "Select {SelectColumns} from {TableName} {WhereClause} Order By {OrderBy} LIMIT {Offset},{RowsPerPage}";
                     break;
                 default:
-                    Dialect = Dialects.SQLServer;
+                    Dialect = DbDialects.SQLServer;
                     Encapsulation = "[{0}]";
                     GetIdentitySql = string.Format("SELECT CAST(SCOPE_IDENTITY()  AS BIGINT) AS [id]");
                     GetPagedListSql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY {OrderBy}) AS PagedNumber, {SelectColumns} FROM {TableName} {WhereClause}) AS u WHERE PagedNumber BETWEEN (({PageNumber}-1) * {RowsPerPage} + 1) AND ({PageNumber} * {RowsPerPage})";
@@ -973,17 +975,6 @@ namespace jotfi.Jot.Database.Base
             bytes[5] = (byte)time.Minute;
             bytes[4] = (byte)time.Second;
             return new Guid(bytes);
-        }
-
-        /// <summary>
-        /// Database server dialects
-        /// </summary>
-        public enum Dialects
-        {
-            SQLite = 0,
-            SQLServer = 1,
-            PostgreSQL = 2,            
-            MySQL = 3
         }
 
         public interface ITableNameResolver

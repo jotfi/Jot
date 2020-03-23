@@ -1,4 +1,5 @@
-﻿using jotfi.Jot.Model.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace jotfi.Jot.Model.Base
         public long AddressId { get; set; }
         public Address Address { get; set; } = new Address();
 
-        public override string CreateTable()
+        public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {
             return $@"
 create table {TableName()}(

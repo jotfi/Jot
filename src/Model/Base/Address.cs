@@ -1,4 +1,5 @@
-﻿using jotfi.Jot.Model.Base;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace jotfi.Jot.Model.Base
         public string PostCode { get; set; } = "";
         public string Country { get; set; } = "";
 
-        public override string CreateTable()
+        public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {
             return $@"
 create table {TableName()}(

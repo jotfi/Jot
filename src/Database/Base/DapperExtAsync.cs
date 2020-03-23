@@ -11,6 +11,7 @@ namespace jotfi.Jot.Database.Base
 {
     /// <summary>
     /// Main class for Dapper extensions
+    /// https://github.com/ericdc1/Dapper.SimpleCRUD
     /// </summary>
     public static partial class DapperExt
     {

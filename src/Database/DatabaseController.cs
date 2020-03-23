@@ -19,14 +19,14 @@ namespace jotfi.Jot.Database
     public class DatabaseController : Logger
     {
         public readonly BaseSettings Settings;
-        public readonly DapperExt.Dialects Dialect;        
+        public readonly DbDialects Dialect;        
         public readonly IDbContext Context;
         public readonly List<ITransaction> Models;
 
         public DatabaseController(BaseSettings settings, LogOpts opts = null) : base(opts)
         {
             Settings = settings;
-            Dialect = (DapperExt.Dialects)settings.DbDialect;
+            Dialect = (DbDialects)settings.DbDialect;
             Context = new DbContext(this, opts);
             Models = new List<ITransaction>()
             {

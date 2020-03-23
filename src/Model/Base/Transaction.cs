@@ -1,4 +1,5 @@
-﻿using System;
+﻿using jotfi.Jot.Base.System;
+using System;
 using System.ComponentModel;
 
 namespace jotfi.Jot.Model.Base
@@ -26,6 +27,6 @@ ModifiedDate datetime";
             return GetType().Name;
         }
 
-        public abstract string CreateTable();
+        public abstract string CreateTable(DbDialects dialect = DbDialects.SQLite);
     }
 }

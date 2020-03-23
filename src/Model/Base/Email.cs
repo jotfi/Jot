@@ -1,4 +1,5 @@
 ﻿
+using jotfi.Jot.Base.System;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +14,7 @@ namespace jotfi.Jot.Model.Base
         [NotMapped]
         public string ConfirmEmail { get; set; } = "";
 
-        public override string CreateTable()
+        public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {
             return $@"
 create table {TableName()}(

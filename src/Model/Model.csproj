@@ -5,4 +5,8 @@
     <RootNamespace>jotfi.Jot.Model</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj" />
+  </ItemGroup>
+
 </Project>

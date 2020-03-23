@@ -23,12 +23,12 @@ namespace jotfi.Jot.Database.Base
             try
             {
                 Db = db;
-                if (Db.Dialect == DapperExt.Dialects.PostgreSQL)
+                if (Db.Dialect == DbDialects.PostgreSQL)
                 {
                     DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JotDb"));
-                    DapperExt.SetDialect(DapperExt.Dialects.PostgreSQL);
+                    DapperExt.SetDialect(DbDialects.PostgreSQL);
                 }
-                else if (Db.Dialect == DapperExt.Dialects.SQLite)
+                else if (Db.Dialect == DbDialects.SQLite)
                 {
                     var dbDirectory = db.Settings.DbDirectory;
                     if (string.IsNullOrEmpty(dbDirectory))
@@ -45,17 +45,17 @@ namespace jotfi.Jot.Database.Base
                         DataSource = Path.Combine(dbDirectory, "Jot.db")
                     };
                     DbConnection = new SQLiteConnection(builder.ConnectionString);                    
-                    DapperExt.SetDialect(DapperExt.Dialects.SQLite);
+                    DapperExt.SetDialect(DbDialects.SQLite);
                 }
-                else if (Db.Dialect == DapperExt.Dialects.MySQL)
+                else if (Db.Dialect == DbDialects.MySQL)
                 {
                     DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JotDb"));
-                    DapperExt.SetDialect(DapperExt.Dialects.MySQL);
+                    DapperExt.SetDialect(DbDialects.MySQL);
                 }
                 else
                 {
                     DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JotDb;Integrated Security=True;MultipleActiveResultSets=true;");
-                    DapperExt.SetDialect(DapperExt.Dialects.SQLServer);
+                    DapperExt.SetDialect(DbDialects.SQLServer);
                 }
                 DbConnection.Open();
             }
