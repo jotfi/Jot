@@ -7,9 +7,14 @@ namespace jotfi.Jot.Core.ViewModels.System
 {
     public partial class UserViewModel
     {
-        public Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            return GetRepository().System.User.GetListAsync();
+            var users = await GetRepository().System.User.GetListAsync();
+            foreach (var user in users)
+            {
+                GetUserDetails(user);
+            }
+            return users;
         }
 
     }

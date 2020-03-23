@@ -1,4 +1,6 @@
-﻿using MySql.Data.MySqlClient;
+﻿#define DEBUG
+
+using MySql.Data.MySqlClient;
 using jotfi.Jot.Base.System;
 using Npgsql;
 using System;
@@ -40,6 +42,11 @@ namespace jotfi.Jot.Database.Base
                     {
                         Directory.CreateDirectory(dbDirectory);
                     }
+#if (DEBUG)
+
+                    File.Delete(Path.Combine(dbDirectory, "Jot.db"));
+
+#endif
                     var builder = new SQLiteConnectionStringBuilder
                     {
                         DataSource = Path.Combine(dbDirectory, "Jot.db")

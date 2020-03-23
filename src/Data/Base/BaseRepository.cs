@@ -83,5 +83,26 @@ namespace jotfi.Jot.Data.Base
             }
             return 0;
         }
+
+        public virtual int Update(T obj, DbConnection conn = null)
+        {
+            try
+            {
+                obj.Init();
+                if (conn != null)
+                {
+                    return conn.Update(obj);
+                }
+                using (Data.Db.Context.Create())
+                {
+                    return Data.Db.Context.GetConnection().Update(obj);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
+            return 0;
+        }
     }
 }

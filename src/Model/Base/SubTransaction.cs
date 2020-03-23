@@ -9,6 +9,12 @@ namespace jotfi.Jot.Model.Base
         public long TxId { get; set; }
         public string TxType { get; set; } = "";
 
+        public void SetTx(long txId, string txType)
+        {
+            TxId = txId;
+            TxType = txType;
+        }
+
         public static string SubTransactionFields()
         {
             return @"

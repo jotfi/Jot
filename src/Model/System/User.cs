@@ -10,9 +10,9 @@ namespace jotfi.Jot.Model.System
     {
         public string UserName { get; set; } = "";
         public long PersonId { get; set; }
-        public Person Person { get; } = new Person();
+        public Person Person { get; set; } = new Person();
         public long PasswordId { get; set; }
-        public Password Password { get; } = new Password();
+        public Password Password { get; set; } = new Password();
 
         public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {

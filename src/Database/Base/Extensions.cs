@@ -10,8 +10,8 @@ namespace jotfi.Jot.Database.Base
     {
         public static void Init(this Transaction transaction)
         {
-            transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
             transaction.ModifiedDate = DateTime.Now;
+            transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
         }
     }
 }

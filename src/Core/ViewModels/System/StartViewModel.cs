@@ -63,7 +63,15 @@ namespace jotfi.Jot.Core.ViewModels.System
             {
                 return true;
             }
-            var admin = new User() { UserName = "Administrator " }; 
+            var admin = new User() { UserName = "Administrator" };
+            admin.Person.FirstName = "System";
+            admin.Person.LastName = "Admin";
+#if DEBUG
+            admin.Password.CreatePassword = "admin1!";
+            admin.Password.ConfirmPassword = admin.Password.CreatePassword;
+            admin.Person.Email.EmailAddress = "admin@admin.com";
+            admin.Person.Email.ConfirmEmail = admin.Person.Email.EmailAddress;
+#endif
             return GetViews().Start.SetupAdministrator(admin, out error);
         }
 

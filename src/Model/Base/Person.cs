@@ -6,9 +6,9 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Person : Transaction 
+    public class Person : SubTransaction 
     {
-        public string FirstNames { get; set; } = "";
+        public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
         public long EmailId { get; set; }
         public Email Email { get; set; } = new Email();
@@ -20,7 +20,8 @@ namespace jotfi.Jot.Model.Base
             return $@"
 create table {TableName()}(
 {TransactionFields()},
-FirstNames varchar(255) not null, 
+{SubTransactionFields()},
+FirstName varchar(255) not null, 
 LastName varchar(255) not null, 
 EmailId integer,
 AddressId integer);";
