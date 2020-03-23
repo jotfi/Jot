@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace jotfi.Jot.Data.Base
 {
-    public abstract class BaseRepository<T> : Logger where T : Transaction
+    public abstract partial class BaseRepository<T> : Logger where T : Transaction
     {
         protected readonly RepositoryController Data;
 
@@ -16,8 +16,6 @@ namespace jotfi.Jot.Data.Base
         {
             Data = data;
         }
-
-        //Todo: support async methods
 
         public virtual bool Exists()
         {

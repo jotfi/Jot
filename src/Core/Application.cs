@@ -9,16 +9,18 @@ namespace jotfi.Jot.Core
 {
     public class Application : Logger
     {
+        public readonly bool IsClient;
         public readonly DatabaseController Database;
         public readonly RepositoryController Repository;
         public readonly ViewModelController ViewModels;
         public ViewController Views { get; protected set; }
         public bool IsInit { get; private set; } = false;
 
-        public Application(bool isConsole) : base()
+        public Application(bool isClient, bool isConsole) : base()
         {
             try
             {
+                IsClient = isClient;
                 Opts = new LogOpts(isConsole, ShowError);
                 Database = new DatabaseController(Opts);
                 Repository = new RepositoryController(Database, Opts);

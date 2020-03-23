@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "Desktop\Desktop.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{DC177705-1920-4C78-9D84-09C4FE5CDFE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{B3B40F27-FE11-4371-B921-DABC308A9EAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{DC177705-1920-4C78-9D84-09C4FE5CDFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC177705-1920-4C78-9D84-09C4FE5CDFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC177705-1920-4C78-9D84-09C4FE5CDFE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3B40F27-FE11-4371-B921-DABC308A9EAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3B40F27-FE11-4371-B921-DABC308A9EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3B40F27-FE11-4371-B921-DABC308A9EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3B40F27-FE11-4371-B921-DABC308A9EAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

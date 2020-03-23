@@ -7,7 +7,7 @@ using System.Data.Common;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
-    public class UserViewModel : BaseViewModel
+    public partial class UserViewModel : BaseViewModel
     {
         public UserViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {

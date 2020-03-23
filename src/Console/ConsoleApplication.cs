@@ -9,7 +9,7 @@ namespace jotfi.Jot.Console
         readonly Toplevel StatusBar;
         readonly Window MainWindow;
 
-        public ConsoleApplication() : base(true)
+        public ConsoleApplication(bool isClient) : base(isClient, true)
         {
             Views = new ConsoleViewController(this);
             Application.Init();
@@ -41,7 +41,15 @@ namespace jotfi.Jot.Console
         public override void ShowError(string message)
         {
             base.ShowError(message);
-            MessageBox.ErrorQuery(50, 7, $"{Constants.DefaultApplicationName} Error", message, "Ok");
+            var width = 50;
+            var height = 7;
+            var messageLines = message.Split("\r\n").Length;
+            if (messageLines > height)
+            {
+                height = messageLines;
+            }
+            var title = $"{Constants.DefaultApplicationName} Error";
+            MessageBox.ErrorQuery(width, height, title, message, "Ok");
         }
 
         public void AddMain(params View[] views)

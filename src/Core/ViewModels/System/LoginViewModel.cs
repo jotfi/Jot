@@ -9,7 +9,7 @@ using System.Text;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
-    public class LoginViewModel : BaseViewModel
+    public partial class LoginViewModel : BaseViewModel
     {
         public LoginViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
