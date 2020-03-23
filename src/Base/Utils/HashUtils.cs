@@ -12,7 +12,12 @@ namespace jotfi.Jot.Base.Utils
             byte[] valueBytes = Encoding.Default.GetBytes(value);
             using var SH256Password = SHA256.Create();
             byte[] hashValue = SH256Password.ComputeHash(valueBytes);
-            return Convert.ToBase64String(hashValue);
+            var sb = new StringBuilder();
+            foreach (var hashByte in hashValue)
+            {
+                sb.Append(hashByte.ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }
