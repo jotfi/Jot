@@ -12,13 +12,14 @@ namespace jotfi.Jot.Core.ViewModels.System
 {
     public class SystemViewModel : BaseViewModel
     {
-
         public SystemViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
 
-        public void CheckDatabase() => GetDatabase().CheckTables(GetTableNames());
+        public bool CheckConnection() => false;
+
+        public bool CheckDatabase(out string error) => GetDatabase().CheckTables(GetTableNames(), out error);
         public bool CheckAdministrator() => GetRepository().System.User.Exists();
         public bool CheckOrganization() => GetRepository().System.Organization.Exists();
 

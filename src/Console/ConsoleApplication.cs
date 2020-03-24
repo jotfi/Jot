@@ -28,20 +28,6 @@ namespace jotfi.Jot.Console
                 Width = Dim.Fill(),
                 Height = Dim.Sized(1)
             });
-            Init();
-        }
-
-        public override void Run()
-        {
-            try
-            {
-                base.Run();
-                Views.System.ApplicationStart();
-            }
-            catch (Exception ex)
-            {
-                Log(ex);
-            }
         }
 
         public override bool Quit()

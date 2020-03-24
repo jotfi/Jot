@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Base
 {
@@ -26,19 +25,24 @@ namespace jotfi.Jot.Console.Views.Base
         }
 
         public Core.Application GetApp() => App;
+        public Core.Settings.AppSettings GetAppSettings() => GetApp().AppSettings;
         public T GetViewModel() => ViewModel;
-        public ConsoleApplication GetConsoleApp() => App;
+        public ConsoleApplication GetConsoleApp() => App;        
         public ViewModelFactory GetViewModels() => App.ViewModels;
+        public Mono.Terminal.MainLoop GetMainLoop() => Terminal.Gui.Application.MainLoop;
+        public Terminal.Gui.Dim GetFill() => Terminal.Gui.Dim.Fill();
+        public Terminal.Gui.ColorScheme GetMenuColor() => Terminal.Gui.Colors.Menu;
+        public Terminal.Gui.ColorScheme GetErrorColor() => Terminal.Gui.Colors.Error;
 
         public virtual void Quit()
         {
             if (App.Quit())
             {
-                Application.Top.Running = false;
+                Terminal.Gui.Application.Top.Running = false;
             }
         }
 
-        protected virtual void AddToTop(View view) => Application.Top.Add(view);
+        protected virtual void AddToTop(Terminal.Gui.View view) => Terminal.Gui.Application.Top.Add(view);
         protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();
         protected virtual void AddToPanel(Field field, 
             string panelId = "main") => GetPanel(panelId).Fields.Add(field);
@@ -50,7 +54,7 @@ namespace jotfi.Jot.Console.Views.Base
             string panelId = "main") => GetPanel(panelId).SetText(id, text);
         protected virtual void SetPanelLabel(string id, string text, 
             string panelId = "main") => GetPanel(panelId).SetLabel(id, text);
-        protected virtual void SetPanelColor(string id, ColorScheme color, 
+        protected virtual void SetPanelColor(string id, Terminal.Gui.ColorScheme color, 
             string panelId = "main") => GetPanel(panelId).SetColor(id, color);
 
         protected virtual bool ShowPanelDialog(string panelId = "main", 

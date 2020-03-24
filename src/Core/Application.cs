@@ -1,4 +1,5 @@
-﻿using jotfi.Jot.Base.System;
+﻿using jotfi.Jot.Base.Settings;
+using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Settings;
 using jotfi.Jot.Core.ViewModels;
 using jotfi.Jot.Core.Views;
@@ -15,7 +16,6 @@ namespace jotfi.Jot.Core
         public readonly RepositoryFactory Repository;
         public readonly ViewModelFactory ViewModels;
         public ViewFactory Views { get; protected set; }
-        public bool IsInit { get; private set; } = false;
 
         public Application(AppSettings appSettings) : base()
         {
@@ -33,30 +33,22 @@ namespace jotfi.Jot.Core
             }
         }
 
-        public virtual void ShowError(string message)
-        {
-
-        }
-
-        public void Init()
+        public virtual void Run()
         {
             try
             {
-                IsInit = true;
+                Views.System.ApplicationStart();
+                Views.System.ApplicationEnd();
             }
-            catch (Exception ex)
+             catch (Exception ex)
             {
                 Log(ex);
             }
         }
 
-        public virtual void Run()
-        {                 
-            if (!IsInit)
-            {
-                throw new NotImplementedException();
-            }         
-        }
+        public virtual void ShowError(string message) { }
+        public virtual void SaveSettings() => SettingsUtils.SaveSettings(AppSettings);
+
 
         public virtual bool Quit()
         {

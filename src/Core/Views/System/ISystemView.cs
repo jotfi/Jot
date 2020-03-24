@@ -7,7 +7,9 @@ namespace jotfi.Jot.Core.Views.System
     public interface ISystemView
     {
         void ApplicationStart();
-        bool SetupAdministrator(User admin, out string error);
-        bool SetupOrganization(Organization organization, out string error);
+        void ApplicationEnd();
+        bool SetupConnection();
+        bool SetupAdministrator(User admin);
+        bool SetupOrganization(Organization organization);
     }
 }

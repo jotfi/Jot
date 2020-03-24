@@ -39,8 +39,9 @@ namespace jotfi.Jot.Database
             };
         }
 
-        public bool CheckTables(List<TableName> tableNames)
+        public bool CheckTables(List<TableName> tableNames, out string error)
         {
+            error = string.Empty;
             using var uow = Context.Create();
             foreach (var table in Models)
             {
@@ -54,6 +55,7 @@ namespace jotfi.Jot.Database
                 catch (Exception ex)
                 {
                     Log(ex, table.CreateTable());
+                    error = $"Exception during create table: {table.GetType().Name}. Check log for details.";
                     return false;
                 }
             }
