@@ -5,7 +5,7 @@ using System.Text;
 
 namespace jotfi.Jot.Data.Base
 {
-    public class BaseRepositories : Logger
+    public class BaseFactory : Logger
     {
         public readonly RepositoryFactory Data;
         public readonly AddressRepository Address;
@@ -13,7 +13,7 @@ namespace jotfi.Jot.Data.Base
         public readonly PasswordRepository Password;
         public readonly PersonRepository Person;
 
-        public BaseRepositories(RepositoryFactory data, LogOpts opts = null) : base(opts)
+        public BaseFactory(RepositoryFactory data, LogOpts opts = null) : base(opts)
         {
             Data = data;
             Address = new AddressRepository(data, opts);

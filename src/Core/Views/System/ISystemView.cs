@@ -9,6 +9,6 @@ namespace jotfi.Jot.Core.Views.System
         SystemViewModel GetSystemViewModel();
         void ApplicationStart();
         bool SetupAdministrator(User admin, out string error);
-        bool SetupOrganization();
+        bool SetupOrganization(Organization organization, out string error);
     }
 }

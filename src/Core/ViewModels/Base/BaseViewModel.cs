@@ -20,26 +20,11 @@ namespace jotfi.Jot.Core.ViewModels.Base
             App = app;            
         }
 
-        protected Application GetApp()
-        {
-            return App;
-        }
-
-        protected DatabaseController GetDatabase()
-        {
-            return App.Database;
-        }
-
-        protected RepositoryFactory GetRepository()
-        {
-            return App.Repository;
-        }
-
-        protected ViewModelFactory GetViewModels()
-        {
-            return App.ViewModels;
-        }
-
+        protected Application GetApp() => App;
+        protected DatabaseController GetDatabase() => App.Database;
+        protected RepositoryFactory GetRepository() => App.Repository;
+        protected ViewModelFactory GetViewModels() => App.ViewModels;
+        
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

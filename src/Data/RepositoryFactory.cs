@@ -7,15 +7,15 @@ namespace jotfi.Jot.Data
 {
     public class RepositoryFactory : Logger
     {
-        public readonly BaseRepositories Base;
-        public readonly SystemRepositories System;
+        public readonly BaseFactory Base;
+        public readonly SystemFactory System;
         public readonly DatabaseController Db;
 
         public RepositoryFactory(DatabaseController db, LogOpts opts = null) : base(opts)
         {
             Db = db;
-            Base = new BaseRepositories(this);
-            System = new SystemRepositories(this);
+            Base = new BaseFactory(this);
+            System = new SystemFactory(this);
         }
 
     }

@@ -42,6 +42,14 @@ namespace jotfi.Jot.Core.ViewModels.System
             return GetRepository().System.TableName.GetList(whereConditions).ToList();
         }
 
+        public string CreateAdministratorText()
+        {
+            return $@"
+Setting up {Constants.DefaultApplicationName} for the first time.
+To get started, an Administrator account with full access will be created.
+This account should only be used for system administration.";
+        }
+
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
@@ -78,12 +86,43 @@ namespace jotfi.Jot.Core.ViewModels.System
             return GetViewModels().User.CreateUser(admin);
         }
 
-        public string CreateAdministratorText()
+        public bool IsOrganizationValid(Organization organization, out string error)
         {
-            return $@"
-Setting up {Constants.DefaultApplicationName} for the first time.
-To get started, an Administrator account with full access will be created.
-This account should only be used for system administration.";
+            error = string.Empty;
+            if (string.IsNullOrWhiteSpace(organization.Name))
+            {
+                error += "Invalid organization. Name must not be blank.";
+                return false;
+            }
+            return true;
         }
+
+        public bool SaveOrganization(Organization organization, out string error)
+        {
+            if (!IsOrganizationValid(organization, out error))
+            {
+                return false;
+            }
+            return CreateOrganization(organization);
+        }
+
+        public bool CreateOrganization(Organization organization)
+        { 
+            try
+            {
+                using var uow = GetDatabase().Context.Create();
+                var conn = GetDatabase().Context.GetConnection();
+                var organizationId = GetRepository().System.Organization.Insert(organization, conn);
+                organizationId.IsEqualTo(0);
+                uow.CommitAsync().Wait();
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+                return false;
+            }
+            return true;
+        }
+
     }
 }

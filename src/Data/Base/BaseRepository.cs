@@ -17,15 +17,8 @@ namespace jotfi.Jot.Data.Base
             Data = data;
         }
 
-        public virtual bool Exists()
-        {
-            return GetCount() > 0;
-        }
-
-        public virtual int GetCount()
-        {
-            return GetList().Count();
-        }
+        public virtual bool Exists() => GetCount() > 0;
+        public virtual int GetCount() => GetList().Count();
 
         public IEnumerable<T> GetList(object whereConditions = null)
         {
