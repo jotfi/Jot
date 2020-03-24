@@ -11,23 +11,32 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Base
 {
-    public abstract class BaseView : Logger, IBaseView
+    public abstract class BaseView<T> : Logger, IBaseView<T>
     {
         private readonly ConsoleApplication App;
-        private readonly BaseViewModel ViewModel;
+        private readonly T ViewModel;
 
         private List<Panel> Panels { get; } = new List<Panel>();
 
-        public BaseView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null) : base(opts)
+        public BaseView(ConsoleApplication app, T viewmodel, LogOpts opts = null) 
+            : base(opts)
         {
             App = app;
-            ViewModel = vm;
+            ViewModel = viewmodel;
         }
 
         public Core.Application GetApp() => App;
+        public T GetViewModel() => ViewModel;
         public ConsoleApplication GetConsoleApp() => App;
         public ViewModelFactory GetViewModels() => App.ViewModels;
-        public BaseViewModel GetViewModel() => ViewModel;
+
+        public virtual void Quit()
+        {
+            if (App.Quit())
+            {
+                Application.Top.Running = false;
+            }
+        }
 
         protected virtual void AddToTop(View view) => Application.Top.Add(view);
         protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();
@@ -59,14 +68,6 @@ namespace jotfi.Jot.Console.Views.Base
                 return newPanel;
             }
             return Panels.Find(p => p.Id == panel);
-        }
-
-        protected virtual void Quit()
-        {
-            if (App.Quit())
-            {
-                Application.Top.Running = false;
-            }
-        }       
+        }    
     }
 }

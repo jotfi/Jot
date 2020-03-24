@@ -10,19 +10,18 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class UserView : BaseView, IUserView
+    public class UserView : BaseView<UserViewModel>, IUserView
     {
 
-        public UserView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
-            : base(app, vm, opts)
+        public UserView(ConsoleApplication app, UserViewModel viewmodel, LogOpts opts = null)
+            : base(app, viewmodel, opts)
         {
             
         }
 
-        public UserViewModel GetUserViewModel()
+        public void CreateNewUser()
         {
-            return (UserViewModel)GetViewModel();
+            throw new NotImplementedException();
         }
-
     }
 }

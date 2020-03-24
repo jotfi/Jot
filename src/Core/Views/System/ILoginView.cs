@@ -3,10 +3,9 @@ using jotfi.Jot.Core.Views.Base;
 
 namespace jotfi.Jot.Core.Views.System
 {
-    public interface ILoginView : IBaseView
+    public interface ILoginView
     {
-        LoginViewModel GetLoginViewModel();
-        bool PerformLogin();
+        bool ShowLogin();
         void AddMainMenu();
 
     }

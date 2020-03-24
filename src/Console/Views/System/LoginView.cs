@@ -10,21 +10,16 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class LoginView : BaseView, ILoginView
+    public class LoginView : BaseView<LoginViewModel>, ILoginView
     {
 
-        public LoginView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
-            : base(app, vm, opts)
+        public LoginView(ConsoleApplication app, LoginViewModel viewmodel, LogOpts opts = null)
+            : base(app, viewmodel, opts)
         {
             
         }
 
-        public LoginViewModel GetLoginViewModel()
-        {
-            return (LoginViewModel)GetViewModel();
-        }
-
-        public void PerformLogin()
+        public bool ShowLogin()
         {
             var menu = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
@@ -66,7 +61,9 @@ namespace jotfi.Jot.Console.Views.System
                             MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
                         }
                         },
-                        new Button(13, 14, "Quit") { Clicked = () => Quit() });            
+                        new Button(13, 14, "Quit") { Clicked = () => Quit() });
+
+            return true;
         }
 
         public MenuBar GetMainMenu()
@@ -93,9 +90,5 @@ namespace jotfi.Jot.Console.Views.System
             throw new NotImplementedException();
         }
 
-        bool ILoginView.PerformLogin()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

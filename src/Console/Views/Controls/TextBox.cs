@@ -1,4 +1,5 @@
-﻿using System;
+﻿using jotfi.Jot.Base.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
@@ -8,17 +9,18 @@ namespace jotfi.Jot.Console.Views.Controls
     public class TextBox : TextField
     {
         public Action<string> TextChanged { get; set; }
-
-        public TextBox(string text) : base(text)
+        private readonly object Model;
+        public TextBox(string text, object model) : base(text)
         {
-
+            Model = model;
         }
 
         public override bool ProcessKey(KeyEvent kb)
         {
-            var procKey = base.ProcessKey(kb);
+            var processKey = base.ProcessKey(kb);
             TextChanged?.Invoke(Text.ToString());
-            return procKey;
+            FieldUtils.SetValue(Model, Id.ToString(), Text.ToString());
+            return processKey;
         }
     }
 }

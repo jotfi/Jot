@@ -50,6 +50,13 @@ To get started, an Administrator account with full access will be created.
 This account should only be used for system administration.";
         }
 
+        public string FirstOrganizationText()
+        {
+            return $@"
+Logging into {Constants.DefaultApplicationName} requires an organization.
+Please enter an organizaton name, this can be edited later.";
+        }
+
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;

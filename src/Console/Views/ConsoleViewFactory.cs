@@ -11,7 +11,6 @@ namespace jotfi.Jot.Console.Views
             System = new SystemView(app, app.ViewModels.System, opts);
             User = new UserView(app, app.ViewModels.User, opts);
             Login = new LoginView(app, app.ViewModels.Login, opts);
-            Init();
         }
     }
 }

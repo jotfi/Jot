@@ -10,7 +10,6 @@ namespace jotfi.Jot.Core.Views
     public abstract class ViewFactory : Logger
     {
         public readonly Application App;
-        public List<IBaseView> Items { get; private set; }
         public ISystemView System { get; protected set; }
         public IUserView User { get; protected set; }
         public ILoginView Login { get; protected set; }
@@ -18,16 +17,6 @@ namespace jotfi.Jot.Core.Views
         public ViewFactory(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;
-        }
-
-        public void Init()
-        {
-            Items = new List<IBaseView>()
-            {
-                System,
-                User,
-                Login
-            };
         }
     }
 }

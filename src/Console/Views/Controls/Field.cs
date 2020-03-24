@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Text;
 using Terminal.Gui;
 
@@ -8,8 +10,9 @@ namespace jotfi.Jot.Console.Views.Controls
     public class Field
     {
         public string Id { get; }
+        public object Model { get; }
         public Label Label { get; private set; }
-        public string LabelText { get; set; }
+        public string LabelText { get; set; } = "";
         public ColorScheme ColorScheme { get; set; }
         public bool ShowLabel { get; set; } = true;
         public bool AutoAlign { get; set; } = true;
@@ -18,17 +21,23 @@ namespace jotfi.Jot.Console.Views.Controls
         public (Dim, Dim) LabelSize { get; set; } = (Dim.Fill(), 1);
         public TextBox TextBox { get; private set; }
         public Action<string> TextChanged { get; set; }
-        public string Text { get; set; }
+        public string Text { get; set; } = "";
         public bool ShowTextField { get; set; } = true;
         public (Pos, Pos) TextPos { get; set; } = (1, 1);
         public (Dim, Dim) TextSize { get; set; } = (Dim.Fill(), 1);
-        public bool Secret { get; set; } = false;        
+        public bool Secret { get; set; } = false;
 
-        public Field(string id, string labelText = "", string text = "")
+        public Field(string id)
         {
             Id = id;
-            LabelText = labelText;
-            Text = text;
+        }
+
+        public Field(string id, object model) : this(id)
+        {
+            Model = model;
+            var property = model?.GetType().GetProperty(id);
+            LabelText = property?.GetCustomAttribute<DisplayAttribute>()?.Name ?? "";
+            Text = property?.GetValue(model, null)?.ToString() ?? "";
         }
 
         public string GetText()
@@ -86,7 +95,7 @@ namespace jotfi.Jot.Console.Views.Controls
             }
             if (ShowTextField)
             {
-                views.Add(TextBox = new TextBox(Text) { Id = Id });
+                views.Add(TextBox = new TextBox(Text, Model) { Id = Id });
                 TextBox.Secret = Secret;
                 TextBox.TextChanged = TextChanged;
                 if (AutoAlign)

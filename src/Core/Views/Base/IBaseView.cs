@@ -1,11 +1,13 @@
 ﻿
-using jotfi.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.ViewModels;
 
 namespace jotfi.Jot.Core.Views.Base
 {
-    public interface IBaseView
+    public interface IBaseView<T>
     {
         Application GetApp();
-        BaseViewModel GetViewModel();
+        T GetViewModel();
+        ViewModelFactory GetViewModels();
+        void Quit();
     }
 }
