@@ -18,10 +18,7 @@ namespace jotfi.Jot.Api.Controllers.System
             
         }
 
-        UserViewModel GetViewModel()
-        {
-            return (UserViewModel)ViewModel;
-        }
+        UserViewModel GetViewModel() => (UserViewModel)ViewModel;        
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> GetUsers()

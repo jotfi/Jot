@@ -12,9 +12,9 @@ namespace jotfi.Jot.Core
     {
         public readonly AppSettings AppSettings;
         public readonly DatabaseController Database;
-        public readonly RepositoryController Repository;
-        public readonly ViewModelController ViewModels;
-        public ViewController Views { get; protected set; }
+        public readonly RepositoryFactory Repository;
+        public readonly ViewModelFactory ViewModels;
+        public ViewFactory Views { get; protected set; }
         public bool IsInit { get; private set; } = false;
 
         public Application(AppSettings appSettings) : base()
@@ -24,8 +24,8 @@ namespace jotfi.Jot.Core
                 AppSettings = appSettings;
                 Opts = new LogOpts(appSettings.IsConsole, ShowError);
                 Database = new DatabaseController(appSettings, Opts);
-                Repository = new RepositoryController(Database, Opts);
-                ViewModels = new ViewModelController(this, Opts);
+                Repository = new RepositoryFactory(Database, Opts);
+                ViewModels = new ViewModelFactory(this, Opts);
             }
             catch (Exception ex)
             {
@@ -41,8 +41,7 @@ namespace jotfi.Jot.Core
         public void Init()
         {
             try
-            {                
-                ViewModels.SetupViews();
+            {
                 IsInit = true;
             }
             catch (Exception ex)
@@ -52,19 +51,11 @@ namespace jotfi.Jot.Core
         }
 
         public virtual void Run()
-        {
-            try
-            {                 
-                if (!IsInit)
-                {
-                    throw new NotImplementedException();
-                }
-                ViewModels.Start.Run();
-            }
-            catch (Exception ex)
+        {                 
+            if (!IsInit)
             {
-                Log(ex);
-            }
+                throw new NotImplementedException();
+            }         
         }
 
         public virtual bool Quit()

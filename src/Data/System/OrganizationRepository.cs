@@ -7,7 +7,7 @@ namespace jotfi.Jot.Data.System
 {
     public class OrganizationRepository : BaseRepository<Organization>
     {
-        public OrganizationRepository(RepositoryController data, LogOpts opts = null) : base(data, opts)
+        public OrganizationRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
         {
 
         }

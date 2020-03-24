@@ -10,69 +10,36 @@ using System.Text;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
-    public class StartViewModel : BaseViewModel
+    public class SystemViewModel : BaseViewModel
     {
 
-        public StartViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public SystemViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
 
-        public void Run()
-        {
-            if (!GetDatabase().CheckTables(GetTableNames()))
-            {
-                return;
-            }
-            if (!CheckAdministrator(out string error))
-            {
-                if (!string.IsNullOrEmpty(error))
-                {
-                    GetApp().ShowError(error);
-                }
-                return;
-            }
-            if (!CheckOrganization())
-            {
-                return;
-            }
-            while (!GetApp().IsLoggedIn())
-            {
-                if (!GetViewModels().Login.PerformLogin())
-                {
-                    break;
-                }
-            }
-            if (!GetApp().IsLoggedIn())
-            {
-                return;
-            }
-            GetViews().Start.ApplicationStart();
-        }
+        public void CheckDatabase() => GetDatabase().CheckTables(GetTableNames());
+        public bool CheckAdministrator() => GetRepository().System.User.Exists();
+        public bool CheckOrganization() => GetRepository().System.Organization.Exists();
 
-        public List<TableName> GetTableNames(object whereConditions = null)
+        public User CreateAdminUser()
         {
-            whereConditions ??= new { Type = "table" };
-            return GetRepository().System.TableName.GetList(whereConditions).ToList();
-        }
-
-        bool CheckAdministrator(out string error)
-        {
-            error = string.Empty;
-            if (GetRepository().System.User.Exists())
-            {
-                return true;
-            }
             var admin = new User() { UserName = "Administrator" };
-            admin.Person.FirstName = "System";
-            admin.Person.LastName = "Admin";
+            admin.Person.FirstName = "Admin";
+            admin.Person.LastName = "System";
 #if DEBUG
             admin.Password.CreatePassword = "admin1!";
             admin.Password.ConfirmPassword = admin.Password.CreatePassword;
             admin.Person.Email.EmailAddress = "admin@admin.com";
             admin.Person.Email.ConfirmEmail = admin.Person.Email.EmailAddress;
 #endif
-            return GetViews().Start.SetupAdministrator(admin, out error);
+            return admin;
+        }
+
+        public List<TableName> GetTableNames(object whereConditions = null)
+        {
+            whereConditions ??= new { Type = "table" };
+            return GetRepository().System.TableName.GetList(whereConditions).ToList();
         }
 
         public bool IsAdministratorValid(User user, out string error)
@@ -109,15 +76,6 @@ namespace jotfi.Jot.Core.ViewModels.System
                 return false;
             }
             return GetViewModels().User.CreateUser(admin);
-        }
-
-        bool CheckOrganization()
-        {
-            if (GetRepository().System.Organization.Exists())
-            {
-                return true;
-            }
-            return GetViews().Start.SetupOrganization();
         }
 
         public string CreateAdministratorText()

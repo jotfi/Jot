@@ -5,7 +5,7 @@ namespace jotfi.Jot.Data.Base
 {
     public class AddressRepository : BaseRepository<Address>
     {
-        public AddressRepository(RepositoryController data, LogOpts opts = null) : base(data, opts)
+        public AddressRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
         {
 
         }

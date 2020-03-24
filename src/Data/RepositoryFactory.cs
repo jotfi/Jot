@@ -5,13 +5,13 @@ using jotfi.Jot.Database;
 
 namespace jotfi.Jot.Data
 {
-    public class RepositoryController : Logger
+    public class RepositoryFactory : Logger
     {
         public readonly BaseRepositories Base;
         public readonly SystemRepositories System;
         public readonly DatabaseController Db;
 
-        public RepositoryController(DatabaseController db, LogOpts opts = null) : base(opts)
+        public RepositoryFactory(DatabaseController db, LogOpts opts = null) : base(opts)
         {
             Db = db;
             Base = new BaseRepositories(this);

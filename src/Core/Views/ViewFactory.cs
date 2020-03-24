@@ -7,15 +7,15 @@ using System.Text;
 
 namespace jotfi.Jot.Core.Views
 {
-    public abstract class ViewController : Logger
+    public abstract class ViewFactory : Logger
     {
         public readonly Application App;
         public List<IBaseView> Items { get; private set; }
-        public IStartView Start { get; protected set; }
+        public ISystemView System { get; protected set; }
         public IUserView User { get; protected set; }
         public ILoginView Login { get; protected set; }
 
-        public ViewController(Application app, LogOpts opts = null) : base(opts)
+        public ViewFactory(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;
         }
@@ -24,7 +24,7 @@ namespace jotfi.Jot.Core.Views
         {
             Items = new List<IBaseView>()
             {
-                Start,
+                System,
                 User,
                 Login
             };

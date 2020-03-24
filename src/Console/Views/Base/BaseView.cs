@@ -24,47 +24,28 @@ namespace jotfi.Jot.Console.Views.Base
             ViewModel = vm;
         }
 
-        protected virtual void AddToTop(View view)
-        {
-            Application.Top.Add(view);
-        }
+        public Core.Application GetApp() => App;
+        public ConsoleApplication GetConsoleApp() => App;
+        public ViewModelFactory GetViewModels() => App.ViewModels;
+        public BaseViewModel GetViewModel() => ViewModel;
 
-        protected virtual void ClearPanel(string panelId = "main")
-        {
-            GetPanel(panelId).Fields.Clear();
-        }
+        protected virtual void AddToTop(View view) => Application.Top.Add(view);
+        protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();
+        protected virtual void AddToPanel(Field field, 
+            string panelId = "main") => GetPanel(panelId).Fields.Add(field);
+        protected virtual void SetPanelTitle(string title, 
+            string panelId = "main") => GetPanel(panelId).SetTitle(title);        
+        protected virtual string GetPanelText(string id, 
+            string panelId = "main") => GetPanel(panelId).GetText(id);
+        protected virtual void SetPanelText(string id, string text, 
+            string panelId = "main") => GetPanel(panelId).SetText(id, text);
+        protected virtual void SetPanelLabel(string id, string text, 
+            string panelId = "main") => GetPanel(panelId).SetLabel(id, text);
+        protected virtual void SetPanelColor(string id, ColorScheme color, 
+            string panelId = "main") => GetPanel(panelId).SetColor(id, color);
 
-        protected virtual void AddToPanel(Field field, string panelId = "main")
-        {
-            GetPanel(panelId).Fields.Add(field);
-        }
-
-        protected virtual void SetPanelTitle(string title, string panelId = "main")
-        {
-            GetPanel(panelId).SetTitle(title);
-        }
-
-        protected virtual string GetPanelText(string id, string panelId = "main")
-        {
-            return GetPanel(panelId).GetText(id);
-        }
-
-        protected virtual void SetPanelText(string id, string text, string panelId = "main")
-        {
-            GetPanel(panelId).SetText(id, text);
-        }
-
-        protected virtual void SetPanelLabel(string id, string text, string panelId = "main")
-        {
-            GetPanel(panelId).SetLabel(id, text);
-        }
-
-        protected virtual void SetPanelColor(string id, ColorScheme color, string panelId = "main")
-        {
-            GetPanel(panelId).SetColor(id, color);
-        }
-
-        protected virtual bool ShowPanelDialog(string panelId = "main", string okCaption = "Ok", string cancelCaption = "Cancel")
+        protected virtual bool ShowPanelDialog(string panelId = "main", 
+            string okCaption = "Ok", string cancelCaption = "Cancel")
         {
             return GetPanel(panelId).ShowDialog(okCaption, cancelCaption);
         }
@@ -86,26 +67,6 @@ namespace jotfi.Jot.Console.Views.Base
             {
                 Application.Top.Running = false;
             }
-        }
-
-        public ConsoleApplication GetConsoleApp()
-        {
-            return App;
-        }
-
-        public Core.Application GetApp()
-        {
-            return App;
-        }
-
-        public ViewModelController GetViewModels()
-        {
-            return App.ViewModels;
-        }
-
-        public BaseViewModel GetViewModel()
-        {
-            return ViewModel;
-        }
+        }       
     }
 }

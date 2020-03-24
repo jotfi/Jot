@@ -7,13 +7,13 @@ namespace jotfi.Jot.Data.Base
 {
     public class BaseRepositories : Logger
     {
-        public readonly RepositoryController Data;
+        public readonly RepositoryFactory Data;
         public readonly AddressRepository Address;
         public readonly EmailRepository Email;
         public readonly PasswordRepository Password;
         public readonly PersonRepository Person;
 
-        public BaseRepositories(RepositoryController data, LogOpts opts = null) : base(opts)
+        public BaseRepositories(RepositoryFactory data, LogOpts opts = null) : base(opts)
         {
             Data = data;
             Address = new AddressRepository(data, opts);

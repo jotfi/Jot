@@ -10,9 +10,9 @@ namespace jotfi.Jot.Data.Base
 {
     public abstract partial class BaseRepository<T> : Logger where T : Transaction
     {
-        protected readonly RepositoryController Data;
+        protected readonly RepositoryFactory Data;
 
-        public BaseRepository(RepositoryController data, LogOpts opts = null) : base(opts)
+        public BaseRepository(RepositoryFactory data, LogOpts opts = null) : base(opts)
         {
             Data = data;
         }

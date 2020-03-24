@@ -14,16 +14,10 @@ namespace jotfi.Jot.Core.ViewModels.Base
     public class BaseViewModel : Logger, INotifyPropertyChanged
     {
         private readonly Application App;
-        private IBaseView View;
 
         public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;            
-        }
-
-        public void SetView(IBaseView view)
-        {
-            View = view;
         }
 
         protected Application GetApp()
@@ -36,24 +30,14 @@ namespace jotfi.Jot.Core.ViewModels.Base
             return App.Database;
         }
 
-        protected RepositoryController GetRepository()
+        protected RepositoryFactory GetRepository()
         {
             return App.Repository;
         }
 
-        protected ViewModelController GetViewModels()
+        protected ViewModelFactory GetViewModels()
         {
             return App.ViewModels;
-        }
-
-        protected ViewController GetViews()
-        {
-            return App.Views;
-        }
-
-        protected IBaseView GetView()
-        {
-            return View;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

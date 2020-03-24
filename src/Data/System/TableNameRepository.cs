@@ -6,7 +6,7 @@ namespace jotfi.Jot.Data.System
 {
     public class TableNameRepository : BaseRepository<TableName>
     {
-        public TableNameRepository(RepositoryController data, LogOpts opts = null) : base(data, opts)
+        public TableNameRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
         {
 
         }

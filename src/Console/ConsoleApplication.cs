@@ -1,6 +1,7 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views;
 using jotfi.Jot.Core.Settings;
+using System;
 using Terminal.Gui;
 
 namespace jotfi.Jot.Console
@@ -12,7 +13,7 @@ namespace jotfi.Jot.Console
 
         public ConsoleApplication(AppSettings appSettings) : base(appSettings)
         {
-            Views = new ConsoleViewController(this);            
+            Views = new ConsoleViewFactory(this);            
             Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
             {
                 X = 0,
@@ -28,6 +29,19 @@ namespace jotfi.Jot.Console
                 Height = Dim.Sized(1)
             });
             Init();
+        }
+
+        public override void Run()
+        {
+            try
+            {
+                base.Run();
+                Views.System.ApplicationStart();
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
         }
 
         public override bool Quit()

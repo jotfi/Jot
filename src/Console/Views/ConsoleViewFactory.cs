@@ -4,11 +4,11 @@ using jotfi.Jot.Core.Views;
 
 namespace jotfi.Jot.Console.Views
 {
-    public class ConsoleViewController : ViewController
+    public class ConsoleViewFactory : ViewFactory
     {
-        public ConsoleViewController(ConsoleApplication app, LogOpts opts = null) : base(app, opts)
+        public ConsoleViewFactory(ConsoleApplication app, LogOpts opts = null) : base(app, opts)
         {
-            Start = new StartView(app, app.ViewModels.Start, opts);
+            System = new SystemView(app, app.ViewModels.System, opts);
             User = new UserView(app, app.ViewModels.User, opts);
             Login = new LoginView(app, app.ViewModels.Login, opts);
             Init();

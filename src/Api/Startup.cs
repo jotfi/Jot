@@ -30,7 +30,7 @@ namespace jotfi.Jot.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Application.ViewModels.Start);
+            services.AddSingleton(Application.ViewModels.System);
             services.AddSingleton(Application.ViewModels.User);
             services.AddSingleton(Application.ViewModels.Login);
             services.AddControllers();

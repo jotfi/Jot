@@ -4,9 +4,9 @@ using jotfi.Jot.Model.System;
 
 namespace jotfi.Jot.Core.Views.System
 {
-    public interface IStartView : IBaseView
+    public interface ISystemView : IBaseView
     {
-        StartViewModel GetStartViewModel();
+        SystemViewModel GetSystemViewModel();
         void ApplicationStart();
         bool SetupAdministrator(User admin, out string error);
         bool SetupOrganization();

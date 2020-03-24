@@ -13,24 +13,30 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class StartView : BaseView, IStartView
+    public class SystemView : BaseView, ISystemView
     {
         private bool ValidPassword;
         private bool ValidEmail;
 
-        public StartView(ConsoleApplication app, BaseViewModel vm, LogOpts opts = null)
+        public SystemView(ConsoleApplication app, SystemViewModel vm, LogOpts opts = null)
             : base(app, vm, opts)
         { 
 
         }
-
-        public StartViewModel GetStartViewModel()
-        {
-            return (StartViewModel)GetViewModel();
-        }
+        public SystemViewModel GetSystemViewModel() => (SystemViewModel)GetViewModel();
 
         public void ApplicationStart()
         {
+            GetSystemViewModel().CheckDatabase();
+            if (!GetSystemViewModel().CheckAdministrator())
+            {
+                var admin = GetSystemViewModel().CreateAdminUser();
+                if (!SetupAdministrator(admin, out string error))
+                {
+                    GetApp().ShowError(error);
+                }
+                return;
+            }
             Application.Run();
         }
 
@@ -45,7 +51,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = GetStartViewModel().IsAdministratorValid(admin, out error);
+                ok = GetSystemViewModel().IsAdministratorValid(admin, out error);
                 if (!ok)
                 {
                     GetApp().ShowError(error);
@@ -55,14 +61,14 @@ namespace jotfi.Jot.Console.Views.System
             {
                 return false;
             }
-            return GetStartViewModel().SaveAdministrator(admin, out error);
+            return GetSystemViewModel().SaveAdministrator(admin, out error);
         }
 
         bool SetupAdministratorDialog(User admin)
         {
             ClearPanel();
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
-            AddToPanel(new Field("infoText", GetStartViewModel().CreateAdministratorText())
+            AddToPanel(new Field("infoText", GetSystemViewModel().CreateAdministratorText())
             {
                 AutoAlign = false,
                 AutoSize = false,
