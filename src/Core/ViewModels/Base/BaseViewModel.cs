@@ -21,6 +21,7 @@ namespace jotfi.Jot.Core.ViewModels.Base
         }
 
         protected Application GetApp() => App;
+        public Settings.AppSettings GetAppSettings() => GetApp().AppSettings;
         protected DatabaseController GetDatabase() => App.Database;
         protected RepositoryFactory GetRepository() => App.Repository;
         protected ViewModelFactory GetViewModels() => App.ViewModels;

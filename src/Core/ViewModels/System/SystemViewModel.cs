@@ -6,7 +6,9 @@ using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
@@ -17,7 +19,31 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         }
 
-        public bool CheckConnection() => false;
+        public async Task<(bool, string)> CheckConnectionAsync()
+        {
+            var error = $"Error connecting to {GetAppSettings().ServerUrl}: ";
+            try
+            {
+                var client = GetApp().Client;
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.BaseAddress = new Uri(GetAppSettings().ServerUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                client.Timeout = new TimeSpan(0, 0, 5);
+                var response = await client.GetAsync("user");
+                if (response.IsSuccessStatusCode)
+                {
+                    return (true, "");
+                }
+                return (false, $"{error} Status {response.StatusCode}");
+            }
+            catch(Exception ex)
+            {
+                Log(ex);
+                error += ex.Message;                
+            }
+            return (false, error);
+        }
 
         public bool CheckDatabase(out string error) => GetDatabase().CheckTables(GetTableNames(), out error);
         public bool CheckAdministrator() => GetRepository().System.User.Exists();
@@ -43,6 +69,13 @@ namespace jotfi.Jot.Core.ViewModels.System
             return GetRepository().System.TableName.GetList(whereConditions).ToList();
         }
 
+        public string ServerConnectionText()
+        {
+            return $@"
+If the {Constants.DefaultApplicationName} server is not available, selecting ""Local connection""
+will attempt to use a direct connection to the database.";
+        }
+
         public string CreateAdministratorText()
         {
             return $@"
@@ -57,6 +90,8 @@ This account should only be used for system administration.";
 Logging into {Constants.DefaultApplicationName} requires an organization.
 Please enter an organizaton name, this can be edited later.";
         }
+
+        public bool IsServerValid(string url) => Validators.IsUrlValid(url);
 
         public bool IsAdministratorValid(User user, out string error)
         {

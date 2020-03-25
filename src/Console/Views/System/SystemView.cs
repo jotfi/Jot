@@ -1,22 +1,26 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
+using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Console.Views.Controls;
 using jotfi.Jot.Core.ViewModels.Base;
 using jotfi.Jot.Core.ViewModels.System;
 using jotfi.Jot.Core.Views.System;
 using jotfi.Jot.Model.System;
+using System.Collections.Generic;
 
 namespace jotfi.Jot.Console.Views.System
 {
     public class SystemView : BaseView<SystemViewModel>, ISystemView
     {
         private bool ValidPassword;
-        private bool ValidEmail;
+        private bool ValidEmail;        
         const string ServerInfo = "ServerInfo";
+        const string UrlInfo = "UrlInfo";
         const string AdminInfo = "AdminInfo";
         const string PasswordInfo = "PasswordInfo";
         const string EmailInfo = "EmailInfo";
+        const string ConnectionType = "ConnectionType";
 
         public SystemView(ConsoleApplication app, SystemViewModel viewmodel, LogOpts opts = null)
             : base(app, viewmodel, opts)
@@ -68,38 +72,73 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = GetViewModel().CheckConnection();
-                if (ok)
+                string error;
+                (ok, error) = GetViewModel().CheckConnectionAsync().Result;
+                if (!ok)
                 {
-                    GetApp().SaveSettings();
+                    GetApp().ShowError(error);
                 }
+            }
+            if (ok)
+            {
+                GetApp().SaveSettings();
             }
             return ok;
         }
 
         bool SetupConnectionDialog()
         {
+            var settings = GetAppSettings();
             ClearPanel();
             SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
-            var settings = GetAppSettings();
-            AddToPanel(new Field(nameof(settings.ServerUrl), settings)
-            {
-                Secret = true,
-                TextChanged = (text) =>
-                {
-                    var validUrl = GetViewModels().User.GetPasswordValid(text);
-                    var serverInfo = validUrl ? "" : "Invalid server URL";
-                    GetMainLoop().Invoke(() => SetPanelLabel(ServerInfo, serverInfo));
-                    var infoColor = validUrl ? GetMenuColor() : GetErrorColor();
-                    GetMainLoop().Invoke(() => SetPanelColor(ServerInfo, infoColor));
-                }
-            });
             AddToPanel(new Field(ServerInfo)
             {
-                AutoSize = false,
+                ViewText = GetViewModel().ServerConnectionText(),
+                ViewSize = (-1, 3),                
                 ShowTextField = false
             });
-            if (!ShowPanelDialog())
+            var connectionTypes = new List<string>() { "Jot Server", "Local Connection" };
+            ConsoleUtils.ChangeSelection(connectionTypes);
+            var listView = new Terminal.Gui.ListView(connectionTypes);
+            AddToPanel(new Field(ConnectionType, listView)
+            {
+                ViewSize = (-1, 2),
+                ShowTextField = false,
+                ListChanged = (index) =>
+                {
+                    ConsoleUtils.ChangeSelection(connectionTypes, index);
+                    settings.IsClient = index == 0;
+                }
+            });
+            var serverInfo = $"Please enter the {Constants.DefaultApplicationName} server URL.";
+            AddToPanel(new Field(nameof(settings.ServerUrl), settings)
+            {
+                Secret = false,
+                TextChanged = (text) =>
+                {
+                    var serverValid = false;
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        GetMainLoop().Invoke(() => SetPanelLabel(UrlInfo, serverInfo));
+                    }
+                    else
+                    {
+                        serverValid = GetViewModel().IsServerValid(text);
+                        var urlInfo = serverValid ? "" : "Invalid server URL";
+                        GetMainLoop().Invoke(() => SetPanelLabel(UrlInfo, urlInfo));
+                    }
+                    var infoColor = serverValid ? GetMenuColor() : GetErrorColor();
+                    GetMainLoop().Invoke(() => SetPanelColor(UrlInfo, infoColor));
+                }
+            });
+            var serverText = string.IsNullOrEmpty(settings.ServerUrl) ? serverInfo : "";
+            AddToPanel(new Field(UrlInfo)
+            {
+                ViewText = serverText,
+                ShowTextField = false,
+                ViewColor = GetErrorColor()
+            });
+            if (!ShowPanelDialog(nameof(settings.ServerUrl)))
             {
                 return false;
             }
@@ -131,11 +170,9 @@ namespace jotfi.Jot.Console.Views.System
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
             AddToPanel(new Field(AdminInfo)
             {
-                AutoAlign = false,
-                AutoSize = false,
                 ShowTextField = false,
-                LabelText = GetViewModel().CreateAdministratorText(),
-                LabelSize = (GetFill(), 4)
+                ViewText = GetViewModel().CreateAdministratorText(),
+                ViewSize = (-1, 4)
             });
             AddToPanel(new Field(nameof(admin.Password.CreatePassword), admin.Password)
             {
@@ -169,7 +206,6 @@ namespace jotfi.Jot.Console.Views.System
             });
             AddToPanel(new Field(PasswordInfo)
             {
-                AutoSize = false,
                 ShowTextField = false
             });
             AddToPanel(new Field(nameof(admin.Person.Email.EmailAddress), admin.Person.Email)
@@ -201,7 +237,6 @@ namespace jotfi.Jot.Console.Views.System
             });
             AddToPanel(new Field(EmailInfo)
             {
-                AutoSize = false,
                 ShowTextField = false
             });
             if (!ShowPanelDialog())

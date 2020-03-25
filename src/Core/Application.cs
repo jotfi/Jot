@@ -6,6 +6,7 @@ using jotfi.Jot.Core.Views;
 using jotfi.Jot.Data;
 using jotfi.Jot.Database;
 using System;
+using System.Net.Http;
 
 namespace jotfi.Jot.Core
 {
@@ -16,6 +17,7 @@ namespace jotfi.Jot.Core
         public readonly RepositoryFactory Repository;
         public readonly ViewModelFactory ViewModels;
         public ViewFactory Views { get; protected set; }
+        public HttpClient Client { get; } = new HttpClient();
 
         public Application(AppSettings appSettings) : base()
         {

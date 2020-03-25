@@ -41,7 +41,7 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         public bool GetEmailValid(string email)
         {
-            return EmailValidator.IsEmailValid(email);
+            return Validators.IsEmailValid(email);
         }
 
         public bool CreateUser(User user)

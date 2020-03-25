@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace jotfi.Jot.Base.Utils
 {
-    public class EmailValidator
+    public class Validators
     {
-        static Logger Log { get; } = LogManager.GetLogger(typeof(EmailValidator).FullName);
+        static Logger Log { get; } = LogManager.GetLogger(typeof(Validators).FullName);
 
         /// <summary>
         /// Uses a regular expression to verify that a string is in valid email format
@@ -59,6 +59,12 @@ namespace jotfi.Jot.Base.Utils
             {
                 return false;
             }
+        }
+
+        public static bool IsUrlValid(string url)
+        {
+            var valid = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
+            return valid && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace jotfi.Jot.Console.Views.Controls
             Id = id;
         }
 
-        public bool ShowDialog(string okCaption = "Ok", string cancelCaption = "Cancel")
+        public bool ShowDialog(string id = "", string okCaption = "Ok", string cancelCaption = "Cancel")
         {
             if (Fields.Count() == 0)
             {
@@ -26,23 +26,27 @@ namespace jotfi.Jot.Console.Views.Controls
             }
             var views = new List<View>();
             int maxLength = 0;
-            foreach (var field in Fields.Where(p => p.AutoAlign))
+            foreach (var field in Fields)
             {
-                if (field.LabelText.Length > maxLength)
+                if (field.ShowTextField && field.ViewText.Length > maxLength)
                 {
-                    maxLength = field.LabelText.Length;
+                    maxLength = field.ViewText.Length;
                 }
             }
-            View previous = null;
+            Field previous = null;
             foreach (var field in Fields)
             {
                 field.Create(views, previous, maxLength);
-                previous = (View)field.Label ?? field.TextBox;
+                previous = field;
             }
             var dialog = new Dialog(Title, Size.Item1, Size.Item2)
             {
                 views.ToArray()
             };
+            if (!string.IsNullOrEmpty(id))
+            {
+                dialog.SetFocus(views.Find(p => p.Id == id));
+            }
             dialog.AddButton(GetOkButton(okCaption));
             dialog.AddButton(GetCancelButton(cancelCaption));
             Application.Run(dialog);
@@ -79,7 +83,7 @@ namespace jotfi.Jot.Console.Views.Controls
             {
                 return;
             }
-            Fields.Find(p => p.Id == id).SetLabel(text);
+            Fields.Find(p => p.Id == id).SetViewText(text);
         }
 
         public void SetColor(string id, ColorScheme color)
