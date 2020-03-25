@@ -58,7 +58,7 @@ namespace jotfi.Jot.Core.ViewModels.System
                 var passwordId = GetRepository().Base.Password.Insert(user.Password, conn);
                 AssertUpdateNewUser(userId, user.Hash, personId, passwordId, conn);
                 AssertUpdateNewUserPassword(userId, passwordId, user.Password.Hash, conn);
-                AssertUpdateNewUserPerson(userId, personId, user.Person.Hash, conn);
+                AssertUpdateNewUserPerson(userId, personId, emailId, addressId, user.Person.Hash, conn);
                 AssertUpdateNewUserPersonEmail(personId, emailId, user.Person.Email.Hash, conn);
                 AssertUpdateNewUserPersonAddress(personId, addressId, user.Person.Address.Hash, conn);
                 uow.CommitAsync().Wait();
@@ -94,10 +94,12 @@ namespace jotfi.Jot.Core.ViewModels.System
             updatedPassword.TxId.IsEqualTo(userId);
         }
 
-        void AssertUpdateNewUserPerson(long userId, long personId, string hash, DbConnection conn = null)
+        void AssertUpdateNewUserPerson(long userId, long personId, long emailId, long addressId, string hash, DbConnection conn = null)
         {
             var person = GetRepository().Base.Person.GetById(personId, conn);
             person.Hash.IsEqualTo(hash);
+            person.EmailId = emailId;
+            person.AddressId = addressId;
             person.SetTx(userId, typeof(User).Name);
             GetRepository().Base.Person.Update(person, conn).IsEqualTo(1);
             var updatedPerson = GetRepository().Base.Person.GetById(personId, conn);

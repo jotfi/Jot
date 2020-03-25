@@ -1,6 +1,4 @@
-﻿#define DEBUG
-
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using jotfi.Jot.Base.System;
 using Npgsql;
 using System;

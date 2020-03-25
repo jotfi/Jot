@@ -23,6 +23,10 @@ namespace jotfi.Jot.Api
         {
             Configuration = configuration;
             Application = new Core.Application(new Core.Settings.AppSettings());
+            if (!Application.ViewModels.System.CheckDatabase(out string error))
+            {
+                throw new ApplicationException(error);
+            }
         }
 
         public IConfiguration Configuration { get; }

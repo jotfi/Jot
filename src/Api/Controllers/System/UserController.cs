@@ -11,19 +11,17 @@ namespace jotfi.Jot.Api.Controllers.System
     //[Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class UserController : BaseController
+    public class UserController : BaseController<UserViewModel>
     {
         public UserController(UserViewModel viewmodel) : base(viewmodel)
         {
             
-        }
-
-        UserViewModel GetViewModel() => (UserViewModel)ViewModel;        
+        } 
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
-            var res = await GetViewModel().GetUsersAsync();
+            var res = await ViewModel.GetUsersAsync();
             if (res == null)
             {
                 return NotFound();

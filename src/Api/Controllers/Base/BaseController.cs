@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace jotfi.Jot.Api.Controllers.Base
 {
-    public class BaseController : ControllerBase
+    public class BaseController<T> : ControllerBase
     {
-        protected readonly BaseViewModel ViewModel;
+        protected readonly T ViewModel;
 
-        public BaseController(BaseViewModel viewmodel)
+        public BaseController(T viewmodel)
         {
             ViewModel = viewmodel;
         }

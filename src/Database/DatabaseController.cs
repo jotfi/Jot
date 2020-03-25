@@ -1,16 +1,12 @@
 ﻿using Dapper;
-using jotfi.Jot.Base;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Database.Base;
-using jotfi.Jot.Model;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
-using System.Text;
 
 namespace jotfi.Jot.Database
 {
@@ -49,7 +45,7 @@ namespace jotfi.Jot.Database
                 {
                     if (!tableNames.Any(p => p.Name == table.TableName()))
                     {
-                        Context.GetConnection().Execute(table.CreateTable());
+                        Context.GetConnection().Execute(table.CreateTable(Dialect));
                     }
                 }
                 catch (Exception ex)

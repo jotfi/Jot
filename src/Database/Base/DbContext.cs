@@ -1,13 +1,8 @@
-﻿#define DEBUG
+﻿//#define RESET
 
-using MySql.Data.MySqlClient;
 using jotfi.Jot.Base.System;
-using Npgsql;
 using System;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.IO;
 
 namespace jotfi.Jot.Database.Base
@@ -15,9 +10,8 @@ namespace jotfi.Jot.Database.Base
     public class DbContext : Logger, IDbContext
     {
         private readonly DatabaseController Db;
-        private readonly DbConnection DbConnection;
         private UnitOfWork UnitOfWork;
-        private string SQLiteDirectory;
+        private readonly string SQLiteDirectory;
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
@@ -34,7 +28,7 @@ namespace jotfi.Jot.Database.Base
             {
                 Directory.CreateDirectory(SQLiteDirectory);
             }
-#if (DEBUG)
+#if (RESET)
             File.Delete(Path.Combine(SQLiteDirectory, "Jot.db"));
 #endif
         }
