@@ -18,7 +18,7 @@ namespace jotfi.Jot.Console.Views.Controls
             Id = id;
         }
 
-        public bool ShowDialog(string id = "", string okCaption = "Ok", string cancelCaption = "Cancel")
+        public bool ShowDialog(string id = "", bool showCancel = true, (string, string) buttonCaptions = default)
         {
             if (Fields.Count() == 0)
             {
@@ -47,8 +47,11 @@ namespace jotfi.Jot.Console.Views.Controls
             {
                 dialog.SetFocus(views.Find(p => p.Id == id));
             }
-            dialog.AddButton(GetOkButton(okCaption));
-            dialog.AddButton(GetCancelButton(cancelCaption));
+            dialog.AddButton(GetOkButton(buttonCaptions.Item1));
+            if (showCancel)
+            {
+                dialog.AddButton(GetCancelButton(buttonCaptions.Item2));
+            }
             Application.Run(dialog);
             return OkClicked;
         }

@@ -32,12 +32,15 @@ namespace jotfi.Jot.Console.Views.System
         {
             if (!SetupConnection())
             {
-                GetAppSettings().IsClient = false;
+                return;
+            }
+            if (!GetAppSettings().IsClient)
+            {
                 if (!GetViewModel().CheckDatabase(out string error))
                 {
                     GetApp().ShowError(error);
                 }
-            }            
+            }
             if (!GetViewModel().CheckAdministrator())
             {
                 var admin = GetViewModel().CreateAdminUser();
@@ -72,11 +75,13 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                string error;
-                (ok, error) = GetViewModel().CheckConnectionAsync().Result;
-                if (!ok)
+                if (GetAppSettings().IsClient)
                 {
-                    GetApp().ShowError(error);
+                    ok = GetViewModel().CheckConnection(out string error);
+                    if (!ok)
+                    {
+                        GetApp().ShowError(error);
+                    }
                 }
             }
             if (ok)
@@ -98,25 +103,33 @@ namespace jotfi.Jot.Console.Views.System
                 ShowTextField = false
             });
             var connectionTypes = new List<string>() { "Jot Server", "Local Connection" };
-            ConsoleUtils.ChangeSelection(connectionTypes);
-            var listView = new Terminal.Gui.ListView(connectionTypes);
+            var defaultConnection = settings.IsClient ? 0 : 1;
+            ConsoleUtils.ChangeSelection(connectionTypes, defaultConnection);
+            var listView = new Terminal.Gui.ListView(connectionTypes)
+            {
+                SelectedItem = defaultConnection,
+                TopItem = 0
+            };
             AddToPanel(new Field(ConnectionType, listView)
             {
-                ViewSize = (-1, 2),
+                ViewSize = (-1, 3),
                 ShowTextField = false,
                 ListChanged = (index) =>
                 {
                     ConsoleUtils.ChangeSelection(connectionTypes, index);
                     settings.IsClient = index == 0;
+                    var serverValid = HasServerInfo(out string serverInfo);
+                    GetMainLoop().Invoke(() => SetPanelLabel(UrlInfo, serverInfo));
+                    var infoColor = serverValid ? GetMenuColor() : GetErrorColor();
+                    GetMainLoop().Invoke(() => SetPanelColor(UrlInfo, infoColor));
                 }
-            });
-            var serverInfo = $"Please enter the {Constants.DefaultApplicationName} server URL.";
+            });            
             AddToPanel(new Field(nameof(settings.ServerUrl), settings)
             {
                 Secret = false,
                 TextChanged = (text) =>
                 {
-                    var serverValid = false;
+                    var serverValid = HasServerInfo(out string serverInfo);
                     if (string.IsNullOrWhiteSpace(text))
                     {
                         GetMainLoop().Invoke(() => SetPanelLabel(UrlInfo, serverInfo));
@@ -131,18 +144,26 @@ namespace jotfi.Jot.Console.Views.System
                     GetMainLoop().Invoke(() => SetPanelColor(UrlInfo, infoColor));
                 }
             });
-            var serverText = string.IsNullOrEmpty(settings.ServerUrl) ? serverInfo : "";
+            var serverValid = HasServerInfo(out string serverInfo);
             AddToPanel(new Field(UrlInfo)
             {
-                ViewText = serverText,
+                ViewText = serverInfo,
                 ShowTextField = false,
-                ViewColor = GetErrorColor()
+                ViewColor = serverValid ? GetMenuColor() : GetErrorColor()
             });
-            if (!ShowPanelDialog(nameof(settings.ServerUrl)))
+            return ShowPanelDialog();
+        }
+
+        bool HasServerInfo(out string error)
+        {
+            var settings = GetApp().AppSettings;
+            if (!settings.IsClient || !string.IsNullOrEmpty(settings.ServerUrl))
             {
-                return false;
+                error = string.Empty;
+                return true;
             }
-            return true;
+            error = $"Please enter the {Constants.DefaultApplicationName} server URL.";
+            return false;
         }
 
         public bool SetupAdministrator(User admin)

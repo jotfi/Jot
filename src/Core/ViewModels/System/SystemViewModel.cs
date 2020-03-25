@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.ViewModels.System
@@ -19,9 +20,9 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         }
 
-        public async Task<(bool, string)> CheckConnectionAsync()
+        public bool CheckConnection(out string error)
         {
-            var error = $"Error connecting to {GetAppSettings().ServerUrl}: ";
+            error = $"Error connecting to {GetAppSettings().ServerUrl}: ";
             try
             {
                 var client = GetApp().Client;
@@ -29,20 +30,24 @@ namespace jotfi.Jot.Core.ViewModels.System
                 client.BaseAddress = new Uri(GetAppSettings().ServerUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
+                //using var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+                //var response = await client.GetAsync("user", cts.Token).ConfigureAwait(false);
                 client.Timeout = new TimeSpan(0, 0, 5);
-                var response = await client.GetAsync("user");
+                var response = client.GetAsync("user").Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    return (true, "");
+                    error = "";
+                    return true;
                 }
-                return (false, $"{error} Status {response.StatusCode}");
+                error += $"Status {response.StatusCode}";
+                return false;
             }
             catch(Exception ex)
             {
                 Log(ex);
                 error += ex.Message;                
             }
-            return (false, error);
+            return false;
         }
 
         public bool CheckDatabase(out string error) => GetDatabase().CheckTables(GetTableNames(), out error);

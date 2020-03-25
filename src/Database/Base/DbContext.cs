@@ -16,61 +16,29 @@ namespace jotfi.Jot.Database.Base
     {
         private readonly DatabaseController Db;
         private readonly DbConnection DbConnection;
-        private UnitOfWork UnitOfWork;        
+        private UnitOfWork UnitOfWork;
+        private string SQLiteDirectory;
 
         private bool IsUnitOfWorkOpen => !(UnitOfWork == null || UnitOfWork.IsDisposed);
 
         public DbContext(DatabaseController db, LogOpts opts = null) : base(opts)
         {
-            try
+            Db = db;
+            SQLiteDirectory = db.Settings.DbDirectory;
+            if (string.IsNullOrEmpty(SQLiteDirectory))
             {
-                Db = db;
-                if (Db.Dialect == DbDialects.PostgreSQL)
-                {
-                    DbConnection = new NpgsqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "5432", "postgres", "postgrespass", "JotDb"));
-                    DapperExt.SetDialect(DbDialects.PostgreSQL);
-                }
-                else if (Db.Dialect == DbDialects.SQLite)
-                {
-                    var dbDirectory = db.Settings.DbDirectory;
-                    if (string.IsNullOrEmpty(dbDirectory))
-                    {
-                        dbDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                        dbDirectory = Path.Combine(dbDirectory, "jotfi");
-                    }
-                    if (!Directory.Exists(dbDirectory))
-                    {
-                        Directory.CreateDirectory(dbDirectory);
-                    }
+                SQLiteDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                SQLiteDirectory = Path.Combine(SQLiteDirectory, "jotfi");
+            }
+            if (!Directory.Exists(SQLiteDirectory))
+            {
+                Directory.CreateDirectory(SQLiteDirectory);
+            }
 #if (DEBUG)
-
-                    File.Delete(Path.Combine(dbDirectory, "Jot.db"));
-
+            File.Delete(Path.Combine(SQLiteDirectory, "Jot.db"));
 #endif
-                    var builder = new SQLiteConnectionStringBuilder
-                    {
-                        DataSource = Path.Combine(dbDirectory, "Jot.db")
-                    };
-                    DbConnection = new SQLiteConnection(builder.ConnectionString);                    
-                    DapperExt.SetDialect(DbDialects.SQLite);
-                }
-                else if (Db.Dialect == DbDialects.MySQL)
-                {
-                    DbConnection = new MySqlConnection(String.Format("Server={0};Port={1};User Id={2};Password={3};Database={4};", "localhost", "3306", "root", "admin", "JotDb"));
-                    DapperExt.SetDialect(DbDialects.MySQL);
-                }
-                else
-                {
-                    DbConnection = new SqlConnection(@"Data Source = .\sqlexpress;Initial Catalog=JotDb;Integrated Security=True;MultipleActiveResultSets=true;");
-                    DapperExt.SetDialect(DbDialects.SQLServer);
-                }
-                DbConnection.Open();
-            }
-            catch (Exception ex)
-            {
-                Log(ex);
-            }
         }
+        
 
         public DbConnection GetConnection()
         {
@@ -89,8 +57,10 @@ namespace jotfi.Jot.Database.Base
                 throw new InvalidOperationException(
                     "Cannot begin a transaction before the unit of work from the last one is disposed");
             }
-            UnitOfWork = new UnitOfWork(DbConnection);
+            UnitOfWork = new UnitOfWork(Db, SQLiteDirectory, Opts);
             return UnitOfWork;
         }
+
+
     }
 }

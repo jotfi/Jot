@@ -57,10 +57,10 @@ namespace jotfi.Jot.Console.Views.Base
         protected virtual void SetPanelColor(string id, Terminal.Gui.ColorScheme color, 
             string panelId = "main") => GetPanel(panelId).SetColor(id, color);
 
-        protected virtual bool ShowPanelDialog(string id = "", string panelId = "main", 
-            string okCaption = "Ok", string cancelCaption = "Cancel")
+        protected virtual bool ShowPanelDialog(string id = "", bool showCancel = true,
+            string panelId = "main", string okCaption = "Ok", string cancelCaption = "Cancel")
         {
-            return GetPanel(panelId).ShowDialog(id, okCaption, cancelCaption);
+            return GetPanel(panelId).ShowDialog(id, showCancel, (okCaption, cancelCaption));
         }
 
         protected Panel GetPanel(string panel)
