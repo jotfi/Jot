@@ -27,20 +27,50 @@ namespace jotfi.Jot.Data.Base
             });
         }
 
-        public Task<IEnumerable<T>> GetListAsync(object whereConditions = null)
+        public virtual Task<IEnumerable<T>> GetListAsync(object whereConditions = null)
         {
-            try
+            using (Data.Db.Context.Create())
             {
-                using (Data.Db.Context.Create())
-                {
-                    return Data.Db.Context.GetConnection().GetListAsync<T>(whereConditions);
-                }
+                return Data.Db.Context.GetConnection().GetListAsync<T>(whereConditions);
             }
-            catch (Exception ex)
+        }
+
+        public virtual Task<T> GetByIdAsync(long id, DbConnection conn = null)
+        {
+            if (conn != null)
             {
-                Log(ex);
+                return conn.GetAsync<T>(id);
             }
-            return null;
+            using (Data.Db.Context.Create())
+            {
+                return Data.Db.Context.GetConnection().GetAsync<T>(id);
+            }
+        }
+
+        public virtual Task<long> InsertAsync(T obj, DbConnection conn = null)
+        {
+            obj.Init();
+            if (conn != null)
+            {
+                return conn.InsertAsync<long, T>(obj);
+            }
+            using (Data.Db.Context.Create())
+            {
+                return Data.Db.Context.GetConnection().InsertAsync<long, T>(obj);
+            }
+        }
+
+        public virtual Task<int> UpdateAsync(T obj, DbConnection conn = null)
+        {
+            obj.Init();
+            if (conn != null)
+            {
+                return conn.UpdateAsync(obj);
+            }
+            using (Data.Db.Context.Create())
+            {
+                return Data.Db.Context.GetConnection().UpdateAsync(obj);
+            }
         }
     }
 }

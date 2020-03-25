@@ -20,82 +20,54 @@ namespace jotfi.Jot.Data.Base
         public virtual bool Exists() => GetCount() > 0;
         public virtual int GetCount() => GetList().Count();
 
-        public IEnumerable<T> GetList(object whereConditions = null)
+        public IEnumerable<T> GetList(object whereConditions = null, DbConnection conn = null)
         {
-            try
+            if (conn != null)
             {
-                using (Data.Db.Context.Create())
-                {
-                    return Data.Db.Context.GetConnection().GetList<T>(whereConditions);
-                }
+                return conn.GetList<T>(whereConditions);
             }
-            catch (Exception ex)
+            using (Data.Db.Context.Create())
             {
-                Log(ex);
+                return Data.Db.Context.GetConnection().GetList<T>(whereConditions);
             }
-            return new List<T>();
         }
 
         public virtual T GetById(long id, DbConnection conn = null)
         {
-            try
+            if (conn != null)
             {
-                if (conn != null)
-                {
-                    return conn.Get<T>(id);
-                }
-                using (Data.Db.Context.Create())
-                {
-                    return Data.Db.Context.GetConnection().Get<T>(id);
-                }
+                return conn.Get<T>(id);
             }
-            catch (Exception ex)
+            using (Data.Db.Context.Create())
             {
-                Log(ex);
+                return Data.Db.Context.GetConnection().Get<T>(id);
             }
-            return null;
         }
 
         public virtual long Insert(T obj, DbConnection conn = null)
         {
-            try
+            obj.Init();
+            if (conn != null)
             {
-                obj.Init();
-                if (conn != null)
-                {
-                    return conn.Insert<long, T>(obj);
-                }
-                using (Data.Db.Context.Create())
-                {
-                    return Data.Db.Context.GetConnection().Insert<long, T>(obj);
-                }
+                return conn.Insert<long, T>(obj);
             }
-            catch (Exception ex)
+            using (Data.Db.Context.Create())
             {
-                Log(ex);
+                return Data.Db.Context.GetConnection().Insert<long, T>(obj);
             }
-            return 0;
         }
 
         public virtual int Update(T obj, DbConnection conn = null)
         {
-            try
+            obj.Init();
+            if (conn != null)
             {
-                obj.Init();
-                if (conn != null)
-                {
-                    return conn.Update(obj);
-                }
-                using (Data.Db.Context.Create())
-                {
-                    return Data.Db.Context.GetConnection().Update(obj);
-                }
+                return conn.Update(obj);
             }
-            catch (Exception ex)
+            using (Data.Db.Context.Create())
             {
-                Log(ex);
+                return Data.Db.Context.GetConnection().Update(obj);
             }
-            return 0;
         }
     }
 }

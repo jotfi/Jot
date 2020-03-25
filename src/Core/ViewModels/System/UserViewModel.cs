@@ -48,6 +48,10 @@ namespace jotfi.Jot.Core.ViewModels.System
         {
             try
             {
+                if (GetAppSettings().IsClient)
+                {
+                    return CreateUserClient(user);
+                }
                 using var uow = GetDatabase().Context.Create();
                 var conn = GetDatabase().Context.GetConnection();
                 var userId = GetRepository().System.User.Insert(user, conn);
@@ -62,15 +66,14 @@ namespace jotfi.Jot.Core.ViewModels.System
                 AssertUpdateNewUserPersonEmail(personId, emailId, user.Person.Email.Hash, conn);
                 AssertUpdateNewUserPersonAddress(personId, addressId, user.Person.Address.Hash, conn);
                 uow.CommitAsync().Wait();
+                return true;
             }
             catch (Exception ex)
             {
                 Log(ex);
                 return false;
-            }
-            return true;
+            }            
         }
-
 
         void AssertUpdateNewUser(long userId, string hash, long personId, long passwordId, DbConnection conn = null)
         {

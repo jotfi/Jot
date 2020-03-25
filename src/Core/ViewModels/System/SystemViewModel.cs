@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
-    public class SystemViewModel : BaseViewModel
+    public partial class SystemViewModel : BaseViewModel
     {
         public SystemViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
