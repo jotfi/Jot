@@ -282,7 +282,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = GetViewModel().SaveOrganization(organization, out string error);
+                ok = GetViewModels().System.Organization.SaveOrganization(organization, out string error);
                 if (!ok)
                 {
                     GetApp().ShowError(error);

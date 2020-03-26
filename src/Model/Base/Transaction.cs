@@ -1,12 +1,15 @@
 ﻿using jotfi.Jot.Base.System;
 using System;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.Base
 {
     public abstract class Transaction : ITransaction
     {
         public long Id { get; set; }
+
+        [JsonIgnore]
         public string Hash { get; set; } = "";
 
         [ReadOnly(true)]

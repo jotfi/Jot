@@ -4,17 +4,23 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.Base
 {
     public class Password : SubTransaction
     {
-        public string PasswordHash { get; set; } = "";
+        [JsonIgnore]
+        public byte[] PasswordHash { get; set; }
 
-        [NotMapped]
+        [JsonIgnore]
+        public byte[] PasswordSalt { get; set; }
+
+        [NotMapped]        
         [Display(Name = "User Password")]
         public string CreatePassword { get; set; } = "";
-        [NotMapped]
+        
+        [NotMapped]        
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; } = "";
 
@@ -25,7 +31,8 @@ namespace jotfi.Jot.Model.Base
 create table {TableName()}(
 {TransactionFields()},
 {SubTransactionFields()},
-PasswordHash varchar(64) not null);";
+PasswordHash blob not null,
+PasswordSalt blob not null);";
         }
     }
 }

@@ -69,7 +69,9 @@ namespace jotfi.Jot.Core.ViewModels.System
                 var personId = GetRepository().Base.Person.Insert(user.Person, conn);
                 var emailId = GetRepository().Base.Email.Insert(user.Person.Email, conn);
                 var addressId = GetRepository().Base.Address.Insert(user.Person.Address, conn);
-                user.Password.PasswordHash = HashUtils.GetSHA256Hash(user.Password.CreatePassword);
+                HashUtils.CreatePasswordHash(user.Password.CreatePassword, out byte[] hash, out byte[] salt);
+                user.Password.PasswordHash = hash;
+                user.Password.PasswordSalt = salt;
                 var passwordId = GetRepository().Base.Password.Insert(user.Password, conn);
                 AssertUpdateNewUser(userId, user.Hash, personId, passwordId, conn);
                 AssertUpdateNewUserPassword(userId, passwordId, user.Password.Hash, conn);

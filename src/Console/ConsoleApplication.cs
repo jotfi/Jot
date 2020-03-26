@@ -92,5 +92,10 @@ namespace jotfi.Jot.Console
             }
             StatusBar.Add(view);
         }
+
+        public void UpdateMainMenu()
+        {
+            MainMenu.Clear();
+        }
     }
 }

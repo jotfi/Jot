@@ -134,43 +134,5 @@ Please enter an organizaton name, this can be edited later.";
             return GetViewModels().System.User.CreateUser(admin);
         }
 
-        public bool IsOrganizationValid(Organization organization, out string error)
-        {
-            error = string.Empty;
-            if (string.IsNullOrWhiteSpace(organization.Name))
-            {
-                error += "Invalid organization. Name must not be blank.";
-                return false;
-            }
-            return true;
-        }
-
-        public bool SaveOrganization(Organization organization, out string error)
-        {
-            if (!IsOrganizationValid(organization, out error))
-            {
-                return false;
-            }
-            return CreateOrganization(organization);
-        }
-
-        public bool CreateOrganization(Organization organization)
-        { 
-            try
-            {
-                using var uow = GetDatabase().Context.Create();
-                var conn = GetDatabase().Context.GetConnection();
-                var organizationId = GetRepository().System.Organization.Insert(organization, conn);
-                organizationId.IsEqualTo(0);
-                uow.CommitAsync().Wait();
-            }
-            catch (Exception ex)
-            {
-                Log(ex);
-                return false;
-            }
-            return true;
-        }
-
     }
 }

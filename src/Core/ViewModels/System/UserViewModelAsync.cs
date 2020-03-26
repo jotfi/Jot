@@ -33,7 +33,9 @@ namespace jotfi.Jot.Core.ViewModels.System
                 var personId = await GetRepository().Base.Person.InsertAsync(user.Person, conn);
                 var emailId = await GetRepository().Base.Email.InsertAsync(user.Person.Email, conn);
                 var addressId = await GetRepository().Base.Address.InsertAsync(user.Person.Address, conn);
-                user.Password.PasswordHash = HashUtils.GetSHA256Hash(user.Password.CreatePassword);
+                HashUtils.CreatePasswordHash(user.Password.CreatePassword, out byte[] hash, out byte[] salt);
+                user.Password.PasswordHash = hash;
+                user.Password.PasswordSalt = salt;
                 var passwordId = await GetRepository().Base.Password.InsertAsync(user.Password, conn);
                 await AssertUpdateNewUserAsync(userId, user.Hash, personId, passwordId, conn);
                 await AssertUpdateNewUserPasswordAsync(userId, passwordId, user.Password.Hash, conn);
