@@ -11,7 +11,7 @@ using System.Text;
 
 namespace jotfi.Jot.Console.Views.Base
 {
-    public abstract class BaseView<T> : Logger, IBaseView<T>
+    public abstract class BaseView<T> : BaseControl, IBaseView<T>
     {
         public Core.Application App { get; }
         public T ViewModel { get; }
@@ -32,12 +32,18 @@ namespace jotfi.Jot.Console.Views.Base
             ViewModel = viewmodel;
         }
 
+        protected virtual void Reset() => Panels.Clear();
         protected virtual void AddToTop(Terminal.Gui.View view) => Terminal.Gui.Application.Top.Add(view);
-        protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();
         protected virtual void AddToPanel(Field field, 
             string panelId = "main") => GetPanel(panelId).Fields.Add(field);
+        protected virtual void AddToPanel(Terminal.Gui.View view,
+            string panelId = "main") => GetPanel(panelId).Views.Add(view);
         protected virtual void SetPanelTitle(string title, 
-            string panelId = "main") => GetPanel(panelId).SetTitle(title);        
+            string panelId = "main") => GetPanel(panelId).Title = title;
+        protected virtual void SetPanelPos(int x, int y,
+            string panelId = "main") => GetPanel(panelId).Pos = (x, y);
+        protected virtual void SetPanelSize(int width, int height,
+            string panelId = "main") => GetPanel(panelId).Size = (width, height);
         protected virtual string GetPanelText(string id, 
             string panelId = "main") => GetPanel(panelId).GetText(id);
         protected virtual void SetPanelText(string id, string text, 
@@ -53,15 +59,20 @@ namespace jotfi.Jot.Console.Views.Base
             return GetPanel(panelId).ShowDialog(id, showCancel, (okCaption, cancelCaption));
         }
 
-        protected Panel GetPanel(string panel)
+        protected virtual void ShowPanel(string id = "", string panelId = "main")
         {
-            if (!Panels.Any(p => p.Id == panel))
+            GetPanel(panelId).ShowPanel(id);
+        }
+
+        protected Panel GetPanel(string panelId = "main")
+        {
+            if (!Panels.Any(p => p.Id == panelId))
             {
-                var newPanel = new Panel(panel);
+                var newPanel = new Panel(ConsoleApp, panelId, Opts);
                 Panels.Add(newPanel);
                 return newPanel;
             }
-            return Panels.Find(p => p.Id == panel);
+            return Panels.Find(p => p.Id == panelId);
         }    
     }
 }

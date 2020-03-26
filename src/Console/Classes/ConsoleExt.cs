@@ -9,7 +9,7 @@ namespace jotfi.Jot.Console.Classes
     {
         public static Pos ToPos(this int source)
         {
-            return source > 0 ? source : 1;
+            return Math.Abs(source);
         }
 
         public static (Pos, Pos) ToPos(this (int, int) source)
@@ -19,7 +19,11 @@ namespace jotfi.Jot.Console.Classes
 
         public static Dim ToDim(this int source)
         {
-            return source > 0 ? source : Dim.Fill();
+            if (source > 0)
+            {
+                return source;
+            }
+            return Dim.Fill() + source;
         }
 
         public static (Dim, Dim) ToDim(this (int, int) source)

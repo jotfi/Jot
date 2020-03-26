@@ -73,6 +73,12 @@ namespace jotfi.Jot.Core.ViewModels.System
             whereConditions ??= new { Type = "table" };
             return Repository.System.TableName.GetList(whereConditions).ToList();
         }
+        public string FirstTimeSetupText()
+        {
+            return $@"
+Setting up {Constants.DefaultApplicationName} for the first time. The following tasks must be 
+completed before server connection and login dialogs will be displayed.";
+        }
 
         public string ServerConnectionText()
         {

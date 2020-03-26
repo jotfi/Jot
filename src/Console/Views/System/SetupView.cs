@@ -15,7 +15,8 @@ namespace jotfi.Jot.Console.Views.System
     public class SetupView : BaseView<SetupViewModel>, ISetupView
     {
         private bool ValidPassword;
-        private bool ValidEmail;        
+        private bool ValidEmail;
+        const string SetupInfo = "SetupInfo";
         const string ServerInfo = "ServerInfo";
         const string ConnectionType = "ConnectionType";
         const string ServerUrlInfo = "ServerUrlInfo";
@@ -33,11 +34,21 @@ namespace jotfi.Jot.Console.Views.System
 
         public void ShowSetup()
         {
-            ConsoleApp.AddMain(
-            new Terminal.Gui.FrameView(new Terminal.Gui.Rect(3, 10, 25, 6), "Options"){
-                new Terminal.Gui.CheckBox (1, 0, "Remember me"),
-                new Terminal.Gui.RadioGroup (1, 2, new [] { "_Personal", "_Company" }),
+            Reset();
+            SetPanelTitle($"Welcome");
+            SetPanelPos(2, 2);
+            SetPanelSize(-4, -4);
+            AddToPanel(new Field(SetupInfo)
+            {
+                ViewText = ViewModel.FirstTimeSetupText(),
+                ViewSize = (-1, 3),
+                ShowTextField = false
             });
+            var ok = GetOkButton("Setup");
+            (ok.X, ok.Y) = (Terminal.Gui.Pos.Center(), 10);
+            ok.Clicked = () => SetupAdminOrganisation();
+            AddToPanel(ok);
+            ShowPanel();
         }
 
         public bool SetupAdminOrganisation()
@@ -98,7 +109,7 @@ namespace jotfi.Jot.Console.Views.System
         bool SetupConnectionDialog()
         {
             var settings = AppSettings;
-            ClearPanel();
+            Reset();
             SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
             AddToPanel(new Field(ServerInfo)
             {
@@ -191,7 +202,7 @@ namespace jotfi.Jot.Console.Views.System
 
         bool SetupAdministratorDialog(User admin)
         {
-            ClearPanel();
+            Reset();
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
             AddToPanel(new Field(AdminInfo)
             {
@@ -211,7 +222,6 @@ namespace jotfi.Jot.Console.Views.System
                     var infoColor = ValidPassword && passwordsMatch ? MenuColor : ErrorColor;
                     MainLoop.Invoke(() => SetPanelColor(AdminPasswordInfo, infoColor));
                 }
-
             });
             AddToPanel(new Field(nameof(admin.Password.ConfirmPassword), admin.Password)
             {
@@ -293,7 +303,7 @@ namespace jotfi.Jot.Console.Views.System
 
         bool SetupOrganizationDialog(Organization organization)
         {
-            ClearPanel();
+            Reset();
             SetPanelTitle($"Setup your organization");
             AddToPanel(new Field(OrganizationInfo)
             {

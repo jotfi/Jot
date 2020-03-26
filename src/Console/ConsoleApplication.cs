@@ -17,28 +17,29 @@ namespace jotfi.Jot.Console
         {
             Views = new ConsoleViews(this);
             Application.Init();
-            Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
-            {
-                X = 0,
-                Y = 1,
-                Width = Dim.Fill(),
-                Height = Dim.Fill() - Dim.Sized(1)
-            });
-            Application.Top.Add(StatusBar = new Toplevel()
-            {
-                X = 0,
-                Y = Pos.Bottom(Application.Top) - 1,
-                Width = Dim.Fill(),
-                Height = Dim.Sized(1)
-            });
-            Application.Top.Add(MainMenu = new MenuBar(new MenuBarItem[] {
+            MainMenu = new MenuBar(new MenuBarItem[] {
                 new MenuBarItem ("_File", new MenuItem [] {
                     new MenuItem ("_Quit", "", Quit)
                 }),
                 new MenuBarItem ("_Help", new MenuItem [] {
                     new MenuItem ("_About", "", Quit)
                 })
-            }));
+            });
+            MainWindow = new Window(Constants.DefaultApplicationName)
+            {
+                X = 0,
+                Y = 1,
+                Width = Dim.Fill(),
+                Height = Dim.Fill() - Dim.Sized(1)
+            };
+            StatusBar = new Toplevel()
+            {
+                X = 0,
+                Y = Pos.Bottom(Application.Top) - 1,
+                Width = Dim.Fill(),
+                Height = Dim.Sized(1),
+                ColorScheme = Colors.Dialog
+            };
         }
 
         public override void Run()
@@ -60,6 +61,9 @@ namespace jotfi.Jot.Console
             {
                 Log(ex);
             }
+            Application.Top.Add(MainMenu);
+            Application.Top.Add(MainWindow);
+            Application.Top.Add(StatusBar);
             Application.Run();
         }
 
@@ -82,7 +86,6 @@ namespace jotfi.Jot.Console
 
         public void AddMain(params View[] views)
         {
-            MainWindow.RemoveAll();
             MainWindow.Add(views);
         }
 

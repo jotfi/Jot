@@ -1,4 +1,6 @@
-﻿using System;
+﻿using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +10,17 @@ namespace jotfi.Jot.Console.Views.Controls
 {
     public class Panel : BaseControl
     {
+        public ConsoleApplication App { get; }
         public string Id { get; }
-        public string Title { get; private set; } = "";
+        public string Title { get; set; } = "";
+        public (int, int) Pos { get; set; } = (1, 1);
         public (int, int) Size { get; set; } = (80, 24);
         public List<Field> Fields { get; } = new List<Field>();
+        public List<View> Views { get; } = new List<View>();
 
-        public Panel(string id)
+        public Panel(ConsoleApplication app, string id, LogOpts opts = null) : base(opts)
         {
+            App = app;
             Id = id;
         }
 
@@ -24,21 +30,7 @@ namespace jotfi.Jot.Console.Views.Controls
             {
                 return false;
             }
-            var views = new List<View>();
-            int maxLength = 0;
-            foreach (var field in Fields)
-            {
-                if (field.ShowTextField && field.ViewText.Length > maxLength)
-                {
-                    maxLength = field.ViewText.Length;
-                }
-            }
-            Field previous = null;
-            foreach (var field in Fields)
-            {
-                field.Create(views, previous, maxLength);
-                previous = field;
-            }
+            var views = GetViews();
             var dialog = new Dialog(Title, Size.Item1, Size.Item2)
             {
                 views.ToArray()
@@ -56,10 +48,43 @@ namespace jotfi.Jot.Console.Views.Controls
             return OkClicked;
         }
 
-
-        public void SetTitle(string title)
+        public void ShowPanel(string id = "")
         {
-            Title = title;
+            if (Fields.Count() == 0)
+            {
+                return;
+            }
+            var window = new FrameView(Title);
+            (window.X, window.Y) = Pos.ToPos();
+            (window.Width, window.Height) = Size.ToDim();
+            var views = GetViews();
+            window.Add(views.ToArray());
+            window.Add(Views.ToArray());
+            if (!string.IsNullOrEmpty(id))
+            {
+                window.SetFocus(views.Find(p => p.Id == id));
+            }
+            App.AddMain(window);
+        }
+
+        protected List<View> GetViews()
+        {
+            int maxLength = 0;
+            foreach (var field in Fields)
+            {
+                if (field.ShowTextField && field.ViewText.Length > maxLength)
+                {
+                    maxLength = field.ViewText.Length;
+                }
+            }
+            Field previous = null;
+            var views = new List<View>();
+            foreach (var field in Fields)
+            {
+                field.Create(views, previous, maxLength);
+                previous = field;
+            }
+            return views;
         }
 
         public string GetText(string id)
