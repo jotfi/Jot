@@ -4,6 +4,7 @@ using jotfi.Jot.Core.ViewModels.Base;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 
 namespace jotfi.Jot.Core.ViewModels.System
@@ -42,6 +43,16 @@ namespace jotfi.Jot.Core.ViewModels.System
         public bool GetEmailValid(string email)
         {
             return Validators.IsEmailValid(email);
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            var users = GetRepository().System.User.GetList();
+            foreach (var user in users)
+            {
+                GetUserDetails(user);
+            }
+            return users;
         }
 
         public bool CreateUser(User user)

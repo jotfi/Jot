@@ -16,7 +16,7 @@ namespace jotfi.Jot.Core.ViewModels.System
             var users = await GetRepository().System.User.GetListAsync();
             foreach (var user in users)
             {
-                GetUserDetails(user);
+                await GetUserDetailsAsync(user);
             }
             return users;
         }
@@ -109,7 +109,7 @@ namespace jotfi.Jot.Core.ViewModels.System
             updatedAddress.TxId.IsEqualTo(personId);
         }
 
-        async Task GetUserDetailsAsyncAsync(User user, DbConnection conn = null)
+        async Task GetUserDetailsAsync(User user, DbConnection conn = null)
         {
             user.Password = await GetRepository().Base.Password.GetByIdAsync(user.PasswordId, conn);
             user.Password.TxId.IsEqualTo(user.Id);

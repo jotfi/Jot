@@ -8,6 +8,7 @@ using jotfi.Jot.Core.ViewModels.System;
 using jotfi.Jot.Core.Views.System;
 using jotfi.Jot.Model.System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace jotfi.Jot.Console.Views.System
 {
@@ -30,33 +31,36 @@ namespace jotfi.Jot.Console.Views.System
 
         public void ApplicationStart()
         {
-            if (!SetupConnection())
+            Task.Run(() =>
             {
-                return;
-            }
-            if (!GetAppSettings().IsClient)
-            {
-                if (!GetViewModel().CheckDatabase(out string error))
+                if (!SetupConnection())
                 {
-                    GetApp().ShowError(error);
+                    return;
                 }
-            }
-            if (!GetViewModel().CheckAdministrator())
-            {
-                var admin = GetViewModel().CreateAdminUser();
-                if (!SetupAdministrator(admin))
+                if (!GetAppSettings().IsClient)
                 {
-                    return;
-                }                
-            }
-            if (!GetViewModel().CheckOrganization())
-            {
-                var organiation = new Organization();
-                if (!SetupOrganization(organiation))
+                    if (!GetViewModel().CheckDatabase(out string error))
+                    {
+                        GetApp().ShowError(error);
+                    }
+                }
+                if (!GetViewModel().CheckAdministrator())
                 {
-                    return;
-                }                
-            }
+                    var admin = GetViewModel().CreateAdminUser();
+                    if (!SetupAdministrator(admin))
+                    {
+                        return;
+                    }
+                }
+                if (!GetViewModel().CheckOrganization())
+                {
+                    var organiation = new Organization();
+                    if (!SetupOrganization(organiation))
+                    {
+                        return;
+                    }
+                }
+            });
             Terminal.Gui.Application.Run();
         }
 

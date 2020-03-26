@@ -34,14 +34,6 @@ namespace jotfi.Jot.Console.Views.Base
         public Terminal.Gui.ColorScheme GetMenuColor() => Terminal.Gui.Colors.Menu;
         public Terminal.Gui.ColorScheme GetErrorColor() => Terminal.Gui.Colors.Error;
 
-        public virtual void Quit()
-        {
-            if (App.Quit())
-            {
-                Terminal.Gui.Application.Top.Running = false;
-            }
-        }
-
         protected virtual void AddToTop(Terminal.Gui.View view) => Terminal.Gui.Application.Top.Add(view);
         protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();
         protected virtual void AddToPanel(Field field, 

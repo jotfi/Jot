@@ -21,13 +21,6 @@ namespace jotfi.Jot.Console.Views.System
 
         public bool ShowLogin()
         {
-            var menu = new MenuBar(new MenuBarItem[] {
-                new MenuBarItem ("_File", new MenuItem [] {
-                    new MenuItem ("_Quit", "", () => Quit())
-                })
-            });
-            AddToTop(menu);
-
             var login = new Label("Login: ") { X = 3, Y = 2 };
             var password = new Label("Password: ")
             {
@@ -60,23 +53,11 @@ namespace jotfi.Jot.Console.Views.System
                         {
                             MessageBox.Query(50, 5, "Login", $"{loginText.Text} {passText.Text}");
                         }
-                        },
-                        new Button(13, 14, "Quit") { Clicked = () => Quit() });
+                        });
 
             return true;
         }
 
-        public MenuBar GetMainMenu()
-        {
-            return new MenuBar(new MenuBarItem[] {
-                new MenuBarItem ("_File", new MenuItem [] {
-                    new MenuItem ("_Quit", "", Quit)
-                }),
-                new MenuBarItem ("_Help", new MenuItem [] {
-                    new MenuItem ("_About", "", Quit)
-                })
-            });
-        }
 
         public List<MenuBarItem> GetMainMenuItems()
         {

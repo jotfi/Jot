@@ -7,7 +7,6 @@ namespace jotfi.Jot.Console
     {
         static void Main()
         {
-            Terminal.Gui.Application.Init();
             var settings = SettingsUtils.GetSettings<AppSettings>() ?? new AppSettings();
             new ConsoleApplication(settings).Run();
         }

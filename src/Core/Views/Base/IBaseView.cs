@@ -8,6 +8,5 @@ namespace jotfi.Jot.Core.Views.Base
         Application GetApp();
         T GetViewModel();
         ViewModelFactory GetViewModels();
-        void Quit();
     }
 }

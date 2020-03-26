@@ -48,14 +48,9 @@ namespace jotfi.Jot.Core
             }
         }
 
+        public virtual void Quit() { }
         public virtual void ShowError(string message) { }
         public virtual void SaveSettings() => SettingsUtils.SaveSettings(AppSettings);
-
-
-        public virtual bool Quit()
-        {
-            return true;
-        }
 
         public virtual bool IsLoggedIn()
         {

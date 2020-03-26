@@ -2,18 +2,21 @@
 using jotfi.Jot.Console.Views;
 using jotfi.Jot.Core.Settings;
 using System;
+using System.Reflection;
 using Terminal.Gui;
 
 namespace jotfi.Jot.Console
 {
     public class ConsoleApplication : Core.Application
-    {
-        readonly Toplevel StatusBar;
+    {        
         readonly Window MainWindow;
+        readonly MenuBar MainMenu;
+        readonly Toplevel StatusBar;
 
         public ConsoleApplication(AppSettings appSettings) : base(appSettings)
         {
-            Views = new ConsoleViewFactory(this);            
+            Views = new ConsoleViewFactory(this);
+            Application.Init();
             Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
             {
                 X = 0,
@@ -28,14 +31,28 @@ namespace jotfi.Jot.Console
                 Width = Dim.Fill(),
                 Height = Dim.Sized(1)
             });
+            Application.Top.Add(MainMenu = new MenuBar(new MenuBarItem[] {
+                new MenuBarItem ("_File", new MenuItem [] {
+                    new MenuItem ("_Quit", "", Quit)
+                }),
+                new MenuBarItem ("_Help", new MenuItem [] {
+                    new MenuItem ("_About", "", Quit)
+                })
+            }));
         }
 
-        public override bool Quit()
+        public override void Run()
+        {
+            AddStatus($"Version: {Assembly.GetEntryAssembly().GetName().Version}");
+            base.Run();
+        }
+
+        public override void Quit()
         {
             base.Quit();
-            var n = MessageBox.Query(50, 7, $"Quit {Constants.DefaultApplicationName}", 
-                $"Are you sure you want to quit {Constants.DefaultApplicationName}?", "Yes", "No");
-            return n == 0;
+            var answer = MessageBox.Query(50, 7, $"Quit {Constants.DefaultApplicationName}", 
+                $"Are you sure you want to quit {Constants.DefaultApplicationName}?", "Yes", "No");            
+            Application.Top.Running = answer == 1;
         }
 
         public override void ShowError(string message)
