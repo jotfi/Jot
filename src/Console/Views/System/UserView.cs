@@ -13,7 +13,7 @@ namespace jotfi.Jot.Console.Views.System
     public class UserView : BaseView<UserViewModel>, IUserView
     {
 
-        public UserView(ConsoleApplication app, UserViewModel viewmodel, LogOpts opts = null)
+        public UserView(Core.Application app, UserViewModel viewmodel, LogOpts opts = null)
             : base(app, viewmodel, opts)
         {
             

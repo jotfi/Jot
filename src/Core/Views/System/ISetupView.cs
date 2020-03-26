@@ -4,7 +4,7 @@ using jotfi.Jot.Model.System;
 
 namespace jotfi.Jot.Core.Views.System
 {
-    public interface ISystemView
+    public interface ISetupView
     {
         void ApplicationStart();
         void ApplicationEnd();

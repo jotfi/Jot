@@ -15,7 +15,7 @@ namespace jotfi.Jot.Console
 
         public ConsoleApplication(AppSettings appSettings) : base(appSettings)
         {
-            Views = new ConsoleViewFactory(this);
+            Views = new ConsoleViews(this);
             Application.Init();
             Application.Top.Add(MainWindow = new Window(Constants.DefaultApplicationName)
             {

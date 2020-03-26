@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.ViewModels.System
 {
-    public partial class SystemViewModel : BaseViewModel
+    public partial class SetupViewModel : BaseViewModel
     {
-        public SystemViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public SetupViewModel(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
@@ -101,10 +101,10 @@ Please enter an organizaton name, this can be edited later.";
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!GetViewModels().User.GetPasswordValid(user.Password.CreatePassword))
+            if (!GetViewModels().System.User.GetPasswordValid(user.Password.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += GetViewModels().User.GetPasswordInfo(user.Password.CreatePassword);
+                error += GetViewModels().System.User.GetPasswordInfo(user.Password.CreatePassword);
                 return false;
             }
             if (user.Password.CreatePassword != user.Password.ConfirmPassword)
@@ -112,7 +112,7 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!GetViewModels().User.GetEmailValid(user.Person.Email.EmailAddress))
+            if (!GetViewModels().System.User.GetEmailValid(user.Person.Email.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
@@ -131,7 +131,7 @@ Please enter an organizaton name, this can be edited later.";
             {
                 return false;
             }
-            return GetViewModels().User.CreateUser(admin);
+            return GetViewModels().System.User.CreateUser(admin);
         }
 
         public bool IsOrganizationValid(Organization organization, out string error)

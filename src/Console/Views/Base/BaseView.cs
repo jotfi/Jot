@@ -12,12 +12,12 @@ namespace jotfi.Jot.Console.Views.Base
 {
     public abstract class BaseView<T> : Logger, IBaseView<T>
     {
-        private readonly ConsoleApplication App;
+        private readonly Core.Application App;
         private readonly T ViewModel;
 
         private List<Panel> Panels { get; } = new List<Panel>();
 
-        public BaseView(ConsoleApplication app, T viewmodel, LogOpts opts = null) 
+        public BaseView(Core.Application app, T viewmodel, LogOpts opts = null) 
             : base(opts)
         {
             App = app;
@@ -27,7 +27,7 @@ namespace jotfi.Jot.Console.Views.Base
         public Core.Application GetApp() => App;
         public Core.Settings.AppSettings GetAppSettings() => GetApp().AppSettings;
         public T GetViewModel() => ViewModel;
-        public ConsoleApplication GetConsoleApp() => App;        
+        public ConsoleApplication GetConsoleApp() => (ConsoleApplication)App;        
         public ViewModelFactory GetViewModels() => App.ViewModels;
         public Mono.Terminal.MainLoop GetMainLoop() => Terminal.Gui.Application.MainLoop;
         public Terminal.Gui.Dim GetFill() => Terminal.Gui.Dim.Fill();

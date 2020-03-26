@@ -16,7 +16,7 @@ namespace jotfi.Jot.Core
         public readonly DatabaseController Database;
         public readonly RepositoryFactory Repository;
         public readonly ViewModelFactory ViewModels;
-        public ViewFactory Views { get; protected set; }
+        public IViewFactory Views { get; protected set; }
         public HttpClient Client { get; } = new HttpClient();
 
         public Application(AppSettings appSettings) : base()
@@ -39,8 +39,8 @@ namespace jotfi.Jot.Core
         {
             try
             {
-                Views.System.ApplicationStart();
-                Views.System.ApplicationEnd();
+                Views.System.Setup.ApplicationStart();
+                Views.System.Setup.ApplicationEnd();
             }
              catch (Exception ex)
             {

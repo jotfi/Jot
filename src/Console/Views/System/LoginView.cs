@@ -13,7 +13,7 @@ namespace jotfi.Jot.Console.Views.System
     public class LoginView : BaseView<LoginViewModel>, ILoginView
     {
 
-        public LoginView(ConsoleApplication app, LoginViewModel viewmodel, LogOpts opts = null)
+        public LoginView(Core.Application app, LoginViewModel viewmodel, LogOpts opts = null)
             : base(app, viewmodel, opts)
         {
             

@@ -10,17 +10,12 @@ namespace jotfi.Jot.Core.ViewModels
     public class ViewModelFactory : Logger
     {
         public readonly Application App;
-        public readonly SystemViewModel System;
-        public readonly UserViewModel User;
-        public readonly LoginViewModel Login;
+        public readonly SystemViewModels System;
 
         public ViewModelFactory(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;
-            System = new SystemViewModel(app, opts);
-            User = new UserViewModel(app, opts);
-            Login = new LoginViewModel(app, opts);
+            System = new SystemViewModels(app, opts);
         }
-
     }
 }

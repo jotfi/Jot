@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class SystemView : BaseView<SystemViewModel>, ISystemView
+    public class SetupView : BaseView<SetupViewModel>, ISetupView
     {
         private bool ValidPassword;
         private bool ValidEmail;        
@@ -23,7 +23,7 @@ namespace jotfi.Jot.Console.Views.System
         const string EmailInfo = "EmailInfo";
         const string ConnectionType = "ConnectionType";
 
-        public SystemView(ConsoleApplication app, SystemViewModel viewmodel, LogOpts opts = null)
+        public SetupView(Core.Application app, SetupViewModel viewmodel, LogOpts opts = null)
             : base(app, viewmodel, opts)
         {
 
@@ -204,9 +204,9 @@ namespace jotfi.Jot.Console.Views.System
                 Secret = true,
                 TextChanged = (text) =>
                 {
-                    ValidPassword = GetViewModels().User.GetPasswordValid(text);
+                    ValidPassword = GetViewModels().System.User.GetPasswordValid(text);
                     var passwordsMatch = GetPanelText(nameof(admin.Password.ConfirmPassword)) == text;
-                    var passwordInfo = GetViewModels().User.GetPasswordInfo(text);
+                    var passwordInfo = GetViewModels().System.User.GetPasswordInfo(text);
                     GetMainLoop().Invoke(() => SetPanelLabel(PasswordInfo, passwordInfo));
                     var infoColor = ValidPassword && passwordsMatch ? GetMenuColor() : GetErrorColor();
                     GetMainLoop().Invoke(() => SetPanelColor(PasswordInfo, infoColor));
@@ -223,7 +223,7 @@ namespace jotfi.Jot.Console.Views.System
                         return;
                     }
                     var passwordsMatch = GetPanelText(nameof(admin.Password.CreatePassword)) == text;
-                    var passwordInfo = passwordsMatch ? GetViewModels().User.GetPasswordInfo(text) : "Passwords do not match";
+                    var passwordInfo = passwordsMatch ? GetViewModels().System.User.GetPasswordInfo(text) : "Passwords do not match";
                     GetMainLoop().Invoke(() => SetPanelLabel(PasswordInfo, passwordInfo));
                     var infoColor = passwordsMatch ? GetMenuColor() : GetErrorColor();
                     GetMainLoop().Invoke(() => SetPanelColor(PasswordInfo, infoColor));
@@ -237,7 +237,7 @@ namespace jotfi.Jot.Console.Views.System
             {
                 TextChanged = (text) =>
                 {
-                    ValidEmail = GetViewModels().User.GetPasswordValid(text);
+                    ValidEmail = GetViewModels().System.User.GetPasswordValid(text);
                     var emailsMatch = GetPanelText(nameof(admin.Person.Email.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
                     GetMainLoop().Invoke(() => SetPanelLabel(EmailInfo, emailInfo));

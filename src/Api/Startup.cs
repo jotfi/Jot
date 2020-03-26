@@ -23,7 +23,7 @@ namespace jotfi.Jot.Api
         {
             Configuration = configuration;
             Application = new Core.Application(new Core.Settings.AppSettings());
-            if (!Application.ViewModels.System.CheckDatabase(out string error))
+            if (!Application.ViewModels.System.Setup.CheckDatabase(out string error))
             {
                 throw new ApplicationException(error);
             }
@@ -34,9 +34,9 @@ namespace jotfi.Jot.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Application.ViewModels.System);
-            services.AddSingleton(Application.ViewModels.User);
-            services.AddSingleton(Application.ViewModels.Login);
+            services.AddSingleton(Application.ViewModels.System.Setup);
+            services.AddSingleton(Application.ViewModels.System.User);
+            services.AddSingleton(Application.ViewModels.System.Login);
             services.AddControllers();
         }
 
