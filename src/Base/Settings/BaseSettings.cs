@@ -8,6 +8,7 @@ namespace jotfi.Jot.Base.Settings
     public class BaseSettings
     {
         public bool IsClient { get; set; }
+        public string Secret { get; set; } = "http://www.jotfi.com/";
         public bool IsConsole { get; set; }
         [Display(Name = "Server URL")]
         public string ServerUrl { get; set; } = "";

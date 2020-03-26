@@ -2,6 +2,7 @@
 using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace jotfi.Jot.Model.System
@@ -13,6 +14,9 @@ namespace jotfi.Jot.Model.System
         public Person Person { get; set; } = new Person();
         public long PasswordId { get; set; }
         public Password Password { get; set; } = new Password();
+
+        [NotMapped]
+        public string Token { get; set; }
 
         public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {

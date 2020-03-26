@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
 using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace jotfi.Jot.Api.Controllers.System
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : BaseController<UserViewModel>
@@ -17,6 +18,18 @@ namespace jotfi.Jot.Api.Controllers.System
         public UserController(UserViewModel viewmodel) : base(viewmodel)
         {
             
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate([FromBody]Authenticate model)
+        {
+            var user = ViewModel.Authenticate(model.Username, model.Password);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+            return Ok(user);
         }
 
         // GET: user

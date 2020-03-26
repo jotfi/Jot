@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using jotfi.Jot;
 using jotfi.Jot.Database.Base;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace jotfi.Jot.Api
 {
@@ -22,7 +25,12 @@ namespace jotfi.Jot.Api
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Application = new Core.Application(new Core.Settings.AppSettings());
+            var settings = new Core.Settings.AppSettings()
+            {
+                IsClient = false,
+                Secret = configuration["Secret"]
+            };
+            Application = new Core.Application(settings);
             if (!Application.ViewModels.System.Setup.CheckDatabase(out string error))
             {
                 throw new ApplicationException(error);
@@ -34,10 +42,31 @@ namespace jotfi.Jot.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
+            var key = Encoding.ASCII.GetBytes(Application.AppSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
             services.AddSingleton(Application.ViewModels.System.Setup);
             services.AddSingleton(Application.ViewModels.System.User);
             services.AddSingleton(Application.ViewModels.System.Login);
-            services.AddControllers();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace jotfi.Jot.Base.Utils
 {
-    public class Validators
+    public class ValidUtils
     {
-        static Logger Log { get; } = LogManager.GetLogger(typeof(Validators).FullName);
+        static Logger Log { get; } = LogManager.GetLogger(typeof(ValidUtils).FullName);
 
         /// <summary>
         /// Uses a regular expression to verify that a string is in valid email format

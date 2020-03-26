@@ -32,7 +32,7 @@ namespace jotfi.Jot.Data.Base
             }
         }
 
-        public virtual T GetById(long id, DbConnection conn = null)
+        public virtual T Get(object id, DbConnection conn = null)
         {
             if (conn != null)
             {

@@ -96,7 +96,7 @@ Logging into {Constants.DefaultApplicationName} requires an organization.
 Please enter an organizaton name, this can be edited later.";
         }
 
-        public bool IsServerValid(string url) => Validators.IsUrlValid(url);
+        public bool IsServerValid(string url) => ValidUtils.IsUrlValid(url);
 
         public bool IsAdministratorValid(User user, out string error)
         {
