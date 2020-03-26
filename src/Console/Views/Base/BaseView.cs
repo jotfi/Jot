@@ -1,8 +1,8 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views.Controls;
 using jotfi.Jot.Core.Settings;
-using jotfi.Jot.Core.ViewModels;
-using jotfi.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.Services;
+using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Core.Views.Base;
 using System;
 using System.Collections.Generic;
@@ -14,9 +14,9 @@ namespace jotfi.Jot.Console.Views.Base
     public abstract class BaseView<T> : BaseControl, IBaseView<T>
     {
         public Core.Application App { get; }
-        public T ViewModel { get; }
+        public T Service { get; }
         public ConsoleApplication ConsoleApp => (ConsoleApplication)App;
-        public ViewModelFactory ViewModels => App.ViewModels;
+        public ServiceFactory Services => App.Services;
         public AppSettings AppSettings => App.AppSettings;
         public Mono.Terminal.MainLoop MainLoop => Terminal.Gui.Application.MainLoop;
         public Terminal.Gui.Dim DimFill => Terminal.Gui.Dim.Fill();
@@ -25,11 +25,11 @@ namespace jotfi.Jot.Console.Views.Base
 
         private List<Panel> Panels { get; } = new List<Panel>();
 
-        public BaseView(Core.Application app, T viewmodel, LogOpts opts = null) 
+        public BaseView(Core.Application app, T service, LogOpts opts = null) 
             : base(opts)
         {
             App = app;
-            ViewModel = viewmodel;
+            Service = service;
         }
 
         protected virtual void Reset() => Panels.Clear();

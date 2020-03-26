@@ -1,7 +1,7 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views.Base;
-using jotfi.Jot.Core.ViewModels.Base;
-using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Core.Views.System;
 using System;
 using System.Collections.Generic;
@@ -10,11 +10,11 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class LoginView : BaseView<LoginViewModel>, ILoginView
+    public class LoginView : BaseView<LoginService>, ILoginView
     {
 
-        public LoginView(Core.Application app, LoginViewModel viewmodel, LogOpts opts = null)
-            : base(app, viewmodel, opts)
+        public LoginView(Core.Application app, LoginService service, LogOpts opts = null)
+            : base(app, service, opts)
         {
             
         }

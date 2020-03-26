@@ -1,6 +1,6 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
-using jotfi.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Core.Views.Base;
 using jotfi.Jot.Model.System;
 using System;
@@ -11,11 +11,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace jotfi.Jot.Core.ViewModels.System
+namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SetupViewModel : BaseViewModel
+    public partial class SetupService : ServiceBase
     {
-        public SetupViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public SetupService(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }
@@ -107,10 +107,10 @@ Please enter an organizaton name, this can be edited later.";
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!ViewModels.System.User.GetPasswordValid(user.Password.CreatePassword))
+            if (!Services.System.User.GetPasswordValid(user.Password.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += ViewModels.System.User.GetPasswordInfo(user.Password.CreatePassword);
+                error += Services.System.User.GetPasswordInfo(user.Password.CreatePassword);
                 return false;
             }
             if (user.Password.CreatePassword != user.Password.ConfirmPassword)
@@ -118,7 +118,7 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!ViewModels.System.User.GetEmailValid(user.Person.Email.EmailAddress))
+            if (!Services.System.User.GetEmailValid(user.Person.Email.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
@@ -137,7 +137,7 @@ Please enter an organizaton name, this can be edited later.";
             {
                 return false;
             }
-            return ViewModels.System.User.CreateUser(admin);
+            return Services.System.User.CreateUser(admin);
         }
 
     }

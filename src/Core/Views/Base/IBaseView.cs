@@ -1,12 +1,12 @@
 ﻿
-using jotfi.Jot.Core.ViewModels;
+using jotfi.Jot.Core.Services;
 
 namespace jotfi.Jot.Core.Views.Base
 {
     public interface IBaseView<T>
     {
         Application App { get; }
-        T ViewModel { get; }
-        ViewModelFactory ViewModels { get => App.ViewModels; }
+        T Service { get; }
+        ServiceFactory Services { get => App.Services; }
     }
 }

@@ -3,8 +3,8 @@ using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Console.Views.Controls;
-using jotfi.Jot.Core.ViewModels.Base;
-using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Core.Views.System;
 using jotfi.Jot.Model.System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class SetupView : BaseView<SetupViewModel>, ISetupView
+    public class SetupView : BaseView<SetupService>, ISetupView
     {
         private bool ValidPassword;
         private bool ValidEmail;
@@ -26,8 +26,8 @@ namespace jotfi.Jot.Console.Views.System
         const string OrganizationInfo = "OrganizationInfo";
         const string OrganizationNameInfo = "OrganizationNameInfo";
 
-        public SetupView(Core.Application app, SetupViewModel viewmodel, LogOpts opts = null)
-            : base(app, viewmodel, opts)
+        public SetupView(Core.Application app, SetupService service, LogOpts opts = null)
+            : base(app, service, opts)
         {
 
         }
@@ -40,7 +40,7 @@ namespace jotfi.Jot.Console.Views.System
             SetPanelSize(-4, -4);
             AddToPanel(new Field(SetupInfo)
             {
-                ViewText = ViewModel.FirstTimeSetupText(),
+                ViewText = Service.FirstTimeSetupText(),
                 ViewSize = (-1, 3),
                 ShowTextField = false
             });
@@ -55,21 +55,21 @@ namespace jotfi.Jot.Console.Views.System
         {
             if (!AppSettings.IsClient)
             {
-                if (!ViewModel.CheckDatabase(out string error))
+                if (!Service.CheckDatabase(out string error))
                 {
                     App.ShowError(error);
                     return false;
                 }
             }
-            if (!ViewModel.AdministratorExists)
+            if (!Service.AdministratorExists)
             {
-                var admin = ViewModel.CreateAdminUser();
+                var admin = Service.CreateAdminUser();
                 if (!SetupAdministrator(admin))
                 {
                     return false;
                 }
             }
-            if (!ViewModel.OrganizationExists)
+            if (!Service.OrganizationExists)
             {
                 var organiation = new Organization();
                 if (!SetupOrganization(organiation))
@@ -92,7 +92,7 @@ namespace jotfi.Jot.Console.Views.System
                 }
                 if (AppSettings.IsClient)
                 {
-                    ok = ViewModel.CheckConnection(out string error);
+                    ok = Service.CheckConnection(out string error);
                     if (!ok)
                     {
                         App.ShowError(error);
@@ -113,7 +113,7 @@ namespace jotfi.Jot.Console.Views.System
             SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
             AddToPanel(new Field(ServerInfo)
             {
-                ViewText = ViewModel.ServerConnectionText(),
+                ViewText = Service.ServerConnectionText(),
                 ViewSize = (-1, 3),                
                 ShowTextField = false
             });
@@ -151,7 +151,7 @@ namespace jotfi.Jot.Console.Views.System
                     }
                     else
                     {
-                        serverValid = ViewModel.IsServerValid(text);
+                        serverValid = Service.IsServerValid(text);
                         var urlInfo = serverValid ? "" : "Invalid server URL";
                         MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, urlInfo));
                     }
@@ -191,7 +191,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = ViewModel.SaveAdministrator(admin, out string error);
+                ok = Service.SaveAdministrator(admin, out string error);
                 if (!ok)
                 {
                     App.ShowError(error);
@@ -207,7 +207,7 @@ namespace jotfi.Jot.Console.Views.System
             AddToPanel(new Field(AdminInfo)
             {
                 ShowTextField = false,
-                ViewText = ViewModel.CreateAdministratorText(),
+                ViewText = Service.CreateAdministratorText(),
                 ViewSize = (-1, 4)
             });
             AddToPanel(new Field(nameof(admin.Password.CreatePassword), admin.Password)
@@ -215,9 +215,9 @@ namespace jotfi.Jot.Console.Views.System
                 Secret = true,
                 TextChanged = (text) =>
                 {
-                    ValidPassword = ViewModels.System.User.GetPasswordValid(text);
+                    ValidPassword = Services.System.User.GetPasswordValid(text);
                     var passwordsMatch = GetPanelText(nameof(admin.Password.ConfirmPassword)) == text;
-                    var passwordInfo = ViewModels.System.User.GetPasswordInfo(text);
+                    var passwordInfo = Services.System.User.GetPasswordInfo(text);
                     MainLoop.Invoke(() => SetPanelLabel(AdminPasswordInfo, passwordInfo));
                     var infoColor = ValidPassword && passwordsMatch ? MenuColor : ErrorColor;
                     MainLoop.Invoke(() => SetPanelColor(AdminPasswordInfo, infoColor));
@@ -233,7 +233,7 @@ namespace jotfi.Jot.Console.Views.System
                         return;
                     }
                     var passwordsMatch = GetPanelText(nameof(admin.Password.CreatePassword)) == text;
-                    var passwordInfo = passwordsMatch ? ViewModels.System.User.GetPasswordInfo(text) : "Passwords do not match";
+                    var passwordInfo = passwordsMatch ? Services.System.User.GetPasswordInfo(text) : "Passwords do not match";
                     MainLoop.Invoke(() => SetPanelLabel(AdminPasswordInfo, passwordInfo));
                     var infoColor = passwordsMatch ? MenuColor : ErrorColor;
                     MainLoop.Invoke(() => SetPanelColor(AdminPasswordInfo, infoColor));
@@ -247,7 +247,7 @@ namespace jotfi.Jot.Console.Views.System
             {
                 TextChanged = (text) =>
                 {
-                    ValidEmail = ViewModels.System.User.GetPasswordValid(text);
+                    ValidEmail = Services.System.User.GetPasswordValid(text);
                     var emailsMatch = GetPanelText(nameof(admin.Person.Email.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
                     MainLoop.Invoke(() => SetPanelLabel(AdminEmailInfo, emailInfo));
@@ -292,7 +292,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = ViewModels.System.Organization.SaveOrganization(organization, out string error);
+                ok = Services.System.Organization.SaveOrganization(organization, out string error);
                 if (!ok)
                 {
                     App.ShowError(error);
@@ -308,7 +308,7 @@ namespace jotfi.Jot.Console.Views.System
             AddToPanel(new Field(OrganizationInfo)
             {
                 ShowTextField = false,
-                ViewText = ViewModel.FirstOrganizationText(),
+                ViewText = Service.FirstOrganizationText(),
                 ViewSize = (-1, 4)
             });
             AddToPanel(new Field(nameof(organization.Name), organization)

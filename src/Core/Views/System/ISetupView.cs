@@ -1,4 +1,4 @@
-﻿using jotfi.Jot.Core.ViewModels.System;
+﻿using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Core.Views.Base;
 using jotfi.Jot.Model.System;
 

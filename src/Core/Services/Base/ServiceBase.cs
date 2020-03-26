@@ -9,17 +9,17 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace jotfi.Jot.Core.ViewModels.Base
+namespace jotfi.Jot.Core.Services.Base
 {
-    public class BaseViewModel : Logger, INotifyPropertyChanged
+    public class ServiceBase : Logger, INotifyPropertyChanged
     {
         public Application App;
         public Settings.AppSettings AppSettings { get => App.AppSettings; }
-        public DatabaseController Database { get => App.Database; }
+        public DatabaseService Database { get => App.Database; }
         public RepositoryFactory Repository { get => App.Repository; }
-        public ViewModelFactory ViewModels { get => App.ViewModels; }
+        public ServiceFactory Services { get => App.Services; }
 
-        public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
+        public ServiceBase(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;            
         }

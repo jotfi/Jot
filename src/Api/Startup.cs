@@ -31,7 +31,7 @@ namespace jotfi.Jot.Api
                 Secret = configuration["Secret"]
             };
             Application = new Core.Application(settings);
-            if (!Application.ViewModels.System.Setup.CheckDatabase(out string error))
+            if (!Application.Services.System.Setup.CheckDatabase(out string error))
             {
                 throw new ApplicationException(error);
             }
@@ -63,9 +63,9 @@ namespace jotfi.Jot.Api
                 };
             });
 
-            services.AddSingleton(Application.ViewModels.System.Setup);
-            services.AddSingleton(Application.ViewModels.System.User);
-            services.AddSingleton(Application.ViewModels.System.Login);
+            services.AddSingleton(Application.Services.System.Setup);
+            services.AddSingleton(Application.Services.System.User);
+            services.AddSingleton(Application.Services.System.Login);
             
         }
 

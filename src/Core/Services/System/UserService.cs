@@ -1,17 +1,17 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
-using jotfi.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 
-namespace jotfi.Jot.Core.ViewModels.System
+namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserViewModel : BaseViewModel
+    public partial class UserService : ServiceBase
     {
-        public UserViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public UserService(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }

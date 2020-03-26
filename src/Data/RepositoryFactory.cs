@@ -1,7 +1,7 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Data.Base;
 using jotfi.Jot.Data.System;
-using jotfi.Jot.Database;
+using jotfi.Jot.Database.Base;
 
 namespace jotfi.Jot.Data
 {
@@ -9,11 +9,11 @@ namespace jotfi.Jot.Data
     {
         public readonly BaseFactory Base;
         public readonly SystemFactory System;
-        public readonly DatabaseController Db;
+        public readonly IDbContext Context;
 
-        public RepositoryFactory(DatabaseController db, LogOpts opts = null) : base(opts)
+        public RepositoryFactory(IDbContext context, LogOpts opts = null) : base(opts)
         {
-            Db = db;
+            Context = context;
             Base = new BaseFactory(this);
             System = new SystemFactory(this);
         }

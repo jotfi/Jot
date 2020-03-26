@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace jotfi.Jot.Core.ViewModels.System
+namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserViewModel
+    public partial class UserService
     {
         public User AuthenticateClient(string username, string password)
         {

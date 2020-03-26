@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
-using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +18,9 @@ namespace jotfi.Jot.Api.Controllers.System
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class UserController : BaseController<UserViewModel>
+    public class UserController : BaseController<UserService>
     {
-        public UserController(UserViewModel viewmodel) : base(viewmodel)
+        public UserController(UserService service) : base(service)
         {
             
         }
@@ -29,13 +29,13 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]Authenticate model)
         {
-            var user = ViewModel.Authenticate(model.Username, model.Password);
+            var user = Service.Authenticate(model.Username, model.Password);
             if (user == null)
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(ViewModel.App.AppSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Service.App.AppSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -56,7 +56,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
-            var res = await ViewModel.GetUsersAsync();
+            var res = await Service.GetUsersAsync();
             if (res == null)
             {
                 return NotFound();
@@ -68,7 +68,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{id}")]
         public async Task<ActionResult> GetUser(long id)
         {
-            var user = await ViewModel.GetUserAsync(id);
+            var user = await Service.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -82,7 +82,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var ok = await ViewModel.CreateUserAsync(user);
+            var ok = await Service.CreateUserAsync(user);
             if (!ok)
             {
                 return BadRequest();

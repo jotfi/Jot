@@ -29,9 +29,9 @@ namespace jotfi.Jot.Data.Base
 
         public virtual Task<IEnumerable<T>> GetListAsync(object whereConditions = null)
         {
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().GetListAsync<T>(whereConditions);
+                return Data.Context.GetConnection().GetListAsync<T>(whereConditions);
             }
         }
 
@@ -41,9 +41,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.GetAsync<T>(id);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().GetAsync<T>(id);
+                return Data.Context.GetConnection().GetAsync<T>(id);
             }
         }
 
@@ -54,9 +54,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.InsertAsync<long, T>(obj);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().InsertAsync<long, T>(obj);
+                return Data.Context.GetConnection().InsertAsync<long, T>(obj);
             }
         }
 
@@ -67,9 +67,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.UpdateAsync(obj);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().UpdateAsync(obj);
+                return Data.Context.GetConnection().UpdateAsync(obj);
             }
         }
     }

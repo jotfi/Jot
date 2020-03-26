@@ -48,7 +48,7 @@ namespace jotfi.Jot.Console
             AddStatus($"Version: {Assembly.GetEntryAssembly().GetName().Version}");
             try
             {
-                if (!ViewModels.System.Setup.IsSetup)
+                if (!Services.System.Setup.IsSetup)
                 {
                     Views.System.Setup.ShowSetup();
                 }
@@ -113,6 +113,11 @@ namespace jotfi.Jot.Console
         }
 
         public void UpdateMainMenu()
+        {
+            Application.MainLoop.Invoke(LoadMainMenu);         
+        }
+
+        void LoadMainMenu()
         {
             MainMenu.Clear();
         }

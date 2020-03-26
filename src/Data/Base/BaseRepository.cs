@@ -26,9 +26,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.GetList<T>(whereConditions);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().GetList<T>(whereConditions);
+                return Data.Context.GetConnection().GetList<T>(whereConditions);
             }
         }
 
@@ -38,9 +38,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.Get<T>(id);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().Get<T>(id);
+                return Data.Context.GetConnection().Get<T>(id);
             }
         }
 
@@ -51,9 +51,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.Insert<long, T>(obj);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().Insert<long, T>(obj);
+                return Data.Context.GetConnection().Insert<long, T>(obj);
             }
         }
 
@@ -64,9 +64,9 @@ namespace jotfi.Jot.Data.Base
             {
                 return conn.Update(obj);
             }
-            using (Data.Db.Context.Create())
+            using (Data.Context.Create())
             {
-                return Data.Db.Context.GetConnection().Update(obj);
+                return Data.Context.GetConnection().Update(obj);
             }
         }
     }

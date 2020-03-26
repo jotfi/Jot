@@ -1,15 +1,15 @@
 ﻿using jotfi.Jot.Base.System;
-using jotfi.Jot.Core.ViewModels.Base;
+using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace jotfi.Jot.Core.ViewModels.System
+namespace jotfi.Jot.Core.Services.System
 {
-    public partial class OrganizationViewModel : BaseViewModel
+    public partial class OrganizationService : ServiceBase
     {
-        public OrganizationViewModel(Application app, LogOpts opts = null) : base(app, opts)
+        public OrganizationService(Application app, LogOpts opts = null) : base(app, opts)
         {
 
         }

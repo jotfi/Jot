@@ -1,7 +1,7 @@
 ﻿using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Settings;
-using jotfi.Jot.Core.ViewModels;
+using jotfi.Jot.Core.Services;
 using jotfi.Jot.Core.Views;
 using jotfi.Jot.Data;
 using jotfi.Jot.Database;
@@ -13,9 +13,9 @@ namespace jotfi.Jot.Core
     public class Application : Logger
     {
         public readonly AppSettings AppSettings;
-        public readonly DatabaseController Database;
+        public readonly DatabaseService Database;
         public readonly RepositoryFactory Repository;
-        public readonly ViewModelFactory ViewModels;
+        public readonly ServiceFactory Services;
         public IViewFactory Views { get; protected set; }
         public HttpClient Client { get; } = new HttpClient();
 
@@ -25,9 +25,9 @@ namespace jotfi.Jot.Core
             {
                 AppSettings = appSettings;
                 Opts = new LogOpts(appSettings.IsConsole, ShowError);
-                Database = new DatabaseController(appSettings, Opts);
-                Repository = new RepositoryFactory(Database, Opts);
-                ViewModels = new ViewModelFactory(this, Opts);
+                Database = new DatabaseService(this, Opts);
+                Repository = new RepositoryFactory(Database.Context, Opts);
+                Services = new ServiceFactory(this, Opts);
             }
             catch (Exception ex)
             {

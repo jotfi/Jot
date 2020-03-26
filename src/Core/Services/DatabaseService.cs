@@ -8,22 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace jotfi.Jot.Database
+namespace jotfi.Jot.Core.Services
 {
     //TODO: potentially abstract Database to not include Dapper, could use MongoDB in future, etc.
     
-    public class DatabaseController : Logger
+    public class DatabaseService : Logger
     {
-        public readonly BaseSettings Settings;
+        public readonly Application App;
         public readonly DbDialects Dialect;        
         public readonly IDbContext Context;
         public readonly List<ITransaction> Models;
 
-        public DatabaseController(BaseSettings settings, LogOpts opts = null) : base(opts)
+        public DatabaseService(Application app, LogOpts opts = null) : base(opts)
         {
-            Settings = settings;
-            Dialect = (DbDialects)settings.DbDialect;
-            Context = new DbContext(this, opts);
+            App = app;
+            Dialect = (DbDialects)app.AppSettings.DbDialect;
+            Context = new DbContext(Dialect, app.AppSettings.DbDirectory, opts);
             Models = new List<ITransaction>()
             {
                 new User(),
