@@ -5,8 +5,8 @@ namespace jotfi.Jot.Core.Views.Base
 {
     public interface IBaseView<T>
     {
-        Application GetApp();
-        T GetViewModel();
-        ViewModelFactory GetViewModels();
+        Application App { get; }
+        T ViewModel { get; }
+        ViewModelFactory ViewModels { get => App.ViewModels; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views.Controls;
+using jotfi.Jot.Core.Settings;
 using jotfi.Jot.Core.ViewModels;
 using jotfi.Jot.Core.ViewModels.Base;
 using jotfi.Jot.Core.Views.Base;
@@ -12,8 +13,15 @@ namespace jotfi.Jot.Console.Views.Base
 {
     public abstract class BaseView<T> : Logger, IBaseView<T>
     {
-        private readonly Core.Application App;
-        private readonly T ViewModel;
+        public Core.Application App { get; }
+        public T ViewModel { get; }
+        public ConsoleApplication ConsoleApp => (ConsoleApplication)App;
+        public ViewModelFactory ViewModels => App.ViewModels;
+        public AppSettings AppSettings => App.AppSettings;
+        public Mono.Terminal.MainLoop MainLoop => Terminal.Gui.Application.MainLoop;
+        public Terminal.Gui.Dim DimFill => Terminal.Gui.Dim.Fill();
+        public Terminal.Gui.ColorScheme MenuColor => Terminal.Gui.Colors.Menu;
+        public Terminal.Gui.ColorScheme ErrorColor => Terminal.Gui.Colors.Error;
 
         private List<Panel> Panels { get; } = new List<Panel>();
 
@@ -23,16 +31,6 @@ namespace jotfi.Jot.Console.Views.Base
             App = app;
             ViewModel = viewmodel;
         }
-
-        public Core.Application GetApp() => App;
-        public Core.Settings.AppSettings GetAppSettings() => GetApp().AppSettings;
-        public T GetViewModel() => ViewModel;
-        public ConsoleApplication GetConsoleApp() => (ConsoleApplication)App;        
-        public ViewModelFactory GetViewModels() => App.ViewModels;
-        public Mono.Terminal.MainLoop GetMainLoop() => Terminal.Gui.Application.MainLoop;
-        public Terminal.Gui.Dim GetFill() => Terminal.Gui.Dim.Fill();
-        public Terminal.Gui.ColorScheme GetMenuColor() => Terminal.Gui.Colors.Menu;
-        public Terminal.Gui.ColorScheme GetErrorColor() => Terminal.Gui.Colors.Error;
 
         protected virtual void AddToTop(Terminal.Gui.View view) => Terminal.Gui.Application.Top.Add(view);
         protected virtual void ClearPanel(string panelId = "main") => GetPanel(panelId).Fields.Clear();

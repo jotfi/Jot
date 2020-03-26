@@ -15,7 +15,7 @@ namespace jotfi.Jot.Core.ViewModels.System
         public User AuthenticateClient(string username, string password)
         {
             var auth = new Authenticate() { Username = username, Password = password };
-            var response = GetApp().Client.PostAsync("authenticate", auth.ToContent()).Result;
+            var response = App.Client.PostAsync("authenticate", auth.ToContent()).Result;
             response.EnsureSuccessStatusCode();
             var user = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<User>(user);
@@ -25,7 +25,7 @@ namespace jotfi.Jot.Core.ViewModels.System
         {
             try
             {
-                var response = GetApp().Client.PostAsync("user", user.ToContent()).Result;
+                var response = App.Client.PostAsync("user", user.ToContent()).Result;
                 response.EnsureSuccessStatusCode();
                 return true;
             }

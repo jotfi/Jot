@@ -42,9 +42,25 @@ namespace jotfi.Jot.Console
         }
 
         public override void Run()
-        {
-            AddStatus($"Version: {Assembly.GetEntryAssembly().GetName().Version}");
+        {            
             base.Run();
+            AddStatus($"Version: {Assembly.GetEntryAssembly().GetName().Version}");
+            try
+            {
+                if (!ViewModels.System.Setup.IsSetup)
+                {
+                    Views.System.Setup.ShowSetup();
+                }
+                else if (!Views.System.Setup.SetupConnection())
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log(ex);
+            }
+            Application.Run();
         }
 
         public override void Quit()

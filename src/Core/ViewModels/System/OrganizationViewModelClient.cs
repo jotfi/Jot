@@ -12,7 +12,7 @@ namespace jotfi.Jot.Core.ViewModels.System
         {
             try
             {
-                var response = GetApp().Client.PostAsync("organization", organization.ToContent()).Result;
+                var response = App.Client.PostAsync("organization", organization.ToContent()).Result;
                 response.EnsureSuccessStatusCode();
                 return true;
             }

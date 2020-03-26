@@ -13,7 +13,7 @@ namespace jotfi.Jot.Core.ViewModels.System
     {
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
-            var users = await GetRepository().System.User.GetListAsync();
+            var users = await Repository.System.User.GetListAsync();
             foreach (var user in users)
             {
                 await GetUserDetailsAsync(user);
@@ -21,22 +21,22 @@ namespace jotfi.Jot.Core.ViewModels.System
             return users;
         }
 
-        public async Task<User> GetUserAsync(long id) => await GetRepository().System.User.GetByIdAsync(id);
+        public async Task<User> GetUserAsync(long id) => await Repository.System.User.GetByIdAsync(id);
 
         public async Task<bool> CreateUserAsync(User user)
         {
             try
             {
-                using var uow = GetDatabase().Context.Create();
-                var conn = GetDatabase().Context.GetConnection();
-                var userId = await GetRepository().System.User.InsertAsync(user, conn);
-                var personId = await GetRepository().Base.Person.InsertAsync(user.Person, conn);
-                var emailId = await GetRepository().Base.Email.InsertAsync(user.Person.Email, conn);
-                var addressId = await GetRepository().Base.Address.InsertAsync(user.Person.Address, conn);
+                using var uow = Database.Context.Create();
+                var conn = Database.Context.GetConnection();
+                var userId = await Repository.System.User.InsertAsync(user, conn);
+                var personId = await Repository.Base.Person.InsertAsync(user.Person, conn);
+                var emailId = await Repository.Base.Email.InsertAsync(user.Person.Email, conn);
+                var addressId = await Repository.Base.Address.InsertAsync(user.Person.Address, conn);
                 PasswordUtils.CreatePasswordHash(user.Password.CreatePassword, out byte[] hash, out byte[] salt);
                 user.Password.PasswordHash = hash;
                 user.Password.PasswordSalt = salt;
-                var passwordId = await GetRepository().Base.Password.InsertAsync(user.Password, conn);
+                var passwordId = await Repository.Base.Password.InsertAsync(user.Password, conn);
                 await AssertUpdateNewUserAsync(userId, user.Hash, personId, passwordId, conn);
                 await AssertUpdateNewUserPasswordAsync(userId, passwordId, user.Password.Hash, conn);
                 await AssertUpdateNewUserPersonAsync(userId, personId, emailId, addressId, user.Person.Hash, conn);
@@ -54,72 +54,72 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         async Task AssertUpdateNewUserAsync(long userId, string hash, long personId, long passwordId, DbConnection conn = null)
         {
-            var user = await GetRepository().System.User.GetByIdAsync(userId, conn);
+            var user = await Repository.System.User.GetByIdAsync(userId, conn);
             user.Hash.IsEqualTo(hash);
             user.PersonId = personId;
             user.PasswordId = passwordId;
-            var rows = await GetRepository().System.User.UpdateAsync(user, conn);
+            var rows = await Repository.System.User.UpdateAsync(user, conn);
             rows.IsEqualTo(1);
-            var updatedUser = await GetRepository().System.User.GetByIdAsync(userId, conn);
+            var updatedUser = await Repository.System.User.GetByIdAsync(userId, conn);
             updatedUser.PersonId.IsEqualTo(personId);
             updatedUser.PasswordId.IsEqualTo(passwordId);
         }
 
         async Task AssertUpdateNewUserPasswordAsync(long userId, long passwordId, string hash, DbConnection conn = null)
         {
-            var password = await GetRepository().Base.Password.GetByIdAsync(passwordId, conn);
+            var password = await Repository.Base.Password.GetByIdAsync(passwordId, conn);
             password.Hash.IsEqualTo(hash);
             password.SetTx(userId, typeof(User).Name);
-            var rows = await GetRepository().Base.Password.UpdateAsync(password, conn);
+            var rows = await Repository.Base.Password.UpdateAsync(password, conn);
             rows.IsEqualTo(1);
-            var updatedPassword = await GetRepository().Base.Password.GetByIdAsync(passwordId, conn);
+            var updatedPassword = await Repository.Base.Password.GetByIdAsync(passwordId, conn);
             updatedPassword.TxId.IsEqualTo(userId);
         }
 
         async Task AssertUpdateNewUserPersonAsync(long userId, long personId, long emailId, long addressId, string hash, DbConnection conn = null)
         {
-            var person = await GetRepository().Base.Person.GetByIdAsync(personId, conn);
+            var person = await Repository.Base.Person.GetByIdAsync(personId, conn);
             person.Hash.IsEqualTo(hash);
             person.EmailId = emailId;
             person.AddressId = addressId;
             person.SetTx(userId, typeof(User).Name);
-            var rows = await GetRepository().Base.Person.UpdateAsync(person, conn);
+            var rows = await Repository.Base.Person.UpdateAsync(person, conn);
             rows.IsEqualTo(1);
-            var updatedPerson = await GetRepository().Base.Person.GetByIdAsync(personId, conn);
+            var updatedPerson = await Repository.Base.Person.GetByIdAsync(personId, conn);
             updatedPerson.TxId.IsEqualTo(userId);
         }
 
         async Task AssertUpdateNewUserPersonEmailAsync(long personId, long emailId, string hash, DbConnection conn = null)
         {
-            var email = await GetRepository().Base.Email.GetByIdAsync(emailId, conn);
+            var email = await Repository.Base.Email.GetByIdAsync(emailId, conn);
             email.Hash.IsEqualTo(hash);
             email.SetTx(personId, typeof(Person).Name);
-            var rows = await GetRepository().Base.Email.UpdateAsync(email, conn);
+            var rows = await Repository.Base.Email.UpdateAsync(email, conn);
             rows.IsEqualTo(1);
-            var updatedEmail = await GetRepository().Base.Person.GetByIdAsync(emailId, conn);
+            var updatedEmail = await Repository.Base.Person.GetByIdAsync(emailId, conn);
             updatedEmail.TxId.IsEqualTo(personId);
         }
 
         async Task AssertUpdateNewUserPersonAddressAsync(long personId, long addressId, string hash, DbConnection conn = null)
         {
-            var address = await GetRepository().Base.Address.GetByIdAsync(addressId, conn);
+            var address = await Repository.Base.Address.GetByIdAsync(addressId, conn);
             address.Hash.IsEqualTo(hash);
             address.SetTx(personId, typeof(Person).Name);
-            var rows = await GetRepository().Base.Address.UpdateAsync(address, conn);
+            var rows = await Repository.Base.Address.UpdateAsync(address, conn);
             rows.IsEqualTo(1);
-            var updatedAddress = await GetRepository().Base.Person.GetByIdAsync(addressId, conn);
+            var updatedAddress = await Repository.Base.Person.GetByIdAsync(addressId, conn);
             updatedAddress.TxId.IsEqualTo(personId);
         }
 
         async Task GetUserDetailsAsync(User user, DbConnection conn = null)
         {
-            user.Password = await GetRepository().Base.Password.GetByIdAsync(user.PasswordId, conn);
+            user.Password = await Repository.Base.Password.GetByIdAsync(user.PasswordId, conn);
             user.Password.TxId.IsEqualTo(user.Id);
-            user.Person = await GetRepository().Base.Person.GetByIdAsync(user.PersonId, conn);
+            user.Person = await Repository.Base.Person.GetByIdAsync(user.PersonId, conn);
             user.Person.TxId.IsEqualTo(user.Id);
-            user.Person.Email = await GetRepository().Base.Email.GetByIdAsync(user.Person.EmailId, conn);
+            user.Person.Email = await Repository.Base.Email.GetByIdAsync(user.Person.EmailId, conn);
             user.Person.Email.TxId.IsEqualTo(user.Person.Id);
-            user.Person.Address = await GetRepository().Base.Address.GetByIdAsync(user.Person.AddressId, conn);
+            user.Person.Address = await Repository.Base.Address.GetByIdAsync(user.Person.AddressId, conn);
             user.Person.Address.TxId.IsEqualTo(user.Person.Id);
         }
 

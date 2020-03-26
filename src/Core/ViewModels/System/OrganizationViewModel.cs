@@ -37,13 +37,13 @@ namespace jotfi.Jot.Core.ViewModels.System
         {
             try
             {
-                if (GetAppSettings().IsClient)
+                if (AppSettings.IsClient)
                 {
                     return CreateOrganizationClient(organization);
                 }
-                using var uow = GetDatabase().Context.Create();
-                var conn = GetDatabase().Context.GetConnection();
-                var organizationId = GetRepository().System.Organization.Insert(organization, conn);
+                using var uow = Database.Context.Create();
+                var conn = Database.Context.GetConnection();
+                var organizationId = Repository.System.Organization.Insert(organization, conn);
                 organizationId.IsEqualTo(0);
                 uow.CommitAsync().Wait();
                 return true;

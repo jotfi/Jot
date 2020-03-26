@@ -41,10 +41,10 @@ namespace jotfi.Jot.Console.Views.System
                 Width = Dim.Width(loginText)
             };
 
-            GetConsoleApp().AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
+            ConsoleApp.AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
 
             // Add some controls, 
-            GetConsoleApp().AddMain(
+            ConsoleApp.AddMain(
                 // The ones with my favorite layout system
                 login, password, loginText, passText,
                         new Button(3, 14, "Ok", true)

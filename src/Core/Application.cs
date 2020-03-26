@@ -37,15 +37,7 @@ namespace jotfi.Jot.Core
 
         public virtual void Run()
         {
-            try
-            {
-                Views.System.Setup.ApplicationStart();
-                Views.System.Setup.ApplicationEnd();
-            }
-             catch (Exception ex)
-            {
-                Log(ex);
-            }
+
         }
 
         public virtual void Quit() { }

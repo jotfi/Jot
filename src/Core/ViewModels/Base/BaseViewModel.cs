@@ -13,18 +13,16 @@ namespace jotfi.Jot.Core.ViewModels.Base
 {
     public class BaseViewModel : Logger, INotifyPropertyChanged
     {
-        private readonly Application App;
+        public Application App;
+        public Settings.AppSettings AppSettings { get => App.AppSettings; }
+        public DatabaseController Database { get => App.Database; }
+        public RepositoryFactory Repository { get => App.Repository; }
+        public ViewModelFactory ViewModels { get => App.ViewModels; }
 
         public BaseViewModel(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;            
         }
-
-        protected Application GetApp() => App;
-        public Settings.AppSettings GetAppSettings() => GetApp().AppSettings;
-        protected DatabaseController GetDatabase() => App.Database;
-        protected RepositoryFactory GetRepository() => App.Repository;
-        protected ViewModelFactory GetViewModels() => App.ViewModels;
         
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

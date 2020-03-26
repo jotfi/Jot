@@ -22,12 +22,12 @@ namespace jotfi.Jot.Core.ViewModels.System
 
         public bool CheckConnection(out string error)
         {
-            error = $"Error connecting to {GetAppSettings().ServerUrl}: ";
+            error = $"Error connecting to {AppSettings.ServerUrl}: ";
             try
             {
-                var client = GetApp().Client;
+                var client = App.Client;
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
-                client.BaseAddress = new Uri(GetAppSettings().ServerUrl);
+                client.BaseAddress = new Uri(AppSettings.ServerUrl);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
                 //using var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
@@ -49,10 +49,10 @@ namespace jotfi.Jot.Core.ViewModels.System
             }
             return false;
         }
-
-        public bool CheckDatabase(out string error) => GetDatabase().CheckTables(GetTableNames(), out error);
-        public bool CheckAdministrator() => GetRepository().System.User.Exists();
-        public bool CheckOrganization() => GetRepository().System.Organization.Exists();
+        public bool IsSetup { get => AdministratorExists && OrganizationExists; }
+        public bool CheckDatabase(out string error) => Database.CheckTables(GetTableNames(), out error);
+        public bool AdministratorExists { get => Repository.System.User.Exists(); }
+        public bool OrganizationExists { get => Repository.System.Organization.Exists(); }
 
         public User CreateAdminUser()
         {
@@ -71,7 +71,7 @@ namespace jotfi.Jot.Core.ViewModels.System
         public List<TableName> GetTableNames(object whereConditions = null)
         {
             whereConditions ??= new { Type = "table" };
-            return GetRepository().System.TableName.GetList(whereConditions).ToList();
+            return Repository.System.TableName.GetList(whereConditions).ToList();
         }
 
         public string ServerConnectionText()
@@ -101,10 +101,10 @@ Please enter an organizaton name, this can be edited later.";
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!GetViewModels().System.User.GetPasswordValid(user.Password.CreatePassword))
+            if (!ViewModels.System.User.GetPasswordValid(user.Password.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += GetViewModels().System.User.GetPasswordInfo(user.Password.CreatePassword);
+                error += ViewModels.System.User.GetPasswordInfo(user.Password.CreatePassword);
                 return false;
             }
             if (user.Password.CreatePassword != user.Password.ConfirmPassword)
@@ -112,7 +112,7 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!GetViewModels().System.User.GetEmailValid(user.Person.Email.EmailAddress))
+            if (!ViewModels.System.User.GetEmailValid(user.Person.Email.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
@@ -131,7 +131,7 @@ Please enter an organizaton name, this can be edited later.";
             {
                 return false;
             }
-            return GetViewModels().System.User.CreateUser(admin);
+            return ViewModels.System.User.CreateUser(admin);
         }
 
     }
