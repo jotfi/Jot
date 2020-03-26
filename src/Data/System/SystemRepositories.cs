@@ -6,14 +6,14 @@ using System.Text;
 
 namespace jotfi.Jot.Data.System
 {
-    public class SystemFactory : Logger
+    public class SystemRepositories : Logger
     {
         public readonly RepositoryFactory Data;
         public readonly OrganizationRepository Organization;
         public readonly TableNameRepository TableName;
         public readonly UserRepository User;
 
-        public SystemFactory(RepositoryFactory data, LogOpts opts = null) : base(opts)
+        public SystemRepositories(RepositoryFactory data, LogOpts opts = null) : base(opts)
         {
             Data = data;
             Organization = new OrganizationRepository(data, opts);

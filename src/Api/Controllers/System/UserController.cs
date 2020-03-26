@@ -20,7 +20,7 @@ namespace jotfi.Jot.Api.Controllers.System
     [ApiController]
     public class UserController : BaseController<UserService>
     {
-        public UserController(UserService service) : base(service)
+        public UserController(Core.Application app) : base(app, app.Services.System.User)
         {
             
         }

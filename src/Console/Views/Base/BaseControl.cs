@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Terminal.Gui;
 
-namespace jotfi.Jot.Console.Views.Controls
+namespace jotfi.Jot.Console.Views.Base
 {
     public abstract class BaseControl : Logger
     {

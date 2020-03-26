@@ -1,8 +1,6 @@
-﻿using jotfi.Jot.Base.Utils;
+﻿using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Model.System;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace jotfi.Jot.Core.Services.System
 {

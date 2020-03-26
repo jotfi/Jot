@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SetupService : ServiceBase
+    public partial class SetupService : BaseService
     {
         public SetupService(Application app, LogOpts opts = null) : base(app, opts)
         {

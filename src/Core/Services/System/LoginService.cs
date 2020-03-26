@@ -3,7 +3,7 @@ using jotfi.Jot.Core.Services.Base;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class LoginService : ServiceBase
+    public partial class LoginService : BaseService
     {
         public LoginService(Application app, LogOpts opts = null) : base(app, opts)
         {

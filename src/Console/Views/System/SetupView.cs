@@ -26,8 +26,8 @@ namespace jotfi.Jot.Console.Views.System
         const string OrganizationInfo = "OrganizationInfo";
         const string OrganizationNameInfo = "OrganizationNameInfo";
 
-        public SetupView(Core.Application app, SetupService service, LogOpts opts = null)
-            : base(app, service, opts)
+        public SetupView(Core.Application app, LogOpts opts = null)
+            : base(app, app.Services.System.Setup, opts)
         {
 
         }

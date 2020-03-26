@@ -11,7 +11,7 @@ using System.Text;
 
 namespace jotfi.Jot.Core.Services.Base
 {
-    public class ServiceBase : Logger, INotifyPropertyChanged
+    public class BaseService : Logger, INotifyPropertyChanged
     {
         public Application App;
         public Settings.AppSettings AppSettings { get => App.AppSettings; }
@@ -19,7 +19,7 @@ namespace jotfi.Jot.Core.Services.Base
         public RepositoryFactory Repository { get => App.Repository; }
         public ServiceFactory Services { get => App.Services; }
 
-        public ServiceBase(Application app, LogOpts opts = null) : base(opts)
+        public BaseService(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;            
         }

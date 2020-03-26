@@ -41,9 +41,7 @@ namespace jotfi.Jot.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-
+        {            
             var key = Encoding.ASCII.GetBytes(Application.AppSettings.Secret);
             services.AddAuthentication(x =>
             {
@@ -62,11 +60,8 @@ namespace jotfi.Jot.Api
                     ValidateAudience = false
                 };
             });
-
-            services.AddSingleton(Application.Services.System.Setup);
-            services.AddSingleton(Application.Services.System.User);
-            services.AddSingleton(Application.Services.System.Login);
-            
+            services.AddSingleton(Application);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,13 +71,10 @@ namespace jotfi.Jot.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

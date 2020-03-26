@@ -9,7 +9,7 @@ using System.Data.Common;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserService : ServiceBase
+    public partial class UserService : BaseService
     {
         public UserService(Application app, LogOpts opts = null) : base(app, opts)
         {

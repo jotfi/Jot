@@ -6,10 +6,12 @@ namespace jotfi.Jot.Api.Controllers.Base
 {
     public class BaseController<T> : ControllerBase
     {
+        protected Core.Application App;
         protected readonly T Service;
 
-        public BaseController(T service)
+        public BaseController(Core.Application app, T service)
         {
+            App = app;
             Service = service;
         }
     }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 
-namespace jotfi.Jot.Base.Utils
+namespace jotfi.Jot.Base.Classes
 {
     public static class Extensions
     {

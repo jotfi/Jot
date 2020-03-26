@@ -7,7 +7,7 @@ using System.Text;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class OrganizationService : ServiceBase
+    public partial class OrganizationService : BaseService
     {
         public OrganizationService(Application app, LogOpts opts = null) : base(app, opts)
         {
