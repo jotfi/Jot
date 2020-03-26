@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
 using jotfi.Jot.Core.ViewModels.System;
+using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,8 +17,9 @@ namespace jotfi.Jot.Api.Controllers.System
         public UserController(UserViewModel viewmodel) : base(viewmodel)
         {
             
-        } 
+        }
 
+        // GET: user
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
@@ -29,64 +31,31 @@ namespace jotfi.Jot.Api.Controllers.System
             return Ok(res);
         }
 
+        // GET: user/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUser(long id)
+        {
+            var user = await ViewModel.GetUserAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
 
-        // GET: api/Products/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult> GetProducts(int id)
-        //{
-        //    var products = await _context.Products.FindAsync(id);
-
-        //    if (products == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return products;
-        //}
-
-        // PUT: api/Users/5
+        // POST: user
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutProducts(int id, Products products)
-        //{
-        //    if (id != products.ProductId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(products).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductsExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        // POST: api/Users
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPost]
-        //public async Task<ActionResult> PostProducts(Products products)
-        //{
-        //    _context.Products.Add(products);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetProducts", new { id = products.ProductId }, products);
-        //}
+        [HttpPost]
+        public async Task<ActionResult> PostUser(User user)
+        {
+            var ok = await ViewModel.CreateUserAsync(user);
+            if (!ok)
+            {
+                return BadRequest();
+            }
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        }
 
         // DELETE: api/Users/5
         //[HttpDelete("{id}")]

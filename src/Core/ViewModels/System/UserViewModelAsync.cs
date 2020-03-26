@@ -21,6 +21,8 @@ namespace jotfi.Jot.Core.ViewModels.System
             return users;
         }
 
+        public async Task<User> GetUserAsync(long id) => await GetRepository().System.User.GetByIdAsync(id);
+
         public async Task<bool> CreateUserAsync(User user)
         {
             try

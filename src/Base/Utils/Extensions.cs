@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 
 namespace jotfi.Jot.Base.Utils
@@ -8,6 +9,7 @@ namespace jotfi.Jot.Base.Utils
     public static class Extensions
     {
         public static string ToJson(this object obj) => JsonConvert.SerializeObject(obj);
+        public static StringContent ToContent(this object obj) => new StringContent(obj.ToJson(), Encoding.UTF8, "application/json");
 
         public static bool ToBool(this object source, bool def = false)
         {
