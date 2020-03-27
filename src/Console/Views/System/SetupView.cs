@@ -17,12 +17,14 @@ namespace jotfi.Jot.Console.Views.System
         private bool ValidPassword;
         private bool ValidEmail;
         const string SetupInfo = "SetupInfo";
+        const string AdministratorExistsInfo = "AdministratorExistsInfo";
+        const string OrganizationExistsInfo = "OrganizationExistsInfo";
         const string ServerInfo = "ServerInfo";
         const string ConnectionType = "ConnectionType";
         const string ServerUrlInfo = "ServerUrlInfo";
-        const string AdminInfo = "AdminInfo";
-        const string AdminPasswordInfo = "AdminPasswordInfo";
-        const string AdminEmailInfo = "AdminEmailInfo";
+        const string AdministratorInfo = "AdministratorInfo";
+        const string AdministratorPasswordInfo = "AdministratorPasswordInfo";
+        const string AdministratorEmailInfo = "AdministratorEmailInfo";
         const string OrganizationInfo = "OrganizationInfo";
         const string OrganizationNameInfo = "OrganizationNameInfo";
 
@@ -44,14 +46,24 @@ namespace jotfi.Jot.Console.Views.System
                 ViewSize = (-1, 3),
                 ShowTextField = false
             });
+            AddToPanel(new Field(AdministratorExistsInfo)
+            {
+                ViewText = Service.AdministratorExists.ToCheckMark() + "Create Administrator User",
+                ShowTextField = false
+            });
+            AddToPanel(new Field(OrganizationExistsInfo)
+            {
+                ViewText = Service.OrganizationExists.ToCheckMark() + "Create First Organization",
+                ShowTextField = false
+            });
             var ok = GetOkButton("Setup");
             (ok.X, ok.Y) = (Terminal.Gui.Pos.Center(), 10);
-            ok.Clicked = () => SetupAdminOrganisation();
+            ok.Clicked = () => BeginSetup();
             AddToPanel(ok);
             ShowPanel();
         }
 
-        public bool SetupAdminOrganisation()
+        public bool BeginSetup()
         {
             if (!AppSettings.IsClient)
             {
@@ -61,13 +73,15 @@ namespace jotfi.Jot.Console.Views.System
                     return false;
                 }
             }
-            if (!Service.AdministratorExists)
+            var admin = Services.System.User.GetUserByName(Constants.DefaultAdministratorName);
+            if (admin == null)
             {
-                var admin = Service.CreateAdminUser();
+                admin = Service.CreateAdminUser();
                 if (!SetupAdministrator(admin))
                 {
                     return false;
                 }
+                admin.UserName.IsEqualTo(Constants.DefaultAdministratorName);
             }
             if (!Service.OrganizationExists)
             {
@@ -78,108 +92,7 @@ namespace jotfi.Jot.Console.Views.System
                 }
             }
             return true;
-        }
-
-        public bool SetupConnection()
-        {
-            var ok = false;
-            while (!ok)
-            {
-                ok = SetupConnectionDialog();
-                if (!ok)
-                {
-                    break;
-                }
-                if (AppSettings.IsClient)
-                {
-                    ok = Service.CheckConnection(out string error);
-                    if (!ok)
-                    {
-                        App.ShowError(error);
-                    }
-                }
-            }
-            if (ok)
-            {
-                App.SaveSettings();
-            }
-            return ok;
-        }
-
-        bool SetupConnectionDialog()
-        {
-            var settings = AppSettings;
-            Reset();
-            SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
-            AddToPanel(new Field(ServerInfo)
-            {
-                ViewText = Service.ServerConnectionText(),
-                ViewSize = (-1, 3),                
-                ShowTextField = false
-            });
-            var connectionTypes = new List<string>() { "Jot Server", "Local Connection" };
-            var defaultConnection = settings.IsClient ? 0 : 1;
-            ConsoleUtils.ChangeSelection(connectionTypes, defaultConnection);
-            var listView = new Terminal.Gui.ListView(connectionTypes)
-            {
-                SelectedItem = defaultConnection,
-                TopItem = 0
-            };
-            AddToPanel(new Field(ConnectionType, listView)
-            {
-                ViewSize = (-1, 3),
-                ShowTextField = false,
-                ListChanged = (index) =>
-                {
-                    ConsoleUtils.ChangeSelection(connectionTypes, index);
-                    settings.IsClient = index == 0;
-                    var serverValid = HasServerInfo(out string serverInfo);
-                    MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, serverInfo));
-                    var infoColor = serverValid ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(ServerUrlInfo, infoColor));
-                }
-            });            
-            AddToPanel(new Field(nameof(settings.ServerUrl), settings)
-            {
-                Secret = false,
-                TextChanged = (text) =>
-                {
-                    var serverValid = HasServerInfo(out string serverInfo);
-                    if (string.IsNullOrWhiteSpace(text))
-                    {
-                        MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, serverInfo));
-                    }
-                    else
-                    {
-                        serverValid = Service.IsServerValid(text);
-                        var urlInfo = serverValid ? "" : "Invalid server URL";
-                        MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, urlInfo));
-                    }
-                    var infoColor = serverValid ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(ServerUrlInfo, infoColor));
-                }
-            });
-            var serverValid = HasServerInfo(out string serverInfo);
-            AddToPanel(new Field(ServerUrlInfo)
-            {
-                ViewText = serverInfo,
-                ShowTextField = false,
-                ViewColor = serverValid ? MenuColor : ErrorColor
-            });
-            return ShowPanelDialog();
-        }
-
-        bool HasServerInfo(out string error)
-        {
-            var settings = App.AppSettings;
-            if (!settings.IsClient || !string.IsNullOrEmpty(settings.ServerUrl))
-            {
-                error = string.Empty;
-                return true;
-            }
-            error = $"Please enter the {Constants.DefaultApplicationName} server URL.";
-            return false;
-        }
+        }        
 
         public bool SetupAdministrator(User admin)
         {
@@ -191,8 +104,13 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                ok = Service.SaveAdministrator(admin, out string error);
-                if (!ok)
+                var id = Service.SaveAdministrator(admin, out string error);
+                ok = id > 0;
+                if (ok)
+                {
+                    admin = Services.System.User.GetUser(id);
+                }
+                else
                 {
                     App.ShowError(error);
                 }
@@ -204,7 +122,7 @@ namespace jotfi.Jot.Console.Views.System
         {
             Reset();
             SetPanelTitle($"Welcome to {Constants.DefaultApplicationName}");
-            AddToPanel(new Field(AdminInfo)
+            AddToPanel(new Field(AdministratorInfo)
             {
                 ShowTextField = false,
                 ViewText = Service.CreateAdministratorText(),
@@ -218,9 +136,9 @@ namespace jotfi.Jot.Console.Views.System
                     ValidPassword = Services.System.User.GetPasswordValid(text);
                     var passwordsMatch = GetPanelText(nameof(admin.Password.ConfirmPassword)) == text;
                     var passwordInfo = Services.System.User.GetPasswordInfo(text);
-                    MainLoop.Invoke(() => SetPanelLabel(AdminPasswordInfo, passwordInfo));
+                    MainLoop.Invoke(() => SetPanelLabel(AdministratorPasswordInfo, passwordInfo));
                     var infoColor = ValidPassword && passwordsMatch ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(AdminPasswordInfo, infoColor));
+                    MainLoop.Invoke(() => SetPanelColor(AdministratorPasswordInfo, infoColor));
                 }
             });
             AddToPanel(new Field(nameof(admin.Password.ConfirmPassword), admin.Password)
@@ -234,12 +152,12 @@ namespace jotfi.Jot.Console.Views.System
                     }
                     var passwordsMatch = GetPanelText(nameof(admin.Password.CreatePassword)) == text;
                     var passwordInfo = passwordsMatch ? Services.System.User.GetPasswordInfo(text) : "Passwords do not match";
-                    MainLoop.Invoke(() => SetPanelLabel(AdminPasswordInfo, passwordInfo));
+                    MainLoop.Invoke(() => SetPanelLabel(AdministratorPasswordInfo, passwordInfo));
                     var infoColor = passwordsMatch ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(AdminPasswordInfo, infoColor));
+                    MainLoop.Invoke(() => SetPanelColor(AdministratorPasswordInfo, infoColor));
                 }
             });
-            AddToPanel(new Field(AdminPasswordInfo)
+            AddToPanel(new Field(AdministratorPasswordInfo)
             {
                 ShowTextField = false
             });
@@ -250,9 +168,9 @@ namespace jotfi.Jot.Console.Views.System
                     ValidEmail = Services.System.User.GetPasswordValid(text);
                     var emailsMatch = GetPanelText(nameof(admin.Person.Email.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
-                    MainLoop.Invoke(() => SetPanelLabel(AdminEmailInfo, emailInfo));
+                    MainLoop.Invoke(() => SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = ValidEmail && emailsMatch ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(AdminEmailInfo, infoColor));
+                    MainLoop.Invoke(() => SetPanelColor(AdministratorEmailInfo, infoColor));
                 }
             });
             AddToPanel(new Field(nameof(admin.Person.Email.ConfirmEmail), admin.Person.Email)
@@ -265,12 +183,12 @@ namespace jotfi.Jot.Console.Views.System
                     }
                     var emailsMatch = GetPanelText(nameof(admin.Person.Email.EmailAddress)) == text;
                     var emailInfo = emailsMatch ? "" : "Emails do not match";
-                    MainLoop.Invoke(() => SetPanelLabel(AdminEmailInfo, emailInfo));
+                    MainLoop.Invoke(() => SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = emailsMatch ? MenuColor : ErrorColor;
-                    MainLoop.Invoke(() => SetPanelColor(AdminEmailInfo, infoColor));
+                    MainLoop.Invoke(() => SetPanelColor(AdministratorEmailInfo, infoColor));
                 }
             });
-            AddToPanel(new Field(AdminEmailInfo)
+            AddToPanel(new Field(AdministratorEmailInfo)
             {
                 ShowTextField = false
             });
@@ -280,7 +198,6 @@ namespace jotfi.Jot.Console.Views.System
             }
             return true;
         }
-
 
         public bool SetupOrganization(Organization organization)
         {
@@ -322,7 +239,7 @@ namespace jotfi.Jot.Console.Views.System
                     MainLoop.Invoke(() => SetPanelColor(OrganizationNameInfo, infoColor));
                 }
             });
-            AddToPanel(new Field(AdminEmailInfo)
+            AddToPanel(new Field(AdministratorEmailInfo)
             {
                 ShowTextField = false
             });
@@ -331,6 +248,107 @@ namespace jotfi.Jot.Console.Views.System
                 return false;
             }
             return true;
+        }
+
+        public bool SetupConnection()
+        {
+            var ok = false;
+            while (!ok)
+            {
+                ok = SetupConnectionDialog();
+                if (!ok)
+                {
+                    break;
+                }
+                if (AppSettings.IsClient)
+                {
+                    ok = Service.CheckConnection(out string error);
+                    if (!ok)
+                    {
+                        App.ShowError(error);
+                    }
+                }
+            }
+            if (ok)
+            {
+                App.SaveSettings();
+            }
+            return ok;
+        }
+
+        bool SetupConnectionDialog()
+        {
+            var settings = AppSettings;
+            Reset();
+            SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
+            AddToPanel(new Field(ServerInfo)
+            {
+                ViewText = Service.ServerConnectionText(),
+                ViewSize = (-1, 3),
+                ShowTextField = false
+            });
+            var connectionTypes = new List<string>() { "Jot Server", "Local Connection" };
+            var defaultConnection = settings.IsClient ? 0 : 1;
+            ConsoleUtils.ChangeSelection(connectionTypes, defaultConnection);
+            var listView = new Terminal.Gui.ListView(connectionTypes)
+            {
+                SelectedItem = defaultConnection,
+                TopItem = 0
+            };
+            AddToPanel(new Field(ConnectionType, listView)
+            {
+                ViewSize = (-1, 3),
+                ShowTextField = false,
+                ListChanged = (index) =>
+                {
+                    ConsoleUtils.ChangeSelection(connectionTypes, index);
+                    settings.IsClient = index == 0;
+                    var serverValid = HasServerInfo(out string serverInfo);
+                    MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, serverInfo));
+                    var infoColor = serverValid ? MenuColor : ErrorColor;
+                    MainLoop.Invoke(() => SetPanelColor(ServerUrlInfo, infoColor));
+                }
+            });
+            AddToPanel(new Field(nameof(settings.ServerUrl), settings)
+            {
+                Secret = false,
+                TextChanged = (text) =>
+                {
+                    var serverValid = HasServerInfo(out string serverInfo);
+                    if (string.IsNullOrWhiteSpace(text))
+                    {
+                        MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, serverInfo));
+                    }
+                    else
+                    {
+                        serverValid = Service.IsServerValid(text);
+                        var urlInfo = serverValid ? "" : "Invalid server URL";
+                        MainLoop.Invoke(() => SetPanelLabel(ServerUrlInfo, urlInfo));
+                    }
+                    var infoColor = serverValid ? MenuColor : ErrorColor;
+                    MainLoop.Invoke(() => SetPanelColor(ServerUrlInfo, infoColor));
+                }
+            });
+            var serverValid = HasServerInfo(out string serverInfo);
+            AddToPanel(new Field(ServerUrlInfo)
+            {
+                ViewText = serverInfo,
+                ShowTextField = false,
+                ViewColor = serverValid ? MenuColor : ErrorColor
+            });
+            return ShowPanelDialog();
+        }
+
+        bool HasServerInfo(out string error)
+        {
+            var settings = App.AppSettings;
+            if (!settings.IsClient || !string.IsNullOrEmpty(settings.ServerUrl))
+            {
+                error = string.Empty;
+                return true;
+            }
+            error = $"Please enter the {Constants.DefaultApplicationName} server URL.";
+            return false;
         }
 
     }

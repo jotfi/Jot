@@ -44,7 +44,7 @@ namespace jotfi.Jot.Core.Services.System
                 using var uow = Database.Context.Create();
                 var conn = Database.Context.GetConnection();
                 var organizationId = Repository.System.Organization.Insert(organization, conn);
-                organizationId.IsEqualTo(0);
+                organizationId.IsEqualTo(1);
                 uow.CommitAsync().Wait();
                 return true;
             }

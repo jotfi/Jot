@@ -35,7 +35,7 @@ namespace jotfi.Jot.Data.Base
             }
         }
 
-        public virtual Task<T> GetByIdAsync(long id, DbConnection conn = null)
+        public virtual Task<T> GetAsync(object id, DbConnection conn = null)
         {
             if (conn != null)
             {

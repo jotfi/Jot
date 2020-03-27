@@ -20,11 +20,9 @@ namespace jotfi.Jot.Core.Services.System
         {
             if (AppSettings.IsClient)
             {
-                return AuthenticateClient(username, password);
+                return AuthenticateClient(username, password).Result;
             }
-            var user = Repository.System.User.Get(new { UserName = username });
-            user.UserName.IsEqualTo(username);
-            GetUserDetails(user);
+            var user = GetUserByName(username);
             var userpass = user.Password;
             if (!PasswordUtils.VerifyPasswordHash(password, userpass.PasswordHash, userpass.PasswordSalt))
             {
@@ -71,13 +69,37 @@ namespace jotfi.Jot.Core.Services.System
             return users;
         }
 
-        public bool CreateUser(User user)
+        public User GetUserById(long id, DbConnection conn = null)
+        {
+            if (AppSettings.IsClient)
+            {
+                return GetUserByIdClient(id).Result;
+            }
+            var user = Repository.System.User.Get(id, conn);
+            user.IsNotNull();
+            GetUserDetails(user, conn);
+            return user;
+        }
+
+        public User GetUserByName(string name, DbConnection conn = null)
+        {
+            if (AppSettings.IsClient)
+            {
+                return GetUserByNameClient(name).Result;
+            }
+            var user = Repository.System.User.Get(new { UserName = name }, conn);
+            user.IsNotNull();
+            GetUserDetails(user, conn);
+            return user;
+        }
+
+        public long CreateUser(User user)
         {
             try
             {
                 if (AppSettings.IsClient)
                 {
-                    return CreateUserClient(user);
+                    return CreateUserClient(user).Result;
                 }
                 using var uow = Database.Context.Create();
                 var conn = Database.Context.GetConnection();
@@ -88,19 +110,19 @@ namespace jotfi.Jot.Core.Services.System
                 PasswordUtils.CreatePasswordHash(user.Password.CreatePassword, out byte[] hash, out byte[] salt);
                 user.Password.PasswordHash = hash;
                 user.Password.PasswordSalt = salt;
-                var passwordId = Repository.Base.Password.Insert(user.Password, conn);
-                AssertUpdateNewUser(userId, user.Hash, personId, passwordId, conn);
+                var passwordId = Repository.Base.Password.Insert(user.Password, conn);                
                 AssertUpdateNewUserPassword(userId, passwordId, user.Password.Hash, conn);
                 AssertUpdateNewUserPerson(userId, personId, emailId, addressId, user.Person.Hash, conn);
                 AssertUpdateNewUserPersonEmail(personId, emailId, user.Person.Email.Hash, conn);
                 AssertUpdateNewUserPersonAddress(personId, addressId, user.Person.Address.Hash, conn);
+                AssertUpdateNewUser(userId, user.Hash, personId, passwordId, conn);
                 uow.CommitAsync().Wait();
-                return true;
+                return userId;
             }
             catch (Exception ex)
             {
                 Log(ex);
-                return false;
+                return 0;
             }            
         }
 

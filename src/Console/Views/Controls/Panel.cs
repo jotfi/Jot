@@ -1,5 +1,6 @@
 ﻿using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Classes;
+using jotfi.Jot.Console.Views.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

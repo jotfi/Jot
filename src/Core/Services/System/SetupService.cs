@@ -56,7 +56,7 @@ namespace jotfi.Jot.Core.Services.System
 
         public User CreateAdminUser()
         {
-            var admin = new User() { UserName = "Administrator" };
+            var admin = new User() { UserName = Constants.DefaultAdministratorName };
             admin.Person.FirstName = "Admin";
             admin.Person.LastName = "System";
 #if DEBUG
@@ -76,8 +76,8 @@ namespace jotfi.Jot.Core.Services.System
         public string FirstTimeSetupText()
         {
             return $@"
-Setting up {Constants.DefaultApplicationName} for the first time. The following tasks must be 
-completed before server connection and login dialogs will be displayed.";
+Setting up {Constants.DefaultApplicationName} for the first time. The following tasks must 
+be completed before login dialog will be displayed.";
         }
 
         public string ServerConnectionText()
@@ -131,11 +131,11 @@ Please enter an organizaton name, this can be edited later.";
             return true;
         }
 
-        public bool SaveAdministrator(User admin, out string error)
+        public long SaveAdministrator(User admin, out string error)
         {
             if (!IsAdministratorValid(admin, out error))
             {
-                return false;
+                return 0;
             }
             return Services.System.User.CreateUser(admin);
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using jotfi.Jot.Base.Classes;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

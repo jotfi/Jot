@@ -65,10 +65,21 @@ namespace jotfi.Jot.Api.Controllers.System
         }
 
         // GET: user/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetUser(long id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult> GetUserById(long id)
         {
-            var user = await Service.GetUserAsync(id);
+            var user = await Service.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpGet("{name}")]
+        public async Task<ActionResult> GetUserByName(string name)
+        {
+            var user = await Service.GetUserByNameAsync(name);
             if (user == null)
             {
                 return NotFound();
@@ -82,12 +93,17 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var ok = await Service.CreateUserAsync(user);
-            if (!ok)
+            var userId = await Service.CreateUserAsync(user);
+            if (userId == 0)
             {
                 return BadRequest();
             }
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            var newUser = await Service.GetUserByIdAsync(userId);
+            if (newUser == null)
+            {
+                return BadRequest();
+            }
+            return CreatedAtAction("GetUser", new { id = userId }, newUser);
         }
 
         // DELETE: api/Users/5

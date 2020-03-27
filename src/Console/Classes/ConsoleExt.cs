@@ -30,5 +30,10 @@ namespace jotfi.Jot.Console.Classes
         {
             return (source.Item1.ToDim(), source.Item2.ToDim());
         }
+
+        public static string ToCheckMark(this bool source)
+        {
+            return source ? ConsoleUtils.SelectionMarked : ConsoleUtils.SelectionNotMarked;
+        }
     }
 }

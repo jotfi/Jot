@@ -46,5 +46,13 @@ namespace jotfi.Jot.Base.System
                 throw new ApplicationException("Expected null");
             }
         }
+
+        public static void IsNotNull(this object obj)
+        {
+            if (obj == null)
+            {
+                throw new ApplicationException("Expected object");
+            }
+        }
     }
 }

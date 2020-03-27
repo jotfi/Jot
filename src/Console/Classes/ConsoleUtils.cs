@@ -6,8 +6,8 @@ namespace jotfi.Jot.Console.Classes
 {
     public class ConsoleUtils
     {        
-        const string SelectionMarked = "[x] ";
-        const string SelectionNotMarked = "[ ] ";
+        public const string SelectionMarked = "[x] ";
+        public const string SelectionNotMarked = "[ ] ";
 
         public static void ChangeSelection(List<string> list, int selectedItem = 0)
         {
