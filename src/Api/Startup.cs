@@ -48,10 +48,10 @@ namespace jotfi.Jot.Api
                 Secret = configuration["Secret"]
             };
             Application = new Core.Application(settings);
-            if (!Application.Services.System.Setup.CheckDatabase(out string error))
-            {
-                throw new ApplicationException(error);
-            }
+            //if (!Application.Services.System.Setup.CheckDatabase(out string error))
+            //{
+            //    throw new ApplicationException(error);
+            //}
         }
 
         public IConfiguration Configuration { get; }

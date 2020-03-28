@@ -16,6 +16,8 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
 using Dapper;
+using Dapper.FluentMap;
+using Dapper.FluentMap.Dommel;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Database.Base;
@@ -41,39 +43,35 @@ namespace jotfi.Jot.Core.Services
             App = app;
             Dialect = (DbDialects)app.AppSettings.DbDialect;
             Context = new DbContext(Dialect, app.AppSettings.DbDirectory, opts);
-            Models = new List<ITransaction>()
+            FluentMapper.Initialize(config =>
             {
-                new User(),
-                new Person(),
-                new Email(),
-                new Address(),
-                new Password(),
-                new Organization()
-            };
+                config.AddMap(new AddressMap());
+                config.ForDommel();
+            });
         }
 
-        public bool CheckTables(List<TableName> tableNames, out string error)
-        {
-            error = string.Empty;
-            using var uow = Context.Create();
-            foreach (var table in Models)
-            {
-                try
-                {
-                    if (!tableNames.Any(p => p.Name == table.TableName()))
-                    {
-                        Context.GetConnection().Execute(table.CreateTable(Dialect));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log(ex, table.CreateTable());
-                    error = $"Exception during create table: {table.GetType().Name}. Check log for details.";
-                    return false;
-                }
-            }
-            uow.CommitAsync().Wait();
-            return true;
-        }
+        //public bool CheckTables(List<TableName> tableNames, out string error)
+        //{
+        //    error = string.Empty;
+        //    using var uow = Context.Create();
+        //    foreach (var table in Models)
+        //    {
+        //        try
+        //        {
+        //            if (!tableNames.Any(p => p.Name == table.TableName()))
+        //            {
+        //                Context.GetConnection().Execute(table.CreateTable(Dialect));
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Log(ex, table.CreateTable());
+        //            error = $"Exception during create table: {table.GetType().Name}. Check log for details.";
+        //            return false;
+        //        }
+        //    }
+        //    uow.CommitAsync().Wait();
+        //    return true;
+        //}
     }
 }

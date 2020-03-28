@@ -19,21 +19,33 @@ using jotfi.Jot.Base.System;
 using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.System
 {
     public class User : Transaction
     {
         public string UserName { get; set; } = "";
+        [JsonIgnore]
+        public byte[] PasswordHash { get; set; }
+        [JsonIgnore]
+        public byte[] PasswordSalt { get; set; }
         public long PersonId { get; set; }
         public Person Person { get; set; } = new Person();
-        public long PasswordId { get; set; }
-        public Password Password { get; set; } = new Password();
 
         [NotMapped]
         public string Token { get; set; }
+
+        [NotMapped]
+        [Display(Name = "User Password")]
+        public string CreatePassword { get; set; } = "";
+
+        [NotMapped]
+        [Display(Name = "Confirm Password")]
+        public string ConfirmPassword { get; set; } = "";
 
         public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
         {

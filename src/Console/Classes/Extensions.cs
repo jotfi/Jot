@@ -22,7 +22,7 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Classes
 {
-    public static class ConsoleExt
+    public static class Extensions
     {
         public static Pos ToPos(this int source)
         {

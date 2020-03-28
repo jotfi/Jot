@@ -82,14 +82,14 @@ namespace jotfi.Jot.Console.Views.System
 
         public bool BeginSetup()
         {
-            if (!AppSettings.IsClient)
-            {
-                if (!Service.CheckDatabase(out string error))
-                {
-                    App.ShowError(error);
-                    return false;
-                }
-            }
+            //if (!AppSettings.IsClient)
+            //{
+            //    if (!Service.CheckDatabase(out string error))
+            //    {
+            //        App.ShowError(error);
+            //        return false;
+            //    }
+            //}
             var admin = Services.System.User.GetUserByName(Constants.DefaultAdministratorName);
             if (admin == null)
             {
@@ -145,20 +145,20 @@ namespace jotfi.Jot.Console.Views.System
                 ViewText = Service.CreateAdministratorText(),
                 ViewSize = (-1, 4)
             });
-            AddToPanel(new Field(nameof(admin.Password.CreatePassword), admin.Password)
+            AddToPanel(new Field(nameof(admin.CreatePassword), admin)
             {
                 Secret = true,
                 TextChanged = (text) =>
                 {
                     ValidPassword = Services.System.User.GetPasswordValid(text);
-                    var passwordsMatch = GetPanelText(nameof(admin.Password.ConfirmPassword)) == text;
+                    var passwordsMatch = GetPanelText(nameof(admin.ConfirmPassword)) == text;
                     var passwordInfo = Services.System.User.GetPasswordInfo(text);
                     MainLoop.Invoke(() => SetPanelLabel(AdministratorPasswordInfo, passwordInfo));
                     var infoColor = ValidPassword && passwordsMatch ? MenuColor : ErrorColor;
                     MainLoop.Invoke(() => SetPanelColor(AdministratorPasswordInfo, infoColor));
                 }
             });
-            AddToPanel(new Field(nameof(admin.Password.ConfirmPassword), admin.Password)
+            AddToPanel(new Field(nameof(admin.ConfirmPassword), admin)
             {
                 Secret = true,
                 TextChanged = (text) =>
@@ -167,7 +167,7 @@ namespace jotfi.Jot.Console.Views.System
                     {
                         return;
                     }
-                    var passwordsMatch = GetPanelText(nameof(admin.Password.CreatePassword)) == text;
+                    var passwordsMatch = GetPanelText(nameof(admin.CreatePassword)) == text;
                     var passwordInfo = passwordsMatch ? Services.System.User.GetPasswordInfo(text) : "Passwords do not match";
                     MainLoop.Invoke(() => SetPanelLabel(AdministratorPasswordInfo, passwordInfo));
                     var infoColor = passwordsMatch ? MenuColor : ErrorColor;
@@ -178,19 +178,19 @@ namespace jotfi.Jot.Console.Views.System
             {
                 ShowTextField = false
             });
-            AddToPanel(new Field(nameof(admin.Person.Email.EmailAddress), admin.Person.Email)
+            AddToPanel(new Field(nameof(admin.Person.ContactDetails.EmailAddress), admin.Person.ContactDetails)
             {
                 TextChanged = (text) =>
                 {
                     ValidEmail = Services.System.User.GetPasswordValid(text);
-                    var emailsMatch = GetPanelText(nameof(admin.Person.Email.ConfirmEmail)) == text;
+                    var emailsMatch = GetPanelText(nameof(admin.Person.ContactDetails.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
                     MainLoop.Invoke(() => SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = ValidEmail && emailsMatch ? MenuColor : ErrorColor;
                     MainLoop.Invoke(() => SetPanelColor(AdministratorEmailInfo, infoColor));
                 }
             });
-            AddToPanel(new Field(nameof(admin.Person.Email.ConfirmEmail), admin.Person.Email)
+            AddToPanel(new Field(nameof(admin.Person.ContactDetails.ConfirmEmail), admin.Person.ContactDetails)
             {
                 TextChanged = (text) =>
                 {
@@ -198,7 +198,7 @@ namespace jotfi.Jot.Console.Views.System
                     {
                         return;
                     }
-                    var emailsMatch = GetPanelText(nameof(admin.Person.Email.EmailAddress)) == text;
+                    var emailsMatch = GetPanelText(nameof(admin.Person.ContactDetails.EmailAddress)) == text;
                     var emailInfo = emailsMatch ? "" : "Emails do not match";
                     MainLoop.Invoke(() => SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = emailsMatch ? MenuColor : ErrorColor;

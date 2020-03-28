@@ -20,9 +20,9 @@ using jotfi.Jot.Model.Base;
 
 namespace jotfi.Jot.Data.Base
 {
-    public class PasswordRepository : BaseRepository<Password>
+    public class ContactDetailsRepository : BaseRepository<ContactDetails>
     {
-        public PasswordRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
+        public ContactDetailsRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
         {
 
         }

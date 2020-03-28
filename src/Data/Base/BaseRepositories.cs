@@ -26,16 +26,14 @@ namespace jotfi.Jot.Data.Base
     {
         public readonly RepositoryFactory Data;
         public readonly AddressRepository Address;
-        public readonly EmailRepository Email;
-        public readonly PasswordRepository Password;
+        public readonly ContactDetailsRepository ContactDetails;
         public readonly PersonRepository Person;
 
         public BaseRepositories(RepositoryFactory data, LogOpts opts = null) : base(opts)
         {
             Data = data;
             Address = new AddressRepository(data, opts);
-            Email = new EmailRepository(data, opts);
-            Password = new PasswordRepository(data, opts);
+            ContactDetails = new ContactDetailsRepository(data, opts);
             Person = new PersonRepository(data, opts);
         }
     }

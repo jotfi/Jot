@@ -67,7 +67,7 @@ namespace jotfi.Jot.Core.Services.System
             return false;
         }
         public bool IsSetup { get => AdministratorExists && OrganizationExists; }
-        public bool CheckDatabase(out string error) => Database.CheckTables(GetTableNames(), out error);
+        //public bool CheckDatabase(out string error) => Database.CheckTables(GetTableNames(), out error);
         public bool AdministratorExists { get => Repository.System.User.Exists(); }
         public bool OrganizationExists { get => Repository.System.Organization.Exists(); }
 
@@ -77,10 +77,12 @@ namespace jotfi.Jot.Core.Services.System
             admin.Person.FirstName = "Admin";
             admin.Person.LastName = "System";
 #if DEBUG
-            admin.Password.CreatePassword = "admin1!";
-            admin.Password.ConfirmPassword = admin.Password.CreatePassword;
-            admin.Person.Email.EmailAddress = "admin@admin.com";
-            admin.Person.Email.ConfirmEmail = admin.Person.Email.EmailAddress;
+            var password = "admin1!";
+            admin.CreatePassword = password;
+            admin.ConfirmPassword = password;
+            var email = "admin@admin.com";
+            admin.Person.ContactDetails.EmailAddress = email;
+            admin.Person.ContactDetails.ConfirmEmail = email;
 #endif
             return admin;
         }
@@ -124,23 +126,23 @@ Please enter an organizaton name, this can be edited later.";
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!Services.System.User.GetPasswordValid(user.Password.CreatePassword))
+            if (!Services.System.User.GetPasswordValid(user.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += Services.System.User.GetPasswordInfo(user.Password.CreatePassword);
+                error += Services.System.User.GetPasswordInfo(user.CreatePassword);
                 return false;
             }
-            if (user.Password.CreatePassword != user.Password.ConfirmPassword)
+            if (user.CreatePassword != user.ConfirmPassword)
             {
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!Services.System.User.GetEmailValid(user.Person.Email.EmailAddress))
+            if (!Services.System.User.GetEmailValid(user.Person.ContactDetails.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
             }
-            if (user.Person.Email.EmailAddress != user.Person.Email.ConfirmEmail)
+            if (user.Person.ContactDetails.EmailAddress != user.Person.ContactDetails.ConfirmEmail)
             {
                 error += "Invalid email. Confirm email does not match.";
                 return false;

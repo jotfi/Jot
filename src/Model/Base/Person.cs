@@ -23,12 +23,12 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public class Person : SubTransaction 
+    public class Person : Transaction 
     {
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        public long EmailId { get; set; }
-        public Email Email { get; set; } = new Email();
+        public long ContactDetailsId { get; set; }
+        public ContactDetails ContactDetails { get; set; } = new ContactDetails();
         public long AddressId { get; set; }
         public Address Address { get; set; } = new Address();
 
@@ -37,10 +37,9 @@ namespace jotfi.Jot.Model.Base
             return $@"
 create table {TableName()}(
 {TransactionFields()},
-{SubTransactionFields()},
 FirstName varchar(255) not null, 
 LastName varchar(255) not null, 
-EmailId integer,
+ContactDetailsId integer,
 AddressId integer);";
         }       
     }
