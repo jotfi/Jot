@@ -1,4 +1,21 @@
-﻿using System;
+﻿// Copyright 2020 John Cottrell
+//
+// This file is part of Jot.
+//
+// Jot is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Jot is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+
+using System;
 using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -80,6 +97,17 @@ namespace jotfi.Jot.Api.Controllers.System
         public async Task<ActionResult> GetUserByName(string name)
         {
             var user = await Service.GetUserByNameAsync(name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpPost("find")]
+        public async Task<ActionResult> GetUser([FromBody]object id)
+        {
+            var user = await Service.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound();
