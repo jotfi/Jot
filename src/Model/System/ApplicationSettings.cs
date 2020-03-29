@@ -27,7 +27,7 @@ namespace jotfi.Jot.Model.System
     {
         public string InstanceName { get; set; }
 
-        public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
+        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
         {
             return $@"
 create table {TableName()}(

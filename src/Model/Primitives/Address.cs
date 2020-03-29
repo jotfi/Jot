@@ -21,7 +21,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace jotfi.Jot.Model.Base
+namespace jotfi.Jot.Model.Primitives
 {
     public class Address : Transaction
     {
@@ -34,7 +34,7 @@ namespace jotfi.Jot.Model.Base
         public string PostCode { get; set; } = "";
         public string Country { get; set; } = "";
 
-        public override string CreateTable(DbDialects dialect = DbDialects.SQLite)
+        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
         {
             return $@"
 create table {TableName()}(

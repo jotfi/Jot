@@ -29,7 +29,6 @@ namespace jotfi.Jot.Base.Settings
         public bool IsConsole { get; set; }
         [Display(Name = "Server URL")]
         public string ServerUrl { get; set; } = "";
-        public int DbDialect { get; set; }
-        public string DbDirectory { get; set; }
+        public DbSettings Database { get; set; } = new DbSettings();
     }
 }

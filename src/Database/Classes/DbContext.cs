@@ -15,13 +15,29 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
+using jotfi.Jot.Base.Settings;
+using jotfi.Jot.Base.Utils;
+using System;
 using System.Data.Common;
 
-namespace jotfi.Jot.Database.Base
+namespace jotfi.Jot.Database.Classes
 {
-    public interface IDbContext
+    public class DbContext : IDisposable
     {
-        UnitOfWork Create();
-        DbConnection GetConnection();
+        private readonly DbConnection Connection = null;
+        public readonly UnitOfWork UnitOfWork = null;
+
+        public DbContext(DbSettings settings)
+        {
+            Connection = DbUtils.CreateConnection(settings);
+            Connection.Open();
+            UnitOfWork = new UnitOfWork(Connection);
+        }
+
+        public void Dispose()
+        {
+            UnitOfWork.Dispose();
+            Connection.Dispose();
+        }
     }
 }

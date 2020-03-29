@@ -19,9 +19,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using jotfi.Jot;
-using jotfi.Jot.Database.Base;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -48,10 +45,6 @@ namespace jotfi.Jot.Api
                 Secret = configuration["Secret"]
             };
             Application = new Core.Application(settings);
-            //if (!Application.Services.System.Setup.CheckDatabase(out string error))
-            //{
-            //    throw new ApplicationException(error);
-            //}
         }
 
         public IConfiguration Configuration { get; }

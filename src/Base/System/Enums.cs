@@ -24,7 +24,7 @@ namespace jotfi.Jot.Base.System
     /// <summary>
     /// Database server dialects
     /// </summary>
-    public enum DbDialects
+    public enum DbConnectionTypes
     {
         SQLite = 0,
         SQLServer = 1,

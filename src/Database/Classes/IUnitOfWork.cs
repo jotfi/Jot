@@ -15,18 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
-using Dapper;
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Data.Base;
-using jotfi.Jot.Model.System;
+using System;
+using System.Data.Common;
 
-namespace jotfi.Jot.Data.System
+namespace jotfi.Jot.Database.Classes
 {
-    public class OrganizationRepository : BaseRepository<Organization>
+    /// <summary>
+    /// https://github.com/timschreiber/DapperUnitOfWork
+    /// </summary>
+    public interface IUnitOfWork : IDisposable
     {
-        public OrganizationRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
-        {
-
-        }
+        Guid Id { get; }
+        DbConnection Connection { get; }
+        DbTransaction Transaction { get; }
+        void Begin();
+        void Commit();
+        void Rollback();
     }
 }

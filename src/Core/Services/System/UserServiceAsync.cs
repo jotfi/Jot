@@ -17,6 +17,7 @@
 
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
+using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using System;
@@ -28,48 +29,32 @@ namespace jotfi.Jot.Core.Services.System
 {
     public partial class UserService
     {
-        public async Task<IEnumerable<User>> GetUsersAsync()
-        {
-            var users = await Repository.System.User.GetListAsync();
-            return users;
-        }
-
-        public async Task<User> GetUserAsync(object id)
-        {
-            var user = await Repository.System.User.GetAsync(id);
-            user.IsNotNull();
-            return user;
-        }
-
-        public async Task<User> GetUserByIdAsync(long id)
-        {
-            var user = await Repository.System.User.GetAsync(id);
-            user.IsNotNull();
-            return user;
-        }
-
-        public async Task<User> GetUserByNameAsync(string name)
-        {
-            var user = await Repository.System.User.GetAsync(new { UserName = name });
-            user.IsNotNull();
-            return user;
-        }
-
         public async Task<long> CreateUserAsync(User user)
         {
             try
             {
-                using var uow = Database.Context.Create();
-                var conn = Database.Context.GetConnection();
-                var userId = await Repository.System.User.InsertAsync(user, conn);
-                var personId = await Repository.Base.Person.InsertAsync(user.Person, conn);
-                var emailId = await Repository.Base.ContactDetails.InsertAsync(user.Person.ContactDetails, conn);
-                var addressId = await Repository.Base.Address.InsertAsync(user.Person.Address, conn);
-                PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
-                user.PasswordHash = hash;
-                user.PasswordSalt = salt;            
-                await uow.CommitAsync();
-                return userId;
+                long userId = 0;
+                using var context = GetContext();
+                var unitOfWork = context.UnitOfWork;
+                unitOfWork.Begin();
+                try
+                {
+                    PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
+                    user.PasswordHash = hash;
+                    user.PasswordSalt = salt;
+                    user.Person.ContactDetailsId = (long)await user.Person.ContactDetails.InsertAsync(unitOfWork);
+                    user.Person.AddressId = (long)await user.Person.Address.InsertAsync(unitOfWork);
+                    user.PersonId = (long)await user.Person.InsertAsync(unitOfWork);
+                    userId = (long)await user.InsertAsync(unitOfWork);
+                    user.Id = userId;
+                    await unitOfWork.CommitAsync();
+                    return userId;
+                }
+                catch
+                {
+                    await unitOfWork.RollbackAsync();
+                    throw;
+                }
             }
             catch (Exception ex)
             {

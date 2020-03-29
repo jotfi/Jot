@@ -9,15 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Console", "Console\Console.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{136DF0B4-F7D3-416E-BE02-00DC53526072}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Database.csproj", "{3F847350-01B5-4FC9-8C03-6D5A3203FC59}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desktop", "Desktop\Desktop.csproj", "{66B1C8BC-1179-4E9B-BFF3-D887179D1C33}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{DC177705-1920-4C78-9D84-09C4FE5CDFE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{B3B40F27-FE11-4371-B921-DABC308A9EAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{B3B40F27-FE11-4371-B921-DABC308A9EAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F479D86-CDD1-4B35-8850-C2DCFE4965A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{136DF0B4-F7D3-416E-BE02-00DC53526072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{136DF0B4-F7D3-416E-BE02-00DC53526072}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{136DF0B4-F7D3-416E-BE02-00DC53526072}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{136DF0B4-F7D3-416E-BE02-00DC53526072}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3F847350-01B5-4FC9-8C03-6D5A3203FC59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3F847350-01B5-4FC9-8C03-6D5A3203FC59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F847350-01B5-4FC9-8C03-6D5A3203FC59}.Release|Any CPU.ActiveCfg = Release|Any CPU

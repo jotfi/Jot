@@ -47,6 +47,6 @@ ModifiedDate datetime";
             return GetType().Name;
         }
 
-        public abstract string CreateTable(DbDialects dialect = DbDialects.SQLite);
+        public abstract string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite);
     }
 }

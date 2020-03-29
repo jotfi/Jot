@@ -15,17 +15,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
+
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Model.Base;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
-namespace jotfi.Jot.Data.Base
+namespace jotfi.Jot.Model.Primitives
 {
-    public class AddressRepository : BaseRepository<Address>
+    public class ContactDetails : Transaction
     {
-        public AddressRepository(RepositoryFactory data, LogOpts opts = null) : base(data, opts)
+        [Display(Name = "Email Address")]
+        public string EmailAddress { get; set; } = "";
+        [NotMapped]
+        [Display(Name = "Confirm Email")]
+        public string ConfirmEmail { get; set; } = "";
+
+        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
         {
-
+            return $@"
+create table {TableName()}(
+{TransactionFields()},
+EmailAddress text not null);"; 
         }
-
     }
 }

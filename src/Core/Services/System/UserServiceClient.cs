@@ -17,6 +17,7 @@
 
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
 using Newtonsoft.Json;
 using System;

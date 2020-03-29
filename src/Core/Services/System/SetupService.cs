@@ -67,9 +67,8 @@ namespace jotfi.Jot.Core.Services.System
             return false;
         }
         public bool IsSetup { get => AdministratorExists && OrganizationExists; }
-        //public bool CheckDatabase(out string error) => Database.CheckTables(GetTableNames(), out error);
-        public bool AdministratorExists { get => Repository.System.User.Exists(); }
-        public bool OrganizationExists { get => Repository.System.Organization.Exists(); }
+        public bool AdministratorExists { get => false; }
+        public bool OrganizationExists { get => false; }
 
         public User CreateAdminUser()
         {
@@ -87,11 +86,6 @@ namespace jotfi.Jot.Core.Services.System
             return admin;
         }
 
-        public List<TableName> GetTableNames(object whereConditions = null)
-        {
-            whereConditions ??= new { Type = "table" };
-            return Repository.System.TableName.GetList(whereConditions).ToList();
-        }
         public string FirstTimeSetupText()
         {
             return $@"

@@ -16,15 +16,9 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
 using jotfi.Jot.Base.System;
-using jotfi.Jot.Core.Views;
-using jotfi.Jot.Core.Views.Base;
-using jotfi.Jot.Data;
-using jotfi.Jot.Database;
-using System;
-using System.Collections.Generic;
+using jotfi.Jot.Database.Classes;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace jotfi.Jot.Core.Services.Base
 {
@@ -33,14 +27,18 @@ namespace jotfi.Jot.Core.Services.Base
         public Application App;
         public Settings.AppSettings AppSettings { get => App.AppSettings; }
         public DatabaseService Database { get => App.Database; }
-        public RepositoryFactory Repository { get => App.Repository; }
         public ServiceFactory Services { get => App.Services; }
 
         public BaseService(Application app, LogOpts opts = null) : base(opts)
         {
             App = app;            
         }
-        
+
+        protected DbContext GetContext()
+        {
+            return new DbContext(App.AppSettings.Database);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

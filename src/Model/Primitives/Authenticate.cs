@@ -15,25 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Data.Base;
-using jotfi.Jot.Data.System;
-using jotfi.Jot.Database.Base;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace jotfi.Jot.Data
+namespace jotfi.Jot.Model.Primitives
 {
-    public class RepositoryFactory : Logger
+    public class Authenticate
     {
-        public readonly BaseRepositories Base;
-        public readonly SystemRepositories System;
-        public readonly IDbContext Context;
+        [Required]
+        public string Username { get; set; }
 
-        public RepositoryFactory(IDbContext context, LogOpts opts = null) : base(opts)
-        {
-            Context = context;
-            Base = new BaseRepositories(this);
-            System = new SystemRepositories(this);
-        }
-
+        [Required]
+        public string Password { get; set; }
     }
 }

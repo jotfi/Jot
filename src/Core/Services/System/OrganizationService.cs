@@ -17,6 +17,7 @@
 
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
@@ -58,11 +59,12 @@ namespace jotfi.Jot.Core.Services.System
                 {
                     return CreateOrganizationClient(organization);
                 }
-                using var uow = Database.Context.Create();
-                var conn = Database.Context.GetConnection();
-                var organizationId = Repository.System.Organization.Insert(organization, conn);
-                organizationId.IsEqualTo(1);
-                uow.CommitAsync().Wait();
+                using (var context = GetContext())
+                {
+                    var repository = new Repository<Organization>(context.UnitOfWork);
+                    var organizationId = repository.Insert(organization);
+                    organizationId.IsNotZero();
+                }
                 return true;
             }
             catch (Exception ex)

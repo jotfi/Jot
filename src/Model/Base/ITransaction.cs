@@ -25,6 +25,6 @@ namespace jotfi.Jot.Model.Base
     public interface ITransaction
     {
         string TableName();
-        string CreateTable(DbDialects dialect = DbDialects.SQLite);
+        string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite);
     }
 }

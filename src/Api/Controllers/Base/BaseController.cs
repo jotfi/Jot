@@ -17,6 +17,7 @@
 
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Database;
+using jotfi.Jot.Database.Classes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace jotfi.Jot.Api.Controllers.Base
@@ -30,6 +31,11 @@ namespace jotfi.Jot.Api.Controllers.Base
         {
             App = app;
             Service = service;
+        }
+
+        protected DbContext GetContext()
+        {
+            return new DbContext(App.AppSettings.Database);
         }
     }
 }

@@ -16,13 +16,15 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
 using jotfi.Jot.Base.Classes;
+using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Model.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace jotfi.Jot.Database.Base
+namespace jotfi.Jot.Database.Classes
 {
     public static class Extensions
     {
@@ -31,5 +33,20 @@ namespace jotfi.Jot.Database.Base
             transaction.ModifiedDate = DateTime.Now;
             transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
         }
+
+        public static long Insert<T>(this T transaction, IUnitOfWork unitOfWork) where T : Transaction
+        {
+            var repository = new Repository<T>(unitOfWork);
+            var id = (long)repository.Insert(transaction);
+            id.IsNotZero();
+            return id;
+        }
+
+        public static Task<object> InsertAsync<T>(this T transaction, IUnitOfWork unitOfWork) where T : Transaction
+        {
+            var repository = new Repository<T>(unitOfWork);
+            return repository.InsertAsync(transaction);
+        }
+
     }
 }

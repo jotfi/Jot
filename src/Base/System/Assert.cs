@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
+using jotfi.Jot.Base.Classes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,6 +62,14 @@ namespace jotfi.Jot.Base.System
             if (obj != null)
             {
                 throw new ApplicationException("Expected null");
+            }
+        }
+
+        public static void IsNotZero(this object obj)
+        {
+            if (obj.ToInt() < 1)
+            {
+                throw new ApplicationException("Expected non zero");
             }
         }
 

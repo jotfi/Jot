@@ -18,11 +18,14 @@
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 
 namespace jotfi.Jot.Core.Services.System
 {
@@ -39,11 +42,13 @@ namespace jotfi.Jot.Core.Services.System
             {
                 return AuthenticateClient(username, password).Result;
             }
-            var user = GetUserByName(username);
+            using var context = GetContext();
+            var repository = new Repository<User>(context.UnitOfWork);
+            var user = repository.Select(p => p.UserName == username).FirstOrDefault();
             if (!PasswordUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
-            }           
+            }
             return user;
         }
 
@@ -75,36 +80,6 @@ namespace jotfi.Jot.Core.Services.System
             return ValidUtils.IsEmailValid(email);
         }
 
-        public IEnumerable<User> GetUsers()
-        {
-            var users = Repository.System.User.GetList();
-            return users;
-        }
-
-        public User GetUserById(long id, DbConnection conn = null)
-        {
-            if (AppSettings.IsClient)
-            {
-                return GetUserByIdClient(id).Result;
-            }
-            var user = Repository.System.User.Get(id, conn);
-            user.IsNotNull();
-            //GetUserDetails(user, conn);
-            return user;
-        }
-
-        public User GetUserByName(string name, DbConnection conn = null)
-        {
-            if (AppSettings.IsClient)
-            {
-                return GetUserByNameClient(name).Result;
-            }
-            var user = Repository.System.User.Get(new { UserName = name }, conn);
-            user.IsNotNull();
-            //GetUserDetails(user, conn);
-            return user;
-        }
-
         public long CreateUser(User user)
         {
             try
@@ -113,16 +88,29 @@ namespace jotfi.Jot.Core.Services.System
                 {
                     return CreateUserClient(user).Result;
                 }
-                using var uow = Database.Context.Create();
-                var conn = Database.Context.GetConnection();
-                var userId = Repository.System.User.Insert(user, conn);
-                var personId = Repository.Base.Person.Insert(user.Person, conn);
-                var emailId = Repository.Base.ContactDetails.Insert(user.Person.ContactDetails, conn);
-                var addressId = Repository.Base.Address.Insert(user.Person.Address, conn);
-                PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
-                user.PasswordHash = hash;
-                user.PasswordSalt = salt;
-                uow.CommitAsync().Wait();
+                long userId = 0;
+                using (var context = GetContext())
+                {
+                    var unitOfWork = context.UnitOfWork;
+                    unitOfWork.Begin();
+                    try
+                    {
+                        PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
+                        user.PasswordHash = hash;
+                        user.PasswordSalt = salt;
+                        user.Person.ContactDetailsId = user.Person.ContactDetails.Insert(unitOfWork);
+                        user.Person.AddressId = user.Person.Address.Insert(unitOfWork);
+                        user.PersonId = user.Person.Insert(unitOfWork);
+                        userId = user.Insert(unitOfWork);
+                        user.Id = userId;
+                        unitOfWork.Commit();
+                    }
+                    catch
+                    {
+                        unitOfWork.Rollback();
+                        throw;
+                    }
+                }
                 return userId;
             }
             catch (Exception ex)

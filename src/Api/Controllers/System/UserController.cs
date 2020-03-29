@@ -18,12 +18,15 @@
 using System;
 using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
 using jotfi.Jot.Core.Services.System;
+using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -73,7 +76,9 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
-            var res = await Service.GetUsersAsync();
+            using var context = GetContext();
+            var repository = new Repository<User>(context.UnitOfWork);
+            var res = await repository.GetAllAsync();
             if (res == null)
             {
                 return NotFound();
@@ -85,7 +90,9 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetUserById(long id)
         {
-            var user = await Service.GetUserByIdAsync(id);
+            using var context = GetContext();
+            var repository = new Repository<User>(context.UnitOfWork);
+            var user = await repository.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -96,24 +103,29 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{name}")]
         public async Task<ActionResult> GetUserByName(string name)
         {
-            var user = await Service.GetUserByNameAsync(name);
+            using var context = GetContext();
+            var repository = new Repository<User>(context.UnitOfWork);
+            var user = await repository.SelectAsync(p => p.UserName == name);
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(user.FirstOrDefault());
         }
 
-        [HttpPost("find")]
-        public async Task<ActionResult> GetUser([FromBody]object id)
-        {
-            var user = await Service.GetUserAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
-        }
+
+        //[HttpPost("find")]
+        //public async Task<ActionResult> GetUser([FromBody]object id)
+        //{
+        //    using var context = GetContext();
+        //    var repository = new Repository<User>(context.UnitOfWork);
+        //    var user = await repository.GetAsync(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(user);
+        //}
 
         // POST: user
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -126,12 +138,7 @@ namespace jotfi.Jot.Api.Controllers.System
             {
                 return BadRequest();
             }
-            var newUser = await Service.GetUserByIdAsync(userId);
-            if (newUser == null)
-            {
-                return BadRequest();
-            }
-            return CreatedAtAction("GetUser", new { id = userId }, newUser);
+            return CreatedAtAction("GetUser", new { id = userId }, user);
         }
 
         // DELETE: api/Users/5

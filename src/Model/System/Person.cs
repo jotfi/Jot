@@ -16,26 +16,32 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
 using jotfi.Jot.Base.System;
-using jotfi.Jot.Database.Base;
+using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace jotfi.Jot.Data.System
+namespace jotfi.Jot.Model.System
 {
-    public class SystemRepositories : Logger
+    public class Person : Entity 
     {
-        public readonly RepositoryFactory Data;
-        public readonly OrganizationRepository Organization;
-        public readonly TableNameRepository TableName;
-        public readonly UserRepository User;
+        public string FirstName { get; set; } = "";
+        public string LastName { get; set; } = "";
+        public long ContactDetailsId { get; set; }
+        public ContactDetails ContactDetails { get; set; } = new ContactDetails();
+        public long AddressId { get; set; }
+        public Address Address { get; set; } = new Address();
 
-        public SystemRepositories(RepositoryFactory data, LogOpts opts = null) : base(opts)
+        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
         {
-            Data = data;
-            Organization = new OrganizationRepository(data, opts);
-            TableName = new TableNameRepository(data, opts);
-            User = new UserRepository(data, opts);
-        }
+            return $@"
+create table {TableName()}(
+{TransactionFields()},
+FirstName varchar(255) not null, 
+LastName varchar(255) not null, 
+ContactDetailsId integer,
+AddressId integer);";
+        }       
     }
 }

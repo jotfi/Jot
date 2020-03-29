@@ -90,7 +90,8 @@ namespace jotfi.Jot.Console.Views.System
             //        return false;
             //    }
             //}
-            var admin = Services.System.User.GetUserByName(Constants.DefaultAdministratorName);
+            //var admin = Services.System.User.GetUserByName(Constants.DefaultAdministratorName);
+            User admin = null;
             if (admin == null)
             {
                 admin = Service.CreateAdminUser();
@@ -125,7 +126,7 @@ namespace jotfi.Jot.Console.Views.System
                 ok = id > 0;
                 if (ok)
                 {
-                    admin = Services.System.User.GetUserById(id);
+                    // admin = Services.System.User.GetUserById(id);
                 }
                 else
                 {
