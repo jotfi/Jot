@@ -50,7 +50,7 @@ namespace jotfi.Jot.Api.Controllers.System
         private readonly AppSettings Settings;
         private readonly ILogger Log;
 
-        public UserController(UserService users, 
+        public UserController(UserService users,
             IOptions<AppSettings> settings,
             ILogger<UserService> log) : base(settings)
         {
@@ -63,27 +63,35 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]Authenticate model)
         {
-            var user = Users.Authenticate(model.Username, model.Password);
-            if (user == null)
+            try
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
-            }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
+                var user = Users.Authenticate(model.Username, model.Password);
+                if (user == null)
                 {
+                    return BadRequest(new { message = "Username or password is incorrect" });
+                }
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(Settings.Secret);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim("hash", user.Hash)
-                    //new Claim(ClaimTypes.Role, user.Role)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
-            return Ok(user);
+                        //new Claim(ClaimTypes.Role, user.Role)
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                user.Token = tokenHandler.WriteToken(token);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex, ex.Message);
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         // GET: user

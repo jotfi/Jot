@@ -40,12 +40,10 @@ namespace jotfi.Jot.Api
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment Environment;
         public readonly IConfiguration Configuration;
 
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
-            Environment = env;
             Configuration = configuration;
         }
 

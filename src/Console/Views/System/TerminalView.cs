@@ -29,6 +29,7 @@ using Microsoft.Extensions.Logging;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Base.System;
 using System.Reflection;
+using System;
 
 namespace jotfi.Jot.Console.Views.System
 {
@@ -40,41 +41,57 @@ namespace jotfi.Jot.Console.Views.System
         private readonly Toplevel StatusBar;
         private List<Panel> Panels { get; } = new List<Panel>();
 
-        public TerminalView()
+        public TerminalView(ILogger<TerminalView> log)
         {
-            Application.Init();
-            MainMenu = new MenuBar(new MenuBarItem[] {
-                new MenuBarItem ("_File", new MenuItem [] {
-                    new MenuItem ("_Quit", "", Quit)
-                }),
-                new MenuBarItem ("_Help", new MenuItem [] {
-                    new MenuItem ("_About", "", Quit)
-                })
-            });
-            MainWindow = new Window(Constants.DefaultApplicationName)
+            Log = log;
+            try
             {
-                X = 0,
-                Y = 1,
-                Width = Dim.Fill(),
-                Height = Dim.Fill() - Dim.Sized(1)
-            };
-            StatusBar = new Toplevel()
+                Application.Init();
+                MainMenu = new MenuBar(new MenuBarItem[] {
+                    new MenuBarItem ("_File", new MenuItem [] {
+                        new MenuItem ("_Quit", "", Quit)
+                    }),
+                    new MenuBarItem ("_Help", new MenuItem [] {
+                        new MenuItem ("_About", "", Quit)
+                    })
+                });
+                MainWindow = new Window(Constants.DefaultApplicationName)
+                {
+                    X = 0,
+                    Y = 1,
+                    Width = Dim.Fill(),
+                    Height = Dim.Fill() - Dim.Sized(1)
+                };
+                StatusBar = new Toplevel()
+                {
+                    X = 0,
+                    Y = Pos.Bottom(Application.Top) - 1,
+                    Width = Dim.Fill(),
+                    Height = Dim.Sized(1),
+                    ColorScheme = Colors.Dialog
+                };
+            }
+            catch (Exception ex)
             {
-                X = 0,
-                Y = Pos.Bottom(Application.Top) - 1,
-                Width = Dim.Fill(),
-                Height = Dim.Sized(1),
-                ColorScheme = Colors.Dialog
-            };
+                Log.LogError(ex, ex.Message);
+            }
         }
 
         public override bool Run()
         {
-            Application.Top.Add(MainMenu);
-            Application.Top.Add(MainWindow);
-            Application.Top.Add(StatusBar);
-            Application.Run();
-            return true;
+            try
+            {
+                Application.Top.Add(MainMenu);
+                Application.Top.Add(MainWindow);
+                Application.Top.Add(StatusBar);
+                Application.Run();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.LogError(ex, ex.Message);
+                return false;
+            }
         }
 
         public MainLoop MainLoop => Application.MainLoop;
@@ -83,23 +100,23 @@ namespace jotfi.Jot.Console.Views.System
         public ColorScheme ErrorColor => Colors.Error;
         public void Reset() => Panels.Clear();
         public void AddToTop(View view) => Application.Top.Add(view);
-        public void AddToPanel(Field field, 
+        public void AddToPanel(Field field,
             string panelId = "main") => GetPanel(panelId).Fields.Add(field);
         public void AddToPanel(View view,
             string panelId = "main") => GetPanel(panelId).Views.Add(view);
-        public void SetPanelTitle(string title, 
+        public void SetPanelTitle(string title,
             string panelId = "main") => GetPanel(panelId).Title = title;
         public void SetPanelPos(int x, int y,
             string panelId = "main") => GetPanel(panelId).Pos = (x, y);
         public void SetPanelSize(int width, int height,
             string panelId = "main") => GetPanel(panelId).Size = (width, height);
-        public string GetPanelText(string id, 
+        public string GetPanelText(string id,
             string panelId = "main") => GetPanel(panelId).GetText(id);
-        public void SetPanelText(string id, string text, 
+        public void SetPanelText(string id, string text,
             string panelId = "main") => GetPanel(panelId).SetText(id, text);
-        public void SetPanelLabel(string id, string text, 
+        public void SetPanelLabel(string id, string text,
             string panelId = "main") => GetPanel(panelId).SetLabel(id, text);
-        public void SetPanelColor(string id, Terminal.Gui.ColorScheme color, 
+        public void SetPanelColor(string id, Terminal.Gui.ColorScheme color,
             string panelId = "main") => GetPanel(panelId).SetColor(id, color);
 
         public bool ShowPanelDialog(string id = "", bool showCancel = true,

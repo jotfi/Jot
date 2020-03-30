@@ -18,21 +18,18 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using Dapper.FluentMap;
-using Dapper.FluentMap.Dommel;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using jotfi.Jot.Database.Primitives;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 using jotfi.Jot.Core.Services.Base;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using jotfi.Jot.Database.Classes;
 
 namespace jotfi.Jot.Core.Classes
 {
@@ -66,11 +63,8 @@ namespace jotfi.Jot.Core.Classes
 
         public void Run()
         {
-            FluentMapper.Initialize(config =>
-            {
-                config.AddMap(new AddressMap());
-                config.ForDommel();
-            });
+            var manager = new DbManager(Settings.Database);
+            manager.Run();
         }
 
         /// <summary>

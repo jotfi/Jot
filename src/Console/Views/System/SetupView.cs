@@ -29,6 +29,7 @@ using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using Terminal.Gui;
 
@@ -60,9 +61,9 @@ namespace jotfi.Jot.Console.Views.System
 
         public SetupView(CoreApp core, TerminalView term,
             SystemService setup, UserService users,
-            OrganizationService organizations, 
+            OrganizationService organizations,
             IOptions<AppSettings> settings,
-            ILogger<CoreApp> log)
+            ILogger<SetupView> log)
         {
             Core = core;
             Term = term;
@@ -75,36 +76,44 @@ namespace jotfi.Jot.Console.Views.System
 
         public override bool Run()
         {
-            if (Setup.IsSetup)
+            try
             {
-                return SetupConnection();
+                if (Setup.IsSetup)
+                {
+                    return SetupConnection();
+                }
+                Term.Reset();
+                Term.SetPanelTitle($"Welcome");
+                Term.SetPanelPos(2, 2);
+                Term.SetPanelSize(-4, -4);
+                Term.AddToPanel(new Field(SetupInfo)
+                {
+                    ViewText = Setup.FirstTimeSetupText(),
+                    ViewSize = (-1, 3),
+                    ShowTextField = false
+                });
+                Term.AddToPanel(new Field(AdministratorExistsInfo)
+                {
+                    ViewText = Setup.AdministratorExists.ToCheckMark() + "Create Administrator User",
+                    ShowTextField = false
+                });
+                Term.AddToPanel(new Field(OrganizationExistsInfo)
+                {
+                    ViewText = Setup.OrganizationExists.ToCheckMark() + "Create First Organization",
+                    ShowTextField = false
+                });
+                var ok = GetOkButton("Setup");
+                (ok.X, ok.Y) = (Pos.Center(), 10);
+                ok.Clicked = () => BeginSetup();
+                Term.AddToPanel(ok);
+                Term.ShowPanel();
+                return true;
             }
-            Term.Reset();
-            Term.SetPanelTitle($"Welcome");
-            Term.SetPanelPos(2, 2);
-            Term.SetPanelSize(-4, -4);
-            Term.AddToPanel(new Field(SetupInfo)
+            catch (Exception ex)
             {
-                ViewText = Setup.FirstTimeSetupText(),
-                ViewSize = (-1, 3),
-                ShowTextField = false
-            });
-            Term.AddToPanel(new Field(AdministratorExistsInfo)
-            {
-                ViewText = Setup.AdministratorExists.ToCheckMark() + "Create Administrator User",
-                ShowTextField = false
-            });
-            Term.AddToPanel(new Field(OrganizationExistsInfo)
-            {
-                ViewText = Setup.OrganizationExists.ToCheckMark() + "Create First Organization",
-                ShowTextField = false
-            });
-            var ok = GetOkButton("Setup");
-            (ok.X, ok.Y) = (Pos.Center(), 10);
-            ok.Clicked = () => BeginSetup();
-            Term.AddToPanel(ok);
-            Term.ShowPanel();
-            return true;
+                Log.LogError(ex, ex.Message);
+                return false;
+            }
         }
 
         public bool BeginSetup()
@@ -129,7 +138,7 @@ namespace jotfi.Jot.Console.Views.System
                 }
             }
             return true;
-        }        
+        }
 
         public bool SetupAdministrator(User admin)
         {
@@ -151,7 +160,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     ShowError(error);
                 }
-            }            
+            }
             return ok;
         }
 

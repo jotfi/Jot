@@ -76,7 +76,7 @@ namespace jotfi.Jot.Base.Utils
             // Set the connection string
             rb.WithGlobalConnectionString(CreateConnectionString(settings));
             // Define the assembly containing the migrations
-            rb.ScanIn(typeof(Migrator).Assembly).For.Migrations();
+            rb.ScanIn(typeof(DbManager).Assembly).For.Migrations();
         }
 
         public static string CreateConnectionString(DbSettings settings)
