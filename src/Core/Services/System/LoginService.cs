@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,15 +16,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Services.Base;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace jotfi.Jot.Core.Services.System
 {
     public partial class LoginService : BaseService
     {
-        public LoginService(Application app, LogOpts opts = null) : base(app, opts)
+        public LoginService(IOptions<AppSettings> settings,
+            ILogger<UserService> log) : base(settings)
         {
 
         }

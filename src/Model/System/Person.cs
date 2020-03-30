@@ -31,17 +31,6 @@ namespace jotfi.Jot.Model.System
         public long ContactDetailsId { get; set; }
         public ContactDetails ContactDetails { get; set; } = new ContactDetails();
         public long AddressId { get; set; }
-        public Address Address { get; set; } = new Address();
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()},
-FirstName varchar(255) not null, 
-LastName varchar(255) not null, 
-ContactDetailsId integer,
-AddressId integer);";
-        }       
+        public Address Address { get; set; } = new Address();   
     }
 }

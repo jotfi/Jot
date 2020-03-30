@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,7 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.System;
 using System;
 using System.ComponentModel;
@@ -22,7 +25,7 @@ using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.Base
 {
-    public abstract class Transaction : ITransaction
+    public abstract class Transaction
     {
         public long Id { get; set; }
 
@@ -30,23 +33,7 @@ namespace jotfi.Jot.Model.Base
         public string Hash { get; set; } = "";
 
         [ReadOnly(true)]
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; } = DateTime.MinValue;
-
-        public static string TransactionFields()
-        {
-            return @"
-Id integer primary key autoincrement, 
-Hash varchar(64) not null, 
-CreatedDate datetime default current_timestamp, 
-ModifiedDate datetime";
-        }
-
-        public virtual string TableName()
-        {
-            return GetType().Name;
-        }
-
-        public abstract string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite);
+        public DateTime CreatedAt { get; set; }
+        public DateTime ModifiedAt { get; set; } = DateTime.MinValue;
     }
 }

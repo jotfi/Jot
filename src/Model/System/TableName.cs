@@ -32,10 +32,5 @@ namespace jotfi.Jot.Model.System
 
         [Column("type")]
         public string Type { get; set; }
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

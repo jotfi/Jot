@@ -33,20 +33,5 @@ namespace jotfi.Jot.Model.Primitives
         public string State { get; set; } = "";
         public string PostCode { get; set; } = "";
         public string Country { get; set; } = "";
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()},
-Lot varchar(50) not null, 
-Unit varchar(50) not null, 
-Number varchar(50) not null, 
-Street text not null, 
-City text not null, 
-State text not null, 
-PostCode varchar(50) not null, 
-Country text not null);";
-        }
     }
 }

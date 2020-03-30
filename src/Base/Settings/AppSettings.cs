@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,16 +16,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-using jotfi.Jot.Core.Services.System;
-using jotfi.Jot.Core.Views.Base;
-
-namespace jotfi.Jot.Core.Views.System
+namespace jotfi.Jot.Base.Settings
 {
-    public interface ILoginView
+    public class AppSettings
     {
-        bool ShowLogin();
-        void AddMainMenu();
-
+        public bool IsClient { get; set; }
+        public string Secret { get; set; } = "http://www.jotfi.com/";
+        public bool IsConsole { get; set; }
+        [Display(Name = "Server URL")]
+        public string ServerUrl { get; set; } = "http://localhost:5000";
+        public DbSettings Database { get; set; } = new DbSettings();
     }
 }

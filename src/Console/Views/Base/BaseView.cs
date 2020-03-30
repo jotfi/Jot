@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,82 +16,31 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
 
 using jotfi.Jot.Base.System;
-using jotfi.Jot.Console.Views.Controls;
-using jotfi.Jot.Core.Settings;
-using jotfi.Jot.Core.Services;
-using jotfi.Jot.Core.Services.Base;
-using jotfi.Jot.Core.Views.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Base
 {
-    public abstract class BaseView<T> : BaseControl, IBaseView<T>
+    public abstract class BaseView : BaseControl
     {
-        public Core.Application App { get; }
-        public T Service { get; }
-        public ConsoleApplication ConsoleApp => (ConsoleApplication)App;
-        public ServiceFactory Services => App.Services;
-        public AppSettings AppSettings => App.AppSettings;
-        public Mono.Terminal.MainLoop MainLoop => Terminal.Gui.Application.MainLoop;
-        public Terminal.Gui.Dim DimFill => Terminal.Gui.Dim.Fill();
-        public Terminal.Gui.ColorScheme MenuColor => Terminal.Gui.Colors.Menu;
-        public Terminal.Gui.ColorScheme ErrorColor => Terminal.Gui.Colors.Error;
+        public abstract bool Run();
 
-        private List<Panel> Panels { get; } = new List<Panel>();
-
-        public BaseView(Core.Application app, T service, LogOpts opts = null) 
-            : base(opts)
+        protected virtual void ShowError(string message)
         {
-            App = app;
-            Service = service;
+            var width = 50;
+            var height = message.Split("\r\n").Length + 6;
+            var title = $"{Constants.DefaultApplicationName} Error";
+            MessageBox.ErrorQuery(width, height, title, message, "Ok");
         }
 
-        protected virtual void Reset() => Panels.Clear();
-        protected virtual void AddToTop(Terminal.Gui.View view) => Terminal.Gui.Application.Top.Add(view);
-        protected virtual void AddToPanel(Field field, 
-            string panelId = "main") => GetPanel(panelId).Fields.Add(field);
-        protected virtual void AddToPanel(Terminal.Gui.View view,
-            string panelId = "main") => GetPanel(panelId).Views.Add(view);
-        protected virtual void SetPanelTitle(string title, 
-            string panelId = "main") => GetPanel(panelId).Title = title;
-        protected virtual void SetPanelPos(int x, int y,
-            string panelId = "main") => GetPanel(panelId).Pos = (x, y);
-        protected virtual void SetPanelSize(int width, int height,
-            string panelId = "main") => GetPanel(panelId).Size = (width, height);
-        protected virtual string GetPanelText(string id, 
-            string panelId = "main") => GetPanel(panelId).GetText(id);
-        protected virtual void SetPanelText(string id, string text, 
-            string panelId = "main") => GetPanel(panelId).SetText(id, text);
-        protected virtual void SetPanelLabel(string id, string text, 
-            string panelId = "main") => GetPanel(panelId).SetLabel(id, text);
-        protected virtual void SetPanelColor(string id, Terminal.Gui.ColorScheme color, 
-            string panelId = "main") => GetPanel(panelId).SetColor(id, color);
-
-        protected virtual bool ShowPanelDialog(string id = "", bool showCancel = true,
-            string panelId = "main", string okCaption = "Ok", string cancelCaption = "Cancel")
+        public void Quit()
         {
-            return GetPanel(panelId).ShowDialog(id, showCancel, (okCaption, cancelCaption));
+            var answer = MessageBox.Query(50, 7, $"Quit {Constants.DefaultApplicationName}",
+                $"Are you sure you want to quit {Constants.DefaultApplicationName}?", "Yes", "No");
+            Application.Top.Running = answer == 1;
         }
-
-        protected virtual void ShowPanel(string id = "", string panelId = "main")
-        {
-            GetPanel(panelId).ShowPanel(id);
-        }
-
-        protected Panel GetPanel(string panelId = "main")
-        {
-            if (!Panels.Any(p => p.Id == panelId))
-            {
-                var newPanel = new Panel(ConsoleApp, panelId, Opts);
-                Panels.Add(newPanel);
-                return newPanel;
-            }
-            return Panels.Find(p => p.Id == panelId);
-        }    
     }
 }

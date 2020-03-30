@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,28 +16,29 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Database;
 using jotfi.Jot.Database.Classes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace jotfi.Jot.Api.Controllers.Base
 {
-    public class BaseController<T> : ControllerBase
+    public class BaseController : ControllerBase
     {
-        protected Core.Application App;
-        protected readonly T Service;
+        private readonly AppSettings Settings;
 
-        public BaseController(Core.Application app, T service)
+        public BaseController(IOptions<AppSettings> settings)
         {
-            App = app;
-            Service = service;
+            Settings = settings.Value;
         }
 
         protected DbContext GetContext()
         {
-            return new DbContext(App.AppSettings.Database);
+            return new DbContext(Settings.Database);
         }
     }
 }

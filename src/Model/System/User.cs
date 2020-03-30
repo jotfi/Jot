@@ -47,15 +47,5 @@ namespace jotfi.Jot.Model.System
         [NotMapped]
         [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; } = "";
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()},
-UserName varchar(100) not null, 
-PersonId integer, 
-PasswordId integer);";
-        }
     }
 }

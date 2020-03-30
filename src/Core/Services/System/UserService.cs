@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,14 +16,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
-using jotfi.Jot.Base.System;
+//
+#endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Database.Classes;
-using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -31,14 +34,17 @@ namespace jotfi.Jot.Core.Services.System
 {
     public partial class UserService : BaseService
     {
-        public UserService(Application app, LogOpts opts = null) : base(app, opts)
-        {
+        private readonly ILogger Log;
 
+        public UserService(IOptions<AppSettings> settings,
+            ILogger<UserService> log) : base(settings)
+        {
+            Log = log;
         }
 
         public User Authenticate(string username, string password)
         {
-            if (AppSettings.IsClient)
+            if (Settings.IsClient)
             {
                 return AuthenticateClient(username, password).Result;
             }
@@ -84,7 +90,7 @@ namespace jotfi.Jot.Core.Services.System
         {
             try
             {
-                if (AppSettings.IsClient)
+                if (Settings.IsClient)
                 {
                     return CreateUserClient(user).Result;
                 }
@@ -115,7 +121,7 @@ namespace jotfi.Jot.Core.Services.System
             }
             catch (Exception ex)
             {
-                Log(ex);
+                Log.LogError(ex, ex.Message);
                 return 0;
             }            
         }

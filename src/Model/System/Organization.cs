@@ -31,15 +31,5 @@ namespace jotfi.Jot.Model.System
         public string Name { get; set; } = "";
         public bool CanLogin { get; set; }
         public List<Person> Contacts { get; set; }
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()}, 
-{EntityFields()}, 
-Name text not null,
-CanLogin integer);";
-        }
     }
 }

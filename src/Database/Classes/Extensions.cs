@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,7 +16,9 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
+using FluentMigrator.Builders.Create.Table;
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
@@ -28,9 +32,26 @@ namespace jotfi.Jot.Database.Classes
 {
     public static class Extensions
     {
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithIdColumn(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithColumn("Id")
+                .AsInt32()
+                .NotNullable()
+                .PrimaryKey()
+                .Identity();
+        }
+
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithTimeStamps(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithColumn("CreatedAt").AsDateTime().NotNullable()
+                .WithColumn("ModifiedAt").AsDateTime().NotNullable();
+        }
+
         public static void Init(this Transaction transaction)
         {
-            transaction.ModifiedDate = DateTime.Now;
+            transaction.ModifiedAt = DateTime.Now;
             transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
         }
 

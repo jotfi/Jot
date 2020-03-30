@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,35 +16,43 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Database.Classes;
+using Microsoft.Extensions.Options;
+using System;
 using System.ComponentModel;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 
 namespace jotfi.Jot.Core.Services.Base
 {
-    public class BaseService : Logger, INotifyPropertyChanged
+    public class BaseService
     {
-        public Application App;
-        public Settings.AppSettings AppSettings { get => App.AppSettings; }
-        public DatabaseService Database { get => App.Database; }
-        public ServiceFactory Services { get => App.Services; }
+        protected readonly AppSettings Settings;
+        protected readonly HttpClient Client;
 
-        public BaseService(Application app, LogOpts opts = null) : base(opts)
+        public BaseService(IOptions<AppSettings> settings)
         {
-            App = app;            
+            Settings = settings.Value;
+            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+            Client = new HttpClient
+            {
+                BaseAddress = new Uri(Settings.ServerUrl)
+            };
+            Client.DefaultRequestHeaders.Accept.Clear();
+            Client.DefaultRequestHeaders.Accept.Add(mediaType);
+            //using var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
+            //var response = await Client.GetAsync("user", cts.Token).ConfigureAwait(false);
+            Client.Timeout = new TimeSpan(0, 0, 10);
         }
 
-        protected DbContext GetContext()
+        public DbContext GetContext()
         {
-            return new DbContext(App.AppSettings.Database);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            return new DbContext(Settings.Database);
         }
     }
 }

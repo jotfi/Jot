@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,7 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using System;
 using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
@@ -23,6 +26,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.Base;
@@ -31,6 +35,8 @@ using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace jotfi.Jot.Api.Controllers.System
@@ -38,24 +44,32 @@ namespace jotfi.Jot.Api.Controllers.System
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class UserController : BaseController<UserService>
+    public class UserController : BaseController
     {
-        public UserController(Core.Application app) : base(app, app.Services.System.User)
+        private readonly UserService Users;
+        private readonly AppSettings Settings;
+        private readonly ILogger Log;
+
+        public UserController(UserService users, 
+            IOptions<AppSettings> settings,
+            ILogger<UserService> log) : base(settings)
         {
-            
+            Users = users;
+            Settings = settings.Value;
+            Log = log;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]Authenticate model)
         {
-            var user = Service.Authenticate(model.Username, model.Password);
+            var user = Users.Authenticate(model.Username, model.Password);
             if (user == null)
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Service.App.AppSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -133,7 +147,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var userId = await Service.CreateUserAsync(user);
+            var userId = await Users.CreateUserAsync(user);
             if (userId == 0)
             {
                 return BadRequest();

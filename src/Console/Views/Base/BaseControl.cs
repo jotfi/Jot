@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,7 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.System;
 using System;
 using System.Collections.Generic;
@@ -23,11 +26,11 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Base
 {
-    public abstract class BaseControl : Logger
+    public abstract class BaseControl
     {
         protected bool OkClicked { get; private set; }
 
-        public BaseControl(LogOpts opts = null) : base(opts)
+        public BaseControl()
         {
 
         }

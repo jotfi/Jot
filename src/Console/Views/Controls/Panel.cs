@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,10 +16,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
+using jotfi.Jot.Console.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +32,6 @@ namespace jotfi.Jot.Console.Views.Controls
 {
     public class Panel : BaseControl
     {
-        public ConsoleApplication App { get; }
         public string Id { get; }
         public string Title { get; set; } = "";
         public (int, int) Pos { get; set; } = (1, 1);
@@ -36,9 +39,8 @@ namespace jotfi.Jot.Console.Views.Controls
         public List<Field> Fields { get; } = new List<Field>();
         public List<View> Views { get; } = new List<View>();
 
-        public Panel(ConsoleApplication app, string id, LogOpts opts = null) : base(opts)
+        public Panel(string id)
         {
-            App = app;
             Id = id;
         }
 
@@ -66,12 +68,8 @@ namespace jotfi.Jot.Console.Views.Controls
             return OkClicked;
         }
 
-        public void ShowPanel(string id = "")
+        public FrameView GetFrameView(string id = "")
         {
-            if (Fields.Count() == 0)
-            {
-                return;
-            }
             var window = new FrameView(Title);
             (window.X, window.Y) = Pos.ToPos();
             (window.Width, window.Height) = Size.ToDim();
@@ -82,7 +80,7 @@ namespace jotfi.Jot.Console.Views.Controls
             {
                 window.SetFocus(views.Find(p => p.Id == id));
             }
-            App.AddMain(window);
+            return window;
         }
 
         protected List<View> GetViews()

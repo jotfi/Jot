@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,9 +16,11 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace jotfi.Jot.Core.Services.System
@@ -27,13 +31,13 @@ namespace jotfi.Jot.Core.Services.System
         {
             try
             {
-                var response = App.Client.PostAsync("organization", organization.ToContent()).Result;
+                var response = Client.PostAsync("organization", organization.ToContent()).Result;
                 response.EnsureSuccessStatusCode();
                 return true;
             }
             catch (Exception ex)
             {
-                Log(ex);
+                Log.LogError(ex, ex.Message);
                 return false;
             }
         }

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,18 +16,18 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
+using Dapper.FluentMap.Dommel.Mapping;
+using jotfi.Jot.Model.Primitives;
 
-using jotfi.Jot.Core.Services.System;
-using jotfi.Jot.Core.Views.Base;
-using jotfi.Jot.Model.System;
-
-namespace jotfi.Jot.Core.Views.System
+namespace jotfi.Jot.Database.Primitives
 {
-    public interface ISetupView
+    public class AddressMap : DommelEntityMap<Address>
     {
-        void ShowSetup();
-        bool SetupConnection();
-        bool SetupAdministrator(User admin);
-        bool SetupOrganization(Organization organization);
+        public AddressMap()
+        {
+            Map(p => p.Id).IsKey();
+        }
     }
 }

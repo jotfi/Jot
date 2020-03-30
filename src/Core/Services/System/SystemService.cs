@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,43 +16,38 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
-using jotfi.Jot.Core.Views.Base;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SetupService : BaseService
+    public partial class SystemService : BaseService
     {
-        public SetupService(Application app, LogOpts opts = null) : base(app, opts)
-        {
+        private readonly UserService Users;
+        private readonly ILogger Log;
 
+        public SystemService(IOptions<AppSettings> settings,
+            UserService users,
+            ILogger<UserService> log) : base(settings)
+        {
+            Users = users;
+            Log = log;
         }
 
         public bool CheckConnection(out string error)
         {
-            error = $"Error connecting to {AppSettings.ServerUrl}: ";
+            error = $"Error connecting to {Settings.ServerUrl}: ";
             try
             {
-                var client = App.Client;
-                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
-                client.BaseAddress = new Uri(AppSettings.ServerUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(mediaType);
-                //using var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
-                //var response = await client.GetAsync("user", cts.Token).ConfigureAwait(false);
-                client.Timeout = new TimeSpan(0, 0, 5);
-                var response = client.GetAsync("user").Result;
+                var response = Client.GetAsync("user").Result;
                 if (response.IsSuccessStatusCode)
                 {
                     error = "";
@@ -61,7 +58,7 @@ namespace jotfi.Jot.Core.Services.System
             }
             catch(Exception ex)
             {
-                Log(ex);
+                Log.LogError(ex, ex.Message);
                 error += ex.Message;                
             }
             return false;
@@ -120,10 +117,10 @@ Please enter an organizaton name, this can be edited later.";
         public bool IsAdministratorValid(User user, out string error)
         {
             error = string.Empty;
-            if (!Services.System.User.GetPasswordValid(user.CreatePassword))
+            if (!Users.GetPasswordValid(user.CreatePassword))
             {
                 error += "Invalid password. Password must not be too weak.\r\n";
-                error += Services.System.User.GetPasswordInfo(user.CreatePassword);
+                error += Users.GetPasswordInfo(user.CreatePassword);
                 return false;
             }
             if (user.CreatePassword != user.ConfirmPassword)
@@ -131,7 +128,7 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!Services.System.User.GetEmailValid(user.Person.ContactDetails.EmailAddress))
+            if (!Users.GetEmailValid(user.Person.ContactDetails.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
@@ -150,7 +147,7 @@ Please enter an organizaton name, this can be edited later.";
             {
                 return 0;
             }
-            return Services.System.User.CreateUser(admin);
+            return Users.CreateUser(admin);
         }
 
     }

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,12 +16,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Core.Services.System;
-using jotfi.Jot.Core.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,16 +30,15 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class UserView : BaseView<UserService>, IUserView
+    public class UserView : BaseView
     {
 
-        public UserView(Core.Application app, LogOpts opts = null)
-            : base(app, app.Services.System.User, opts)
+        public UserView()
         {
             
         }
 
-        public void CreateNewUser()
+        public override bool Run()
         {
             throw new NotImplementedException();
         }

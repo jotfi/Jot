@@ -1,4 +1,6 @@
-// Copyright 2020 John Cottrell
+#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,11 +16,15 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using jotfi.Jot.Base.Settings;
+using jotfi.Jot.Base.System;
+using jotfi.Jot.Core.Classes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,25 +40,22 @@ namespace jotfi.Jot.Api
 {
     public class Startup
     {
-        private readonly Core.Application Application;
+        private readonly IWebHostEnvironment Environment;
+        public readonly IConfiguration Configuration;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
+            Environment = env;
             Configuration = configuration;
-            var settings = new Core.Settings.AppSettings()
-            {
-                IsClient = false,
-                Secret = configuration["Secret"]
-            };
-            Application = new Core.Application(settings);
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
-            var key = Encoding.ASCII.GetBytes(Application.AppSettings.Secret);
+        {
+            var appSettingsSection = Configuration.GetSection(Constants.DefaultApplicationName);
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -70,7 +73,7 @@ namespace jotfi.Jot.Api
                     ValidateAudience = false
                 };
             });
-            services.AddSingleton(Application);
+            CoreApp.RegisterServices(services);
             services.AddControllers();
         }
 

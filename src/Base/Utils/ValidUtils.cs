@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,8 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
-using NLog;
+//
+#endregion
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -24,8 +26,6 @@ namespace jotfi.Jot.Base.Utils
 {
     public class ValidUtils
     {
-        static Logger Log { get; } = LogManager.GetLogger(typeof(ValidUtils).FullName);
-
         /// <summary>
         /// Uses a regular expression to verify that a string is in valid email format
         /// https://docs.microsoft.com/en-us/dotnet/standard/base-types/how-to-verify-that-strings-are-in-valid-email-format
@@ -54,14 +54,12 @@ namespace jotfi.Jot.Base.Utils
                     return match.Groups[1].Value + domainName;
                 }
             }
-            catch (RegexMatchTimeoutException e)
+            catch (RegexMatchTimeoutException)
             {
-                Log.Error(e.Message);
                 return false;
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
-                Log.Error(e.Message);
                 return false;
             }
 

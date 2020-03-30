@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,18 +16,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace jotfi.Jot.Base.System
+namespace jotfi.Jot.Desktop
 {
-    public class LogOpts
+    public class BaseViewModel : INotifyPropertyChanged
     {
-        public bool IsConsole { get; set; }
-        public Action<string> ShowLog { get; set; }
-
-        public LogOpts(bool isConsole = false, Action<string> showLog = null) => (IsConsole, ShowLog) = (isConsole, showLog);
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

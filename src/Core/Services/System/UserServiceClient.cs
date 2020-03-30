@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,11 +16,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
@@ -30,7 +34,7 @@ namespace jotfi.Jot.Core.Services.System
         public async Task<User> AuthenticateClient(string username, string password)
         {
             var auth = new Authenticate() { Username = username, Password = password };
-            var response = await App.Client.PostAsync("authenticate", auth.ToContent());
+            var response = await Client.PostAsync("authenticate", auth.ToContent());
             response.EnsureSuccessStatusCode();
             var content = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<User>(content);
@@ -38,7 +42,7 @@ namespace jotfi.Jot.Core.Services.System
 
         public async Task<User> GetUserByIdClient(long id)
         {
-            var response = await App.Client.GetAsync($"user/{id}");
+            var response = await Client.GetAsync($"user/{id}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("Cannot retrieve tasks");
@@ -50,7 +54,7 @@ namespace jotfi.Jot.Core.Services.System
 
         public async Task<User> GetUserByNameClient(string name)
         {
-            var response = await App.Client.GetAsync($"user/{name}");
+            var response = await Client.GetAsync($"user/{name}");
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception("Cannot retrieve tasks");
@@ -64,7 +68,7 @@ namespace jotfi.Jot.Core.Services.System
         {
             try
             {
-                var response = await App.Client.PostAsync("user", user.ToContent());
+                var response = await Client.PostAsync("user", user.ToContent());
                 response.EnsureSuccessStatusCode();
                 var newUserJson = response.Content.ReadAsStringAsync().Result;
                 var newUser = JsonConvert.DeserializeObject<User>(newUserJson);
@@ -72,7 +76,7 @@ namespace jotfi.Jot.Core.Services.System
             }
             catch (Exception ex)
             {
-                Log(ex);
+                Log.LogError(ex, ex.Message);
                 return 0;
             }            
         }

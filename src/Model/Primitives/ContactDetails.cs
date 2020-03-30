@@ -30,16 +30,9 @@ namespace jotfi.Jot.Model.Primitives
     {
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; } = "";
+        
         [NotMapped]
         [Display(Name = "Confirm Email")]
         public string ConfirmEmail { get; set; } = "";
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()},
-EmailAddress text not null);"; 
-        }
     }
 }

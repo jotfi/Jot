@@ -26,13 +26,5 @@ namespace jotfi.Jot.Model.System
     public class ApplicationSettings : Transaction
     {
         public string InstanceName { get; set; }
-
-        public override string CreateTable(DbConnectionTypes dialect = DbConnectionTypes.SQLite)
-        {
-            return $@"
-create table {TableName()}(
-{TransactionFields()},
-InstanceName text not null);";
-        }
     }
 }

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,18 +16,26 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
+using FluentMigrator;
+using jotfi.Jot.Database.Classes;
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace jotfi.Jot.Core.Views.System
+namespace jotfi.Jot.Database.Migrations.Primitives
 {
-    public interface ISystemViews
+    [Migration(20200330)]
+    public class AddAddressTable : Migration
     {
-        Application App { get; }
-        ISetupView Setup { get; }
-        IUserView User { get; }
-        ILoginView Login { get; }
+        public override void Up()
+        {
+            Create.Table("Address")
+                .WithIdColumn()
+                .WithColumn("Text").AsString();
+        }
+
+        public override void Down()
+        {
+            Delete.Table("Address");
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,12 +16,12 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
-using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Core.Services.System;
-using jotfi.Jot.Core.Views.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,16 +29,16 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class LoginView : BaseView<LoginService>, ILoginView
+    public class LoginView : BaseView
     {
+        private readonly TerminalView Term;
 
-        public LoginView(Core.Application app, LogOpts opts = null)
-            : base(app, app.Services.System.Login, opts)
+        public LoginView(TerminalView term)
         {
-            
+            Term = term;
         }
 
-        public bool ShowLogin()
+        public override bool Run()
         {
             var login = new Label("Login: ") { X = 3, Y = 2 };
             var password = new Label("Password: ")
@@ -58,10 +60,10 @@ namespace jotfi.Jot.Console.Views.System
                 Width = Dim.Width(loginText)
             };
 
-            ConsoleApp.AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
+            Term.AddStatus("Press F9 (on Unix, ESC+9 is an alias) to activate the menubar");
 
             // Add some controls, 
-            ConsoleApp.AddMain(
+            Term.AddMain(
                 // The ones with my favorite layout system
                 login, password, loginText, passText,
                         new Button(3, 14, "Ok", true)

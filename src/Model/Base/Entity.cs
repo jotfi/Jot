@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,23 +16,17 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-
+//
+#endregion
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public abstract class Entity : Transaction, ITransaction
+    public abstract class Entity : Transaction
     {
         public string Code { get; set; } = "";
         public string Description { get; set; } = "";
-
-        public static string EntityFields()
-        {
-            return @"
-Code varchar(100) not null,
-Description text not null";
-        }
     }
 }
