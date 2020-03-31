@@ -67,8 +67,8 @@ namespace jotfi.Jot.Database.Migrations.Primitives
             Create.Table("Users")
                 .WithTransactionColumns()
                 .WithColumn("UserName").AsString(50).NotNullable()
-                .WithColumn("PasswordHash").AsString(128)
-                .WithColumn("PasswordSalt").AsString(64)
+                .WithColumn("PasswordHash").AsBinary()
+                .WithColumn("PasswordSalt").AsBinary()
                 .WithColumn("PersonId").AsInt64().NotNullable();
 
             Create.ForeignKey("fk_Users_PersonId_Person_Id")
