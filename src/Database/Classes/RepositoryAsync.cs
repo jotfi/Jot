@@ -40,10 +40,36 @@ namespace jotfi.Jot.Database.Classes
             => UnitOfWork.Connection.CountAsync(predicate);
         public virtual Task<IEnumerable<T>> SelectAsync(Expression<Func<T, bool>> predicate) 
             => UnitOfWork.Connection.SelectAsync(predicate);
-        public virtual Task<IEnumerable<T>> GetAllAsync(bool buffered = true) 
+        public virtual Task<IEnumerable<T>> GetAllAsync() 
             => UnitOfWork.Connection.GetAllAsync<T>();
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T>(Func<T1, T2, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T3, T>(Func<T1, T2, T3, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T3, T4, T>(Func<T1, T2, T3, T4, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T3, T4, T5, T>(Func<T1, T2, T3, T4, T5, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T3, T4, T5, T6, T>(Func<T1, T2, T3, T4, T5, T6, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
+        public virtual Task<IEnumerable<T>> GetAllAsync<T1, T2, T3, T4, T5, T6, T7, T>(Func<T1, T2, T3, T4, T5, T6, T7, T> map, bool buffered = true)
+            => UnitOfWork.Connection.GetAllAsync(map, buffered);
         public virtual Task<T> GetAsync(object id) 
             => UnitOfWork.Connection.GetAsync<T>(id);
+        public virtual Task<T> GetAsync<T1, T2, T>(object id, Func<T1, T2, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+        public virtual Task<T> GetAsync<T1, T2, T3, T>(object id, Func<T1, T2, T3, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+        public virtual Task<T> GetAsync<T1, T2, T3, T4, T>(object id, Func<T1, T2, T3, T4, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+        public virtual Task<T> GetAsync<T1, T2, T3, T4, T5, T>(object id, Func<T1, T2, T3, T4, T5, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+        public virtual Task<T> GetAsync<T1, T2, T3, T4, T5, T6, T>(object id, Func<T1, T2, T3, T4, T5, T6, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+        public virtual Task<T> GetAsync<T1, T2, T3, T4, T5, T6, T7, T>(object id, Func<T1, T2, T3, T4, T5, T6, T7, T> map) where T : class
+            => UnitOfWork.Connection.GetAsync(id, map);
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type
         public virtual Task<bool> DeleteAsync(T obj) 
             => UnitOfWork.Connection.DeleteAsync(obj, UnitOfWork.Transaction);
 
