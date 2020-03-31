@@ -30,20 +30,19 @@ using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Base.System;
 using System.Reflection;
 using System;
+using jotfi.Jot.Core.Services.System;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class TerminalView : BaseView
+    public class TerminalView : BaseView<TerminalView, SystemService>, IConsoleView
     {
-        private readonly ILogger Log;
         private readonly Window MainWindow;
         private readonly MenuBar MainMenu;
         private readonly Toplevel StatusBar;
         private List<Panel> Panels { get; } = new List<Panel>();
 
-        public TerminalView(ILogger<TerminalView> log)
+        public TerminalView(IServiceProvider services) : base(services)
         {
-            Log = log;
             try
             {
                 Application.Init();
@@ -77,7 +76,7 @@ namespace jotfi.Jot.Console.Views.System
             }
         }
 
-        public override bool Run()
+        public bool Run()
         {
             try
             {

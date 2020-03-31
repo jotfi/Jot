@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Views;
 using jotfi.Jot.Console.Views.Base;
@@ -26,6 +27,7 @@ using jotfi.Jot.Core.Classes;
 using jotfi.Jot.Core.Services.System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -33,21 +35,21 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Classes
 {
-    public class ConsoleApp 
+    public class ConsoleApp
     {
-        private readonly CoreApp App;
+        private readonly CoreApp Core;
+        private readonly ILogger Log;
+        private readonly AppSettings Settings;
         private readonly TerminalView Term;
         private readonly SetupView Setup;
-        private readonly ILogger Log;
 
-        public ConsoleApp(CoreApp app, 
-            TerminalView term, SetupView setup,
-            ILogger<ConsoleApp> log)
+        public ConsoleApp(IServiceProvider services) 
         {
-            App = app;
-            Term = term;
-            Setup = setup;
-            Log = log;
+            Core = services.GetRequiredService<CoreApp>();
+            Log = services.GetRequiredService<ILogger<ConsoleApp>>();
+            Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
+            Term = services.GetRequiredService<TerminalView>();
+            Setup = services.GetRequiredService<SetupView>();
         }
 
         public static void RegisterServices(IServiceCollection services)
@@ -56,7 +58,7 @@ namespace jotfi.Jot.Console.Classes
             var serviceTypes =
                 from type in assembly.GetTypes()
                 where !type.IsAbstract
-                where typeof(BaseView).IsAssignableFrom(type)
+                where typeof(IConsoleView).IsAssignableFrom(type)
                 select type;
             foreach (var type in serviceTypes)
             {
@@ -70,7 +72,7 @@ namespace jotfi.Jot.Console.Classes
             try
             {
                 Term.AddStatus($"Version: {Assembly.GetEntryAssembly().GetName().Version}");
-                App.Run();
+                Core.Run();
                 if (!Setup.Run())
                 {
                     return;

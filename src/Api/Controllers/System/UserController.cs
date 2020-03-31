@@ -44,19 +44,11 @@ namespace jotfi.Jot.Api.Controllers.System
     [Authorize]
     [Route("[controller]")]
     [ApiController]
-    public class UserController : BaseController
+    public class UserController : BaseController<UserController, UserService>
     {
-        private readonly UserService Users;
-        private readonly AppSettings Settings;
-        private readonly ILogger Log;
 
-        public UserController(UserService users,
-            IOptions<AppSettings> settings,
-            ILogger<UserService> log) : base(settings)
+        public UserController(IServiceProvider services) : base(services)
         {
-            Users = users;
-            Settings = settings.Value;
-            Log = log;
         }
 
         [AllowAnonymous]
@@ -65,7 +57,7 @@ namespace jotfi.Jot.Api.Controllers.System
         {
             try
             {
-                var user = Users.Authenticate(model.Username, model.Password);
+                var user = MainService.Authenticate(model.Username, model.Password);
                 if (user == null)
                 {
                     return BadRequest(new { message = "Username or password is incorrect" });
@@ -155,7 +147,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var userId = await Users.CreateUserAsync(user);
+            var userId = await MainService.CreateUserAsync(user);
             if (userId == 0)
             {
                 return BadRequest();

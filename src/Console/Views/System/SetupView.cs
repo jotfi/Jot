@@ -27,6 +27,7 @@ using jotfi.Jot.Console.Views.Controls;
 using jotfi.Jot.Core.Classes;
 using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -35,7 +36,7 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class SetupView : BaseView
+    public class SetupView : BaseView<SetupView, SystemService>, IConsoleView
     {
         private bool ValidPassword;
         private bool ValidEmail;
@@ -51,34 +52,22 @@ namespace jotfi.Jot.Console.Views.System
         const string OrganizationInfo = "OrganizationInfo";
         const string OrganizationNameInfo = "OrganizationNameInfo";
 
-        private readonly CoreApp Core;
         private readonly TerminalView Term;
-        private readonly SystemService Setup;
         private readonly UserService Users;
         private readonly OrganizationService Organizations;
-        private readonly AppSettings Settings;
-        private readonly ILogger Log;
 
-        public SetupView(CoreApp core, TerminalView term,
-            SystemService setup, UserService users,
-            OrganizationService organizations,
-            IOptions<AppSettings> settings,
-            ILogger<SetupView> log)
+        public SetupView(IServiceProvider services) : base(services)
         {
-            Core = core;
-            Term = term;
-            Setup = setup;
-            Users = users;
-            Organizations = organizations;
-            Settings = settings.Value;
-            Log = log;
+            Term = services.GetRequiredService<TerminalView>();
+            Users = services.GetRequiredService<UserService>();
+            Organizations = services.GetRequiredService<OrganizationService>();
         }
 
-        public override bool Run()
+        public bool Run()
         {
             try
             {
-                if (Setup.IsSetup)
+                if (MainService.IsSetup)
                 {
                     return SetupConnection();
                 }
@@ -88,18 +77,18 @@ namespace jotfi.Jot.Console.Views.System
                 Term.SetPanelSize(-4, -4);
                 Term.AddToPanel(new Field(SetupInfo)
                 {
-                    ViewText = Setup.FirstTimeSetupText(),
+                    ViewText = MainService.FirstTimeSetupText(),
                     ViewSize = (-1, 3),
                     ShowTextField = false
                 });
                 Term.AddToPanel(new Field(AdministratorExistsInfo)
                 {
-                    ViewText = Setup.AdministratorExists.ToCheckMark() + "Create Administrator User",
+                    ViewText = MainService.AdministratorExists.ToCheckMark() + "Create Administrator User",
                     ShowTextField = false
                 });
                 Term.AddToPanel(new Field(OrganizationExistsInfo)
                 {
-                    ViewText = Setup.OrganizationExists.ToCheckMark() + "Create First Organization",
+                    ViewText = MainService.OrganizationExists.ToCheckMark() + "Create First Organization",
                     ShowTextField = false
                 });
                 var ok = GetOkButton("Setup");
@@ -122,14 +111,14 @@ namespace jotfi.Jot.Console.Views.System
             User admin = null;
             if (admin == null)
             {
-                admin = Setup.CreateAdminUser();
+                admin = MainService.CreateAdminUser();
                 if (!SetupAdministrator(admin))
                 {
                     return false;
                 }
                 admin.UserName.IsEqualTo(Constants.DefaultAdministratorName);
             }
-            if (!Setup.OrganizationExists)
+            if (!MainService.OrganizationExists)
             {
                 var organiation = new Organization();
                 if (!SetupOrganization(organiation))
@@ -150,7 +139,7 @@ namespace jotfi.Jot.Console.Views.System
                 {
                     break;
                 }
-                var id = Setup.SaveAdministrator(admin, out string error);
+                var id = MainService.SaveAdministrator(admin, out string error);
                 ok = id > 0;
                 if (ok)
                 {
@@ -171,7 +160,7 @@ namespace jotfi.Jot.Console.Views.System
             Term.AddToPanel(new Field(AdministratorInfo)
             {
                 ShowTextField = false,
-                ViewText = Setup.CreateAdministratorText(),
+                ViewText = MainService.CreateAdministratorText(),
                 ViewSize = (-1, 4)
             });
             Term.AddToPanel(new Field(nameof(admin.CreatePassword), admin)
@@ -271,7 +260,7 @@ namespace jotfi.Jot.Console.Views.System
             Term.AddToPanel(new Field(OrganizationInfo)
             {
                 ShowTextField = false,
-                ViewText = Setup.FirstOrganizationText(),
+                ViewText = MainService.FirstOrganizationText(),
                 ViewSize = (-1, 4)
             });
             Term.AddToPanel(new Field(nameof(organization.Name), organization)
@@ -308,7 +297,7 @@ namespace jotfi.Jot.Console.Views.System
                 }
                 if (Settings.IsClient)
                 {
-                    ok = Setup.CheckConnection(out string error);
+                    ok = MainService.CheckConnection(out string error);
                     if (!ok)
                     {
                         ShowError(error);
@@ -328,7 +317,7 @@ namespace jotfi.Jot.Console.Views.System
             Term.SetPanelTitle($"Connect to {Constants.DefaultApplicationName} server");
             Term.AddToPanel(new Field(ServerInfo)
             {
-                ViewText = Setup.ServerConnectionText(),
+                ViewText = MainService.ServerConnectionText(),
                 ViewSize = (-1, 3),
                 ShowTextField = false
             });
@@ -366,7 +355,7 @@ namespace jotfi.Jot.Console.Views.System
                     }
                     else
                     {
-                        serverValid = Setup.IsServerValid(text);
+                        serverValid = MainService.IsServerValid(text);
                         var urlInfo = serverValid ? "" : "Invalid server URL";
                         Term.MainLoop.Invoke(() => Term.SetPanelLabel(ServerUrlInfo, urlInfo));
                     }

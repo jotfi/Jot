@@ -19,21 +19,26 @@
 //
 #endregion
 using jotfi.Jot.Base.Settings;
-using jotfi.Jot.Core.Services.Base;
-using jotfi.Jot.Database;
 using jotfi.Jot.Database.Classes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace jotfi.Jot.Api.Controllers.Base
 {
-    public class BaseController : ControllerBase
+    public class BaseController<T, U> : ControllerBase
     {
-        private readonly AppSettings Settings;
+        protected readonly ILogger Log;
+        protected readonly U MainService;
+        protected readonly AppSettings Settings;
 
-        public BaseController(IOptions<AppSettings> settings)
+        public BaseController(IServiceProvider services)
         {
-            Settings = settings.Value;
+            Log = services.GetRequiredService<ILogger<T>>();
+            MainService = services.GetRequiredService<U>();
+            Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
         }
 
         protected DbContext GetContext()

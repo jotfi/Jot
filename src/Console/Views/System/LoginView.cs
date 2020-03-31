@@ -22,6 +22,7 @@ using jotfi.Jot.Base.System;
 using jotfi.Jot.Console.Classes;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Core.Services.System;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,16 +30,16 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class LoginView : BaseView
+    public class LoginView : BaseView<LoginView, SystemService>, IConsoleView
     {
         private readonly TerminalView Term;
 
-        public LoginView(TerminalView term)
+        public LoginView(IServiceProvider services) : base(services)
         {
-            Term = term;
+            Term = services.GetRequiredService<TerminalView>();
         }
 
-        public override bool Run()
+        public bool Run()
         {
             var login = new Label("Login: ") { X = 3, Y = 2 };
             var password = new Label("Password: ")

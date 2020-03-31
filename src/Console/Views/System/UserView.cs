@@ -30,15 +30,15 @@ using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.System
 {
-    public class UserView : BaseView
+    public class UserView : BaseView<UserView, UserService>, IConsoleView
     {
 
-        public UserView()
+        public UserView(IServiceProvider services) : base(services)
         {
             
         }
 
-        public override bool Run()
+        public bool Run()
         {
             throw new NotImplementedException();
         }

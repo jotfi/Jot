@@ -19,14 +19,32 @@
 //
 #endregion
 
+using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
+using jotfi.Jot.Console.Classes;
+using jotfi.Jot.Core.Classes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Views.Base
 {
-    public abstract class BaseView : BaseControl
+    public abstract class BaseView<T, U> : BaseControl
     {
-        public abstract bool Run();
+        protected readonly CoreApp Core;
+        protected readonly ILogger Log;
+        protected readonly U MainService;
+        protected readonly AppSettings Settings;
+
+        public BaseView(IServiceProvider services)
+        {
+            Core = services.GetRequiredService<CoreApp>();
+            Log = services.GetRequiredService<ILogger<T>>();
+            MainService = services.GetRequiredService<U>();
+            Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
+        }
 
         protected virtual void ShowError(string message)
         {
