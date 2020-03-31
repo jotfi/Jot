@@ -18,24 +18,20 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using FluentMigrator;
-using jotfi.Jot.Database.Classes;
+using Dapper.FluentMap.Dommel.Mapping;
+using jotfi.Jot.Model.System;
 
-namespace jotfi.Jot.Database.Migrations.Primitives
+namespace jotfi.Jot.Database.Primitives
 {
-    [Migration(20200330)]
-    public class AddAddressTable : Migration
+    public class UserMap : DommelEntityMap<User>
     {
-        public override void Up()
+        public UserMap()
         {
-            Create.Table("Address")
-                .WithIdColumn()
-                .WithColumn("Text").AsString();
-        }
-
-        public override void Down()
-        {
-            Delete.Table("Address");
+            ToTable("Users");
+            Map(p => p.Id).IsKey().IsIdentity();
+            Map(p => p.Token).Ignore();
+            Map(p => p.CreatePassword).Ignore();
+            Map(p => p.ConfirmPassword).Ignore();
         }
     }
 }

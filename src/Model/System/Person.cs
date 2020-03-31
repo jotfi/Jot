@@ -28,8 +28,8 @@ namespace jotfi.Jot.Model.System
     {
         public string FirstName { get; set; } = "";
         public string LastName { get; set; } = "";
-        public long ContactDetailsId { get; set; }
-        public ContactDetails ContactDetails { get; set; } = new ContactDetails();
+        public long ContactDetailId { get; set; }
+        public ContactDetail ContactDetails { get; set; } = new ContactDetail();
         public long AddressId { get; set; }
         public Address Address { get; set; } = new Address();   
     }

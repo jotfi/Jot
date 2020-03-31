@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+using FluentMigrator;
 using FluentMigrator.Builders.Create.Table;
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Base.System;
@@ -32,22 +33,6 @@ namespace jotfi.Jot.Database.Classes
 {
     public static class Extensions
     {
-        public static ICreateTableColumnOptionOrWithColumnSyntax WithIdColumn(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
-        {
-            return tableWithColumnSyntax
-                .WithColumn("Id")
-                .AsInt32()
-                .NotNullable()
-                .PrimaryKey()
-                .Identity();
-        }
-
-        public static ICreateTableColumnOptionOrWithColumnSyntax WithTimeStamps(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
-        {
-            return tableWithColumnSyntax
-                .WithColumn("CreatedAt").AsDateTime().NotNullable()
-                .WithColumn("ModifiedAt").AsDateTime().NotNullable();
-        }
 
         public static void Init(this Transaction transaction)
         {
@@ -69,5 +54,37 @@ namespace jotfi.Jot.Database.Classes
             return repository.InsertAsync(transaction);
         }
 
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithIdColumn(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithColumn("Id")
+                .AsInt64()
+                .NotNullable()
+                .PrimaryKey()
+                .Identity();
+        }
+
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithTimeStamps(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("ModifiedAt").AsDateTime().NotNullable();
+        }
+
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithTransactionColumns(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithIdColumn()
+                .WithColumn("Hash").AsAnsiString(64).NotNullable()
+                .WithTimeStamps();
+        }
+
+        public static ICreateTableColumnOptionOrWithColumnSyntax WithEntityColumns(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
+        {
+            return tableWithColumnSyntax
+                .WithTransactionColumns()
+                .WithColumn("Code").AsAnsiString(8).NotNullable()
+                .WithColumn("Description").AsString(255).NotNullable();
+        }
     }
 }

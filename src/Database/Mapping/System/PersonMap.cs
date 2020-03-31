@@ -18,21 +18,17 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using System;
-using System.ComponentModel;
-using System.Text.Json.Serialization;
+using Dapper.FluentMap.Dommel.Mapping;
+using jotfi.Jot.Model.System;
 
-namespace jotfi.Jot.Model.Base
+namespace jotfi.Jot.Database.Primitives
 {
-    public abstract class Transaction
+    public class PersonMap : DommelEntityMap<Person>
     {
-        public long Id { get; set; }
-
-        [JsonIgnore]
-        public string Hash { get; set; } = "";
-
-        [ReadOnly(true)]
-        public DateTime CreatedAt { get; set; }
-        public DateTime ModifiedAt { get; set; } = DateTime.MinValue;
+        public PersonMap()
+        {
+            ToTable("Persons");
+            Map(p => p.Id).IsKey().IsIdentity();
+        }
     }
 }

@@ -26,7 +26,7 @@ using System.Text;
 
 namespace jotfi.Jot.Model.Primitives
 {
-    public class ContactDetails : Transaction
+    public class ContactDetail : Transaction
     {
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; } = "";
@@ -34,5 +34,14 @@ namespace jotfi.Jot.Model.Primitives
         [NotMapped]
         [Display(Name = "Confirm Email")]
         public string ConfirmEmail { get; set; } = "";
+
+        [Display(Name = "Mobile Phone")]
+        public string MobilePhone { get; set; } = "";
+
+        [Display(Name = "Home Phone")]
+        public string HomePhone { get; set; } = "";
+
+        [Display(Name = "Work Phone")]
+        public string WorkPhone { get; set; } = "";
     }
 }

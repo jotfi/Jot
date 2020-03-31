@@ -88,6 +88,7 @@ namespace jotfi.Jot.Api.Controllers.System
 
         // GET: user
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
             using var context = GetContext();

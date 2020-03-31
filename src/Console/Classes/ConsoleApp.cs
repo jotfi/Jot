@@ -19,19 +19,15 @@
 //
 #endregion
 using jotfi.Jot.Base.Settings;
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Console.Views;
 using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Console.Views.System;
 using jotfi.Jot.Core.Classes;
-using jotfi.Jot.Core.Services.System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Reflection;
-using Terminal.Gui;
 
 namespace jotfi.Jot.Console.Classes
 {

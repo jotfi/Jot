@@ -27,7 +27,8 @@ namespace jotfi.Jot.Database.Primitives
     {
         public AddressMap()
         {
-            Map(p => p.Id).IsKey();
+            ToTable("Address");
+            Map(p => p.Id).IsKey().IsIdentity();
         }
     }
 }

@@ -45,6 +45,9 @@ namespace jotfi.Jot.Database.Classes
             FluentMapper.Initialize(config =>
             {
                 config.AddMap(new AddressMap());
+                config.AddMap(new ContactDetailMap());
+                config.AddMap(new PersonMap());
+                config.AddMap(new UserMap());
                 config.ForDommel();
             });
             var serviceProvider = CreateServices();
