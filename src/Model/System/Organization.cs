@@ -25,11 +25,11 @@ using System.Text;
 
 namespace jotfi.Jot.Model.System
 {
-    public class Organization : Entity
+    public class Organization : Transaction
     {
         [Display(Name = "Organization Name")]
-        public string Name { get; set; } = "";
+        public string? Name { get; set; }
         public bool CanLogin { get; set; }
-        public List<Person> Contacts { get; set; }
+        public List<Person>? Contacts { get; set; }
     }
 }

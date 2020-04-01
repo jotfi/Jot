@@ -22,6 +22,7 @@ using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -69,17 +70,26 @@ namespace jotfi.Jot.Core.Services.System
 
         public User CreateAdminUser()
         {
-            var admin = new User() { UserName = Constants.DefaultAdministratorName };
-            admin.Person.FirstName = "Admin";
-            admin.Person.LastName = "System";
+            var admin = new User() 
+            { 
+                UserName = Constants.DefaultAdministratorName,
 #if DEBUG
-            var password = "admin1!";
-            admin.CreatePassword = password;
-            admin.ConfirmPassword = password;
-            var email = "admin@admin.com";
-            admin.Person.ContactDetails.EmailAddress = email;
-            admin.Person.ContactDetails.ConfirmEmail = email;
+                CreatePassword = "admin1!",
+                ConfirmPassword = "admin1!",
 #endif
+                Person = new Person()
+                {
+                    FirstName = "Admin",
+                    LastName = "System",
+                    Data = new ContactData()
+                    {
+#if DEBUG
+                        EmailAddress = "admin@admin.com",
+                        ConfirmEmail = "admin@admin.com"
+#endif
+                    }
+                }
+            };
             return admin;
         }
 
@@ -128,12 +138,12 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!Users.GetEmailValid(user.Person.ContactDetails.EmailAddress))
+            if (!Users.GetEmailValid(user.Person.Data.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
             }
-            if (user.Person.ContactDetails.EmailAddress != user.Person.ContactDetails.ConfirmEmail)
+            if (user.Person.Data.EmailAddress != user.Person.Data.ConfirmEmail)
             {
                 error += "Invalid email. Confirm email does not match.";
                 return false;

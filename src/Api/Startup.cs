@@ -25,6 +25,7 @@ using System.Text;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Classes;
+using jotfi.Jot.Database.Classes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -76,8 +77,11 @@ namespace jotfi.Jot.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
+            var core = services.GetRequiredService<CoreApp>();
+            core.Run();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

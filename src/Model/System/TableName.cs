@@ -28,9 +28,9 @@ namespace jotfi.Jot.Model.System
     public class TableName : Transaction
     {
         [Column("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Column("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
     }
 }

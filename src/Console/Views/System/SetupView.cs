@@ -26,6 +26,7 @@ using jotfi.Jot.Console.Views.Base;
 using jotfi.Jot.Console.Views.Controls;
 using jotfi.Jot.Core.Classes;
 using jotfi.Jot.Core.Services.System;
+using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -107,8 +108,14 @@ namespace jotfi.Jot.Console.Views.System
 
         public bool BeginSetup()
         {
-            //var admin = Services.System.User.GetUserByName(Constants.DefaultAdministratorName);
-            User admin = null;
+            using var context = MainService.GetContext();
+            var repository = new Repository<User>(context.UnitOfWork);
+            var admin = repository.Get<User, Person, User>(1, (u, p) =>
+            {
+                u.Person = p;
+                return u;
+            });
+            //User admin = null;
             if (admin == null)
             {
                 admin = MainService.CreateAdminUser();
@@ -196,19 +203,19 @@ namespace jotfi.Jot.Console.Views.System
             {
                 ShowTextField = false
             });
-            Term.AddToPanel(new Field(nameof(admin.Person.ContactDetails.EmailAddress), admin.Person.ContactDetails)
+            Term.AddToPanel(new Field(nameof(admin.Person.Data.EmailAddress), admin.Person.Data)
             {
                 TextChanged = (text) =>
                 {
                     ValidEmail = Users.GetPasswordValid(text);
-                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.ContactDetails.ConfirmEmail)) == text;
+                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Data.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
                     Term.MainLoop.Invoke(() => Term.SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = ValidEmail && emailsMatch ? Term.MenuColor : Term.ErrorColor;
                     Term.MainLoop.Invoke(() => Term.SetPanelColor(AdministratorEmailInfo, infoColor));
                 }
             });
-            Term.AddToPanel(new Field(nameof(admin.Person.ContactDetails.ConfirmEmail), admin.Person.ContactDetails)
+            Term.AddToPanel(new Field(nameof(admin.Person.Data.ConfirmEmail), admin.Person.Data)
             {
                 TextChanged = (text) =>
                 {
@@ -216,7 +223,7 @@ namespace jotfi.Jot.Console.Views.System
                     {
                         return;
                     }
-                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.ContactDetails.EmailAddress)) == text;
+                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Data.EmailAddress)) == text;
                     var emailInfo = emailsMatch ? "" : "Emails do not match";
                     Term.MainLoop.Invoke(() => Term.SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = emailsMatch ? Term.MenuColor : Term.ErrorColor;

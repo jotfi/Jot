@@ -46,8 +46,6 @@ namespace jotfi.Jot.Core.Services.System
                     PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
                     user.PasswordHash = hash;
                     user.PasswordSalt = salt;
-                    user.Person.ContactDetailId = (long)await user.Person.ContactDetails.InsertAsync(unitOfWork);
-                    user.Person.AddressId = (long)await user.Person.Address.InsertAsync(unitOfWork);
                     user.PersonId = (long)await user.Person.InsertAsync(unitOfWork);
                     userId = (long)await user.InsertAsync(unitOfWork);
                     user.Id = userId;

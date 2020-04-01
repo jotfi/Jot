@@ -28,41 +28,16 @@ namespace jotfi.Jot.Database.Migrations.Primitives
     {
         public override void Up()
         {
-            Create.Table("Address")
-                .WithTransactionColumns()
-                .WithColumn("Lot").AsString(50).NotNullable()
-                .WithColumn("Unit").AsString(50).NotNullable()
-                .WithColumn("Number").AsString(50).NotNullable()
-                .WithColumn("Street").AsString(255).NotNullable()
-                .WithColumn("City").AsString(255).NotNullable()
-                .WithColumn("State").AsString(255).NotNullable()
-                .WithColumn("PostCode").AsString(50).NotNullable()
-                .WithColumn("Country").AsString(255).NotNullable();
-
-            Create.Table("ContactDetails")
-                .WithTransactionColumns()
-                .WithColumn("EmailAddress").AsString(255).NotNullable()
-                .WithColumn("MobilePhone").AsString(50).NotNullable()
-                .WithColumn("HomePhone").AsString(50).NotNullable()
-                .WithColumn("WorkPhone").AsString(50).NotNullable();
 
             Create.Table("Persons")
                 .WithEntityColumns()
                 .WithColumn("FirstName").AsString(255).NotNullable()
                 .WithColumn("LastName").AsString(255).NotNullable()
-                .WithColumn("ContactDetailId").AsInt64().NotNullable()
-                .WithColumn("AddressId").AsInt64().NotNullable();
+                .WithColumn("Data").AsString().Nullable()
+                .WithColumn("Address").AsString().Nullable();
 
             Create.Index("ix_Code").OnTable("Persons").OnColumn("Code")
                 .Ascending().WithOptions().NonClustered();
-
-            Create.ForeignKey("fk_Persons_ContactDetailId_ContactDetail_Id")
-                .FromTable("Persons").ForeignColumn("ContactDetailId")
-                .ToTable("ContactDetail").PrimaryColumn("Id");
-
-            Create.ForeignKey("fk_Persons_AddressId_Address_Id")
-                .FromTable("Persons").ForeignColumn("AddressId")
-                .ToTable("Address").PrimaryColumn("Id");
 
             Create.Table("Users")
                 .WithTransactionColumns()

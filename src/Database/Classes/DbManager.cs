@@ -18,12 +18,12 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using Dapper.FluentMap;
-using Dapper.FluentMap.Dommel;
+
+using Dommel.Json;
 using FluentMigrator.Runner;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.Utils;
-using jotfi.Jot.Database.Primitives;
+using jotfi.Jot.Model.System;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -42,14 +42,7 @@ namespace jotfi.Jot.Database.Classes
 
         public void Run()
         {
-            FluentMapper.Initialize(config =>
-            {
-                config.AddMap(new AddressMap());
-                config.AddMap(new ContactDetailMap());
-                config.AddMap(new PersonMap());
-                config.AddMap(new UserMap());
-                config.ForDommel();
-            });
+            DommelJsonMapper.AddJson(typeof(Person).Assembly);
             var serviceProvider = CreateServices();
 
             // Put the database update into a scope to ensure

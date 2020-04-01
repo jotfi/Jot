@@ -15,23 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Model.Base;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace jotfi.Jot.Model.Primitives
+namespace jotfi.Jot.Model.Base
 {
-    public class Address : Transaction
+    public class Address
     {
-        public string Lot { get; set; } = "";
-        public string Unit { get; set; } = "";
-        public string Number { get; set; } = "";
-        public string Street { get; set; } = "";
-        public string City { get; set; } = "";
-        public string State { get; set; } = "";
-        public string PostCode { get; set; } = "";
-        public string Country { get; set; } = "";
+        public string? Lot { get; set; }
+        public string? Unit { get; set; }
+        public string? Number { get; set; }
+        public string? Street { get; set; }
+        public string? City { get; set; }
+        public string? State { get; set; }
+        public string? PostCode { get; set; }
+        public string? Country { get; set; }
     }
 }

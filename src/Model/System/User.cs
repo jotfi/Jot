@@ -15,37 +15,31 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
-using jotfi.Jot.Base.System;
+using Dommel;
 using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.System
 {
     public class User : Transaction
     {
-        public string UserName { get; set; } = "";
+        public string? UserName { get; set; }
         [JsonIgnore]
-        public byte[] PasswordHash { get; set; }
+        public byte[]? PasswordHash { get; set; }
         [JsonIgnore]
-        public byte[] PasswordSalt { get; set; }
+        public byte[]? PasswordSalt { get; set; }
         public long PersonId { get; set; }
         public Person Person { get; set; } = new Person();
 
-        [NotMapped]
-        public string Token { get; set; }
+        [Ignore, NotMapped]
+        public string? Token { get; set; }
 
-        [NotMapped]
-        [Display(Name = "User Password")]
-        public string CreatePassword { get; set; } = "";
+        [Ignore, NotMapped, Display(Name = "User Password")]
+        public string? CreatePassword { get; set; }
 
-        [NotMapped]
-        [Display(Name = "Confirm Password")]
-        public string ConfirmPassword { get; set; } = "";
+        [Ignore, NotMapped, Display(Name = "Confirm Password")]
+        public string? ConfirmPassword { get; set; }
     }
 }

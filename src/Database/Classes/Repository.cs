@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using Dommel;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Model.Base;
@@ -27,6 +28,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 
+#pragma warning disable CS0693 // Type parameter has the same name as the type parameter from outer type
 namespace jotfi.Jot.Database.Classes
 {
     public partial class Repository<T> where T : Transaction
@@ -40,15 +42,41 @@ namespace jotfi.Jot.Database.Classes
 
         public virtual bool Exists() => Count(p => p.Id > 0) > 0;
         public virtual long Count(Expression<Func<T, bool>> predicate) => UnitOfWork.Connection.Count(predicate);
+        public virtual long Count<T>(Expression<Func<T, bool>> predicate) where T : Entity => UnitOfWork.Connection.Count(predicate);
         public virtual IEnumerable<T> Select(Expression<Func<T, bool>> predicate,
-            bool buffered = true) => UnitOfWork.Connection.Select(predicate, buffered);
-        public virtual IEnumerable<T> GetAll(bool buffered = true) => UnitOfWork.Connection.GetAll<T>(buffered);
+            bool buffered = true) => UnitOfWork.Connection.Select(predicate, UnitOfWork.Transaction, buffered);
+        public virtual IEnumerable<T> GetAll(bool buffered = true) => UnitOfWork.Connection.GetAll<T>(UnitOfWork.Transaction, buffered);
         public virtual T Get(object id) => UnitOfWork.Connection.Get<T>(id);
+        public virtual T Get<T1, T2, T>(object id, Func<T1, T2, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
+        public virtual T Get<T1, T2, T3, T>(object id, Func<T1, T2, T3, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
+        public virtual T Get<T1, T2, T3, T4, T>(object id, Func<T1, T2, T3, T4, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
+        public virtual T Get<T1, T2, T3, T4, T5, T>(object id, Func<T1, T2, T3, T4, T5, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
+        public virtual T Get<T1, T2, T3, T4, T5, T6, T>(object id, Func<T1, T2, T3, T4, T5, T6, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
+        public virtual T Get<T1, T2, T3, T4, T5, T6, T7, T>(object id, Func<T1, T2, T3, T4, T5, T6, T7, T> map) where T : class
+            => UnitOfWork.Connection.Get(id, map);
         public virtual bool Delete(T obj) => UnitOfWork.Connection.Delete(obj, UnitOfWork.Transaction);
 
         public virtual object Insert(T obj)
         {
             obj.Init();
+            return UnitOfWork.Connection.Insert(obj, UnitOfWork.Transaction);
+        }
+
+        public virtual object InsertEntity<T>(T obj) where T : Entity
+        {
+            obj.Init();
+            var code = obj.GetCodePrefix();
+            var seq = Count<T>(p => p.Code == code) + 1;
+            obj.SetCode(seq);
+            if (obj.Description == null)
+            {
+                obj.Description = string.Empty;
+            }
             return UnitOfWork.Connection.Insert(obj, UnitOfWork.Transaction);
         }
 
@@ -59,3 +87,4 @@ namespace jotfi.Jot.Database.Classes
         }
     }
 }
+#pragma warning restore CS0693 // Type parameter has the same name as the type parameter from outer type

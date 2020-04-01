@@ -29,10 +29,10 @@ namespace jotfi.Jot.Model.Base
         public long Id { get; set; }
 
         [JsonIgnore]
-        public string Hash { get; set; } = "";
+        public string? Hash { get; set; }
 
         [ReadOnly(true)]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.MinValue;
         public DateTime ModifiedAt { get; set; } = DateTime.MinValue;
     }
 }

@@ -25,6 +25,6 @@ namespace jotfi.Jot.Model.System
 {
     public class ApplicationSettings : Transaction
     {
-        public string InstanceName { get; set; }
+        public string? InstanceName { get; set; }
     }
 }

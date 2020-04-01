@@ -3,9 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>jotfi.Jot.Model</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Dommel\src\Dommel.Json\Dommel.Json.csproj" />
     <ProjectReference Include="..\Base\Base.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,23 +16,16 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
 
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace jotfi.Jot.Model.System
+namespace jotfi.Jot.Model.Base
 {
-    public class Person : Entity 
+    public interface IEntity
     {
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
-        public long ContactDetailId { get; set; }
-        public ContactDetail ContactDetails { get; set; } = new ContactDetail();
-        public long AddressId { get; set; }
-        public Address Address { get; set; } = new Address();   
+        string? Code { get; set; }
+        string? Description { get; set; }
+        string GetCodePrefix();
+        void SetCode(long seq);
     }
 }

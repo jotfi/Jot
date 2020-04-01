@@ -15,33 +15,27 @@
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 
-
-using jotfi.Jot.Base.System;
-using jotfi.Jot.Model.Base;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace jotfi.Jot.Model.Primitives
+namespace jotfi.Jot.Model.Base
 {
-    public class ContactDetail : Transaction
+    public class ContactData
     {
         [Display(Name = "Email Address")]
-        public string EmailAddress { get; set; } = "";
+        public string? EmailAddress { get; set; }
         
         [NotMapped]
         [Display(Name = "Confirm Email")]
-        public string ConfirmEmail { get; set; } = "";
+        public string? ConfirmEmail { get; set; }
 
         [Display(Name = "Mobile Phone")]
-        public string MobilePhone { get; set; } = "";
+        public string? MobilePhone { get; set; }
 
         [Display(Name = "Home Phone")]
-        public string HomePhone { get; set; } = "";
+        public string? HomePhone { get; set; }
 
         [Display(Name = "Work Phone")]
-        public string WorkPhone { get; set; } = "";
+        public string? WorkPhone { get; set; }
     }
 }

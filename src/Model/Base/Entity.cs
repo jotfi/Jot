@@ -18,15 +18,17 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace jotfi.Jot.Model.Base
 {
-    public abstract class Entity : Transaction
+    public abstract class Entity : Transaction, IEntity
     {
-        public string Code { get; set; } = "";
-        public string Description { get; set; } = "";
+        public string? Code { get; set; }
+        public string? Description { get; set; }
+        public abstract string GetCodePrefix();
+        public virtual void SetCode(long seq)
+        {
+            Code = GetCodePrefix() + seq;
+        }
     }
 }

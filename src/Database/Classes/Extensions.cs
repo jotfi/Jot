@@ -40,6 +40,14 @@ namespace jotfi.Jot.Database.Classes
             transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
         }
 
+        public static long InsertEntity<T>(this T transaction, IUnitOfWork unitOfWork) where T : Entity
+        {
+            var repository = new Repository<T>(unitOfWork);
+            var id = (long)repository.InsertEntity(transaction);
+            id.IsNotZero();
+            return id;
+        }
+
         public static long Insert<T>(this T transaction, IUnitOfWork unitOfWork) where T : Transaction
         {
             var repository = new Repository<T>(unitOfWork);
@@ -83,8 +91,8 @@ namespace jotfi.Jot.Database.Classes
         {
             return tableWithColumnSyntax
                 .WithTransactionColumns()
-                .WithColumn("Code").AsAnsiString(8).NotNullable()
-                .WithColumn("Description").AsString(255).NotNullable();
+                .WithColumn("Code").AsAnsiString(30).NotNullable()
+                .WithColumn("Description").AsString(255).Nullable();
         }
     }
 }

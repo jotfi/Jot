@@ -104,9 +104,7 @@ namespace jotfi.Jot.Core.Services.System
                         PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
                         user.PasswordHash = hash;
                         user.PasswordSalt = salt;
-                        user.Person.AddressId = user.Person.Address.Insert(unitOfWork);
-                        user.Person.ContactDetailId = user.Person.ContactDetails.Insert(unitOfWork);
-                        user.PersonId = user.Person.Insert(unitOfWork);
+                        user.PersonId = user.Person.InsertEntity(unitOfWork);
                         userId = user.Insert(unitOfWork);
                         user.Id = userId;
                         unitOfWork.Commit();

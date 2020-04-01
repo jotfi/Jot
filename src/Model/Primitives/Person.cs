@@ -1,6 +1,4 @@
-﻿#region License
-//
-// Copyright (c) 2020, John Cottrell <me@john.co.com>
+﻿// Copyright 2020 John Cottrell
 //
 // This file is part of Jot.
 //
@@ -16,22 +14,27 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
-//
-#endregion
-using Dapper.FluentMap.Dommel.Mapping;
-using jotfi.Jot.Model.System;
 
-namespace jotfi.Jot.Database.Primitives
+using Dommel.Json;
+using jotfi.Jot.Model.Base;
+
+namespace jotfi.Jot.Model.System
 {
-    public class UserMap : DommelEntityMap<User>
+    public class Person : Entity 
     {
-        public UserMap()
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        [JsonData]
+        public ContactData? Data { get; set; }
+        [JsonData]
+        public Address? Address { get; set; }
+
+        public override string GetCodePrefix()
         {
-            ToTable("Users");
-            Map(p => p.Id).IsKey().IsIdentity();
-            Map(p => p.Token).Ignore();
-            Map(p => p.CreatePassword).Ignore();
-            Map(p => p.ConfirmPassword).Ignore();
+            string codePrefix = string.Empty;
+            codePrefix += LastName?.PadRight(4).Substring(0, 4).Trim();
+            codePrefix += FirstName?.PadRight(4).Substring(0, 4).Trim();
+            return codePrefix.ToUpper();
         }
     }
 }

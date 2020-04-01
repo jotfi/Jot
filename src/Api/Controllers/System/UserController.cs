@@ -93,7 +93,7 @@ namespace jotfi.Jot.Api.Controllers.System
         {
             using var context = GetContext();
             var repository = new Repository<User>(context.UnitOfWork);
-            var res = await repository.GetAllAsync();
+            var res = await repository.GetAllAsync<User, Person, User>((u, p) => { u.Person = p; return u; });
             if (res == null)
             {
                 return NotFound();
