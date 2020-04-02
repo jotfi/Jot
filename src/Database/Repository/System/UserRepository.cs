@@ -29,7 +29,7 @@ using System.Text;
 
 namespace jotfi.Jot.Database.Repository.System
 {
-    public partial class UserRepository : BaseRepository<UserRepository, User>, IBaseRepository<User>, IRepository
+    public partial class UserRepository : BaseRepository<UserRepository, User>
     {
         public UserRepository(IServiceProvider services) : base(services)
         {

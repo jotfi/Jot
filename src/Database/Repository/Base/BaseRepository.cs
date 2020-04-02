@@ -31,7 +31,7 @@ using System.Linq.Expressions;
 
 namespace jotfi.Jot.Database.Repository.Base
 {
-    public partial class BaseRepository<S, T> where T : Transaction
+    public partial class BaseRepository<S, T> : IBaseRepository<T>, IRepository where T : Transaction
     {
         protected readonly ILogger Log;
         protected readonly AppSettings Settings;

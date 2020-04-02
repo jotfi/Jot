@@ -19,12 +19,15 @@
 //
 #endregion
 
+using System.Text.Json.Serialization;
+
 namespace jotfi.Jot.Model.Base
 {
     public abstract class Entity : Transaction, IEntity
     {
         public string? Code { get; set; }
         public string? Description { get; set; }
+        [JsonIgnore]
         public string? CodePrefix { get; set; }
         public abstract string GetCodePrefix();
         public virtual void SetCodePrefix()

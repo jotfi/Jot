@@ -21,22 +21,16 @@
 using System;
 using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using jotfi.Jot.Api.Controllers.Base;
-using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Core.Services.System;
-using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace jotfi.Jot.Api.Controllers.System

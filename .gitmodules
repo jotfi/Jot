@@ -1,6 +1,3 @@
 [submodule "lib/Dommel"]
 	path = lib/Dommel
 	url = https://github.com/henkmollema/Dommel
-[submodule "lib/Dapper-FluentMap"]
-	path = lib/Dapper-FluentMap
-	url = https://github.com/henkmollema/Dapper-FluentMap

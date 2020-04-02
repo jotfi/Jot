@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;

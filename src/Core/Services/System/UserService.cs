@@ -33,7 +33,7 @@ using System.Linq;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserService : BaseService<UserService, UserRepository>, IService
+    public partial class UserService : BaseService<UserService, UserRepository>
     {
         public UserService(IServiceProvider services) : base(services)
         {

@@ -30,7 +30,7 @@ using System.Net.Http.Headers;
 
 namespace jotfi.Jot.Core.Services.Base
 {
-    public abstract class BaseService<T, U>
+    public abstract class BaseService<T, U> : IService
     {
         protected readonly ILogger Log;
         protected readonly AppSettings Settings;

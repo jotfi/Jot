@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,6 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
 
 using Dommel;
 using jotfi.Jot.Model.Base;
@@ -36,10 +40,10 @@ namespace jotfi.Jot.Model.System
         [Ignore, NotMapped]
         public string? Token { get; set; }
 
-        [Ignore, NotMapped, Display(Name = "User Password")]
+        [Ignore, JsonIgnore, NotMapped, Display(Name = "User Password")]
         public string? CreatePassword { get; set; }
 
-        [Ignore, NotMapped, Display(Name = "Confirm Password")]
+        [Ignore, JsonIgnore, NotMapped, Display(Name = "Confirm Password")]
         public string? ConfirmPassword { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,6 +16,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
 
 using Dommel.Json;
 using jotfi.Jot.Model.Base;

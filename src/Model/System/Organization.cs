@@ -1,4 +1,6 @@
-﻿// Copyright 2020 John Cottrell
+﻿#region License
+//
+// Copyright (c) 2020, John Cottrell <me@john.co.com>
 //
 // This file is part of Jot.
 //
@@ -14,14 +16,13 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
+//
+#endregion
 
-using jotfi.Jot.Base.System;
 using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace jotfi.Jot.Model.System
 {

@@ -32,7 +32,7 @@ using System;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SystemService : BaseService<SystemService, UserRepository>, IService
+    public partial class SystemService : BaseService<SystemService, UserRepository>
     {
         private readonly UserService Users;
 
