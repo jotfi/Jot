@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using FluentMigrator.Runner;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;

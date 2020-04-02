@@ -18,10 +18,11 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using FluentMigrator;
 using jotfi.Jot.Database.Classes;
 
-namespace jotfi.Jot.Database.Migrations.Primitives
+namespace jotfi.Jot.Database.Migrations.Base
 {
     [Migration(20200331)]
     public class AddInitialTables : Migration

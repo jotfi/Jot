@@ -18,18 +18,16 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using jotfi.Jot.Base.Settings;
-using jotfi.Jot.Base.System;
+
 using jotfi.Jot.Core.Services.Base;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using jotfi.Jot.Database.Repository.System;
+using System;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class LoginService : BaseService
+    public partial class LoginService : BaseService<LoginService, UserRepository>, IService
     {
-        public LoginService(IOptions<AppSettings> settings,
-            ILogger<UserService> log) : base(settings)
+        public LoginService(IServiceProvider services) : base(services)
         {
 
         }
@@ -38,8 +36,5 @@ namespace jotfi.Jot.Core.Services.System
         {
             return false;
         }
-
-        
-
     }
 }

@@ -30,11 +30,6 @@ namespace jotfi.Jot.Model.System
         public Address? Address { get; set; }
 
         public override string GetCodePrefix()
-        {
-            string codePrefix = string.Empty;
-            codePrefix += LastName?.PadRight(4).Substring(0, 4).Trim();
-            codePrefix += FirstName?.PadRight(4).Substring(0, 4).Trim();
-            return codePrefix.ToUpper();
-        }
+            => Utils.GetCodePrefix(LastName, FirstName);
     }
 }

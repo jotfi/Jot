@@ -57,7 +57,7 @@ namespace jotfi.Jot.Api.Controllers.System
         {
             try
             {
-                var user = MainService.Authenticate(model.Username, model.Password);
+                var user = Service.Authenticate(model.Username, model.Password);
                 if (user == null)
                 {
                     return BadRequest(new { message = "Username or password is incorrect" });
@@ -91,9 +91,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
-            using var context = GetContext();
-            var repository = new Repository<User>(context.UnitOfWork);
-            var res = await repository.GetAllAsync<User, Person, User>((u, p) => { u.Person = p; return u; });
+            var res = await Service.Repository.GetAllAsync();
             if (res == null)
             {
                 return NotFound();
@@ -105,9 +103,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetUserById(long id)
         {
-            using var context = GetContext();
-            var repository = new Repository<User>(context.UnitOfWork);
-            var user = await repository.GetAsync(id);
+            var user = await Service.Repository.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -118,14 +114,12 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{name}")]
         public async Task<ActionResult> GetUserByName(string name)
         {
-            using var context = GetContext();
-            var repository = new Repository<User>(context.UnitOfWork);
-            var user = await repository.SelectAsync(p => p.UserName == name);
+            var user = await Service.Repository.FirstOrDefaultAsync(p => p.UserName == name);
             if (user == null)
             {
                 return NotFound();
             }
-            return Ok(user.FirstOrDefault());
+            return Ok(user);
         }
 
 
@@ -148,7 +142,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var userId = await MainService.CreateUserAsync(user);
+            var userId = await Service.CreateUserAsync(user);
             if (userId == 0)
             {
                 return BadRequest();

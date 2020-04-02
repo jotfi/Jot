@@ -52,12 +52,13 @@ namespace jotfi.Jot.Core.Classes
             var serviceTypes =
                 from type in assembly.GetTypes()
                 where !type.IsAbstract
-                where typeof(BaseService).IsAssignableFrom(type)
+                where typeof(IService).IsAssignableFrom(type)
                 select type;
             foreach (var type in serviceTypes)
             {
                 services.AddSingleton(type);
             }
+            DbManager.RegisterServices(services);
             services.AddSingleton<CoreApp>();
         }
 

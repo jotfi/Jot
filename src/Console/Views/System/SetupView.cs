@@ -108,14 +108,7 @@ namespace jotfi.Jot.Console.Views.System
 
         public bool BeginSetup()
         {
-            using var context = MainService.GetContext();
-            var repository = new Repository<User>(context.UnitOfWork);
-            var admin = repository.Get<User, Person, User>(1, (u, p) =>
-            {
-                u.Person = p;
-                return u;
-            });
-            //User admin = null;
+            var admin = Users.Repository.FirstOrDefault(p => p.UserName == Constants.DefaultAdministratorName);
             if (admin == null)
             {
                 admin = MainService.CreateAdminUser();

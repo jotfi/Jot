@@ -19,14 +19,18 @@
 //
 #endregion
 
+using Dommel;
 using Dommel.Json;
 using FluentMigrator.Runner;
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.Utils;
+using jotfi.Jot.Database.Repository.Base;
+using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace jotfi.Jot.Database.Classes
@@ -43,6 +47,7 @@ namespace jotfi.Jot.Database.Classes
         public void Run()
         {
             DommelJsonMapper.AddJson(typeof(Person).Assembly);
+            //DommelMapper.SetPropertyResolver()
             var serviceProvider = CreateServices();
 
             // Put the database update into a scope to ensure
@@ -76,6 +81,20 @@ namespace jotfi.Jot.Database.Classes
 
             // Execute the migrations
             runner.MigrateUp();
+        }
+
+        public static void RegisterServices(IServiceCollection services)
+        {
+            var assembly = typeof(DbManager).Assembly;
+            var serviceTypes =
+                from type in assembly.GetTypes()
+                where !type.IsAbstract
+                where typeof(IRepository).IsAssignableFrom(type)
+                select type;
+            foreach (var type in serviceTypes)
+            {
+                services.AddSingleton(type);
+            }
         }
     }
 

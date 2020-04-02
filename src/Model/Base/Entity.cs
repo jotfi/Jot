@@ -25,10 +25,13 @@ namespace jotfi.Jot.Model.Base
     {
         public string? Code { get; set; }
         public string? Description { get; set; }
+        public string? CodePrefix { get; set; }
         public abstract string GetCodePrefix();
+        public virtual void SetCodePrefix()
+            => CodePrefix = GetCodePrefix();
+        
         public virtual void SetCode(long seq)
-        {
-            Code = GetCodePrefix() + seq;
-        }
+            => Code = CodePrefix + seq;
+
     }
 }

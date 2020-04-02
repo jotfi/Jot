@@ -18,27 +18,23 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
-using jotfi.Jot.Base.Settings;
+
+using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Database.Classes;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using jotfi.Jot.Database.Repository.Base;
+using jotfi.Jot.Model.System;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace jotfi.Jot.Api.Controllers.Base
+namespace jotfi.Jot.Database.Repository.System
 {
-    public class BaseController<T, U> : ControllerBase
+    public partial class OrganizationRepository : 
+        BaseRepository<OrganizationRepository, Organization>, IBaseRepository<Organization>, IRepository
     {
-        protected readonly ILogger Log;
-        protected readonly U Service;
-        protected readonly AppSettings Settings;
-
-        public BaseController(IServiceProvider services)
+        public OrganizationRepository(IServiceProvider services) : base(services)
         {
-            Log = services.GetRequiredService<ILogger<T>>();
-            Service = services.GetRequiredService<U>();
-            Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
         }
+
     }
 }

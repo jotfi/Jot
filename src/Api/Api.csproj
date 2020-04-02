@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\lib\Dommel\src\Dommel\Dommel.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 

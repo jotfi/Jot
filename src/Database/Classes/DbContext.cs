@@ -27,8 +27,8 @@ namespace jotfi.Jot.Database.Classes
 {
     public class DbContext : IDisposable
     {
-        private readonly DbConnection Connection = null;
-        public readonly UnitOfWork UnitOfWork = null;
+        private readonly DbConnection Connection;
+        public readonly UnitOfWork UnitOfWork;
 
         public DbContext(DbSettings settings)
         {

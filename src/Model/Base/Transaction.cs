@@ -20,6 +20,7 @@
 #endregion
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace jotfi.Jot.Model.Base
@@ -31,8 +32,8 @@ namespace jotfi.Jot.Model.Base
         [JsonIgnore]
         public string? Hash { get; set; }
 
-        [ReadOnly(true)]
-        public DateTime CreatedAt { get; set; } = DateTime.MinValue;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime? CreatedAt { get; set;  }
         public DateTime ModifiedAt { get; set; } = DateTime.MinValue;
     }
 }

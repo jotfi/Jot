@@ -24,6 +24,7 @@ using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Model.Base;
+using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,34 +34,37 @@ namespace jotfi.Jot.Database.Classes
 {
     public static class Extensions
     {
-
-        public static void Init(this Transaction transaction)
+        public static void AddPasswordHash(this User user)
+        {
+            PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
+            user.PasswordHash = hash;
+            user.PasswordSalt = salt;
+        }
+        public static T Hash<T>(this T transaction) where T : Transaction
         {
             transaction.ModifiedAt = DateTime.Now;
             transaction.Hash = HashUtils.GetSHA256Hash(transaction.ToJson());
+            return transaction;
         }
 
-        public static long InsertEntity<T>(this T transaction, IUnitOfWork unitOfWork) where T : Entity
+        public static T HashEntity<T>(this T entity, long count) where T : Entity
         {
-            var repository = new Repository<T>(unitOfWork);
-            var id = (long)repository.InsertEntity(transaction);
-            id.IsNotZero();
-            return id;
+            entity.SetCode(count + 1);
+            entity.Description ??= string.Empty;
+            return entity.Hash();
         }
 
-        public static long Insert<T>(this T transaction, IUnitOfWork unitOfWork) where T : Transaction
-        {
-            var repository = new Repository<T>(unitOfWork);
-            var id = (long)repository.Insert(transaction);
-            id.IsNotZero();
-            return id;
-        }
+        public static long Insert<T>(this T transaction, IUnitOfWork uow) where T : Transaction
+            => Convert.ToInt64(new DbProxy<T>(uow).Insert(transaction));
 
-        public static Task<object> InsertAsync<T>(this T transaction, IUnitOfWork unitOfWork) where T : Transaction
-        {
-            var repository = new Repository<T>(unitOfWork);
-            return repository.InsertAsync(transaction);
-        }
+        public static long InsertEntity<T>(this T transaction, IUnitOfWork uow) where T : Entity
+            => Convert.ToInt64(new DbProxy<T>(uow).InsertEntity(transaction));
+
+        public static Task<object> InsertAsync<T>(this T transaction, IUnitOfWork uow) where T : Transaction
+            => new DbProxy<T>(uow).InsertAsync(transaction);
+
+        public static Task<object> InsertEntityAsync<T>(this T transaction, IUnitOfWork uow) where T : Entity
+            => new DbProxy<T>(uow).InsertEntityAsync(transaction);
 
         public static ICreateTableColumnOptionOrWithColumnSyntax WithIdColumn(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
         {
@@ -75,7 +79,7 @@ namespace jotfi.Jot.Database.Classes
         public static ICreateTableColumnOptionOrWithColumnSyntax WithTimeStamps(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
         {
             return tableWithColumnSyntax
-                .WithColumn("CreatedAt").AsDateTime().NotNullable().WithDefault(SystemMethods.CurrentDateTime)
+                .WithColumn("CreatedAt").AsDateTime().Nullable().WithDefault(SystemMethods.CurrentUTCDateTime)
                 .WithColumn("ModifiedAt").AsDateTime().NotNullable();
         }
 
@@ -92,6 +96,7 @@ namespace jotfi.Jot.Database.Classes
             return tableWithColumnSyntax
                 .WithTransactionColumns()
                 .WithColumn("Code").AsAnsiString(30).NotNullable()
+                .WithColumn("CodePrefix").AsAnsiString(20).NotNullable()
                 .WithColumn("Description").AsString(255).Nullable();
         }
     }

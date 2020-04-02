@@ -18,10 +18,12 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Database.Classes;
+using jotfi.Jot.Database.Repository.System;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -31,14 +33,11 @@ using System.Text;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class OrganizationService : BaseService
+    public partial class OrganizationService : BaseService<OrganizationService, OrganizationRepository>, IService
     {
-        private readonly ILogger Log;
 
-        public OrganizationService(IOptions<AppSettings> settings,
-            ILogger<UserService> log) : base(settings)
+        public OrganizationService(IServiceProvider services) : base(services)
         {
-            Log = log;
         }
 
         public bool SaveOrganization(Organization organization, out string error)
@@ -68,12 +67,8 @@ namespace jotfi.Jot.Core.Services.System
                 {
                     return CreateOrganizationClient(organization);
                 }
-                using (var context = GetContext())
-                {
-                    var repository = new Repository<Organization>(context.UnitOfWork);
-                    var organizationId = repository.Insert(organization);
-                    organizationId.IsNotZero();
-                }
+                var organizationId = Repository.Insert(organization);
+                organizationId.IsNotZero();
                 return true;
             }
             catch (Exception ex)

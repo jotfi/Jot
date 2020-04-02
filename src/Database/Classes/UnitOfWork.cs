@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using System;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace jotfi.Jot.Database.Classes
     {
         public Guid Id { get; }
         public DbConnection Connection { get; }
-        public DbTransaction Transaction { get; private set; }
+        public DbTransaction? Transaction { get; private set; }
 
         public UnitOfWork(DbConnection connection)
         {
@@ -44,24 +45,32 @@ namespace jotfi.Jot.Database.Classes
 
         public void Commit()
         {
-            Transaction.Commit();
+            Transaction?.Commit();
             Dispose();
         }
 
         public void Rollback()
         {
-            Transaction.Rollback();
+            Transaction?.Rollback();
             Dispose();
         }
 
         public async Task CommitAsync()
         {
-            await Transaction.CommitAsync();
+            if (Transaction != null)
+            {
+                await Transaction.CommitAsync();
+            }
+            Dispose();
         }
 
         public async Task RollbackAsync()
         {
-            await Transaction.RollbackAsync();
+            if (Transaction != null)
+            {
+                await Transaction.RollbackAsync();
+            }
+            Dispose();
         }
 
         public void Dispose()

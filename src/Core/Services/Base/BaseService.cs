@@ -18,36 +18,39 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using jotfi.Jot.Base.Settings;
-using jotfi.Jot.Base.System;
 using jotfi.Jot.Database.Classes;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
 
 namespace jotfi.Jot.Core.Services.Base
 {
-    public class BaseService
+    public abstract class BaseService<T, U>
     {
+        protected readonly ILogger Log;
         protected readonly AppSettings Settings;
         protected readonly HttpClient Client;
 
-        public BaseService(IOptions<AppSettings> settings)
+        public readonly U Repository;
+
+        public BaseService(IServiceProvider services)
         {
-            Settings = settings.Value;
-            var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+            Log = services.GetRequiredService<ILogger<T>>();
+            Repository = services.GetRequiredService<U>();
+            Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
             Client = new HttpClient
             {
-                BaseAddress = new Uri(Settings.ServerUrl)
+                BaseAddress = new Uri(Settings.ServerUrl),
+                Timeout = new TimeSpan(0, 0, 10)
             };
             Client.DefaultRequestHeaders.Accept.Clear();
-            Client.DefaultRequestHeaders.Accept.Add(mediaType);
-            //using var cts = new CancellationTokenSource(new TimeSpan(0, 0, 5));
-            //var response = await Client.GetAsync("user", cts.Token).ConfigureAwait(false);
-            Client.Timeout = new TimeSpan(0, 0, 10);
+            Client.DefaultRequestHeaders.Accept
+                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public DbContext GetContext()

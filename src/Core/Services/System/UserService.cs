@@ -22,6 +22,7 @@ using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
 using jotfi.Jot.Database.Classes;
+using jotfi.Jot.Database.Repository.System;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -32,14 +33,10 @@ using System.Linq;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserService : BaseService
+    public partial class UserService : BaseService<UserService, UserRepository>, IService
     {
-        private readonly ILogger Log;
-
-        public UserService(IOptions<AppSettings> settings,
-            ILogger<UserService> log) : base(settings)
+        public UserService(IServiceProvider services) : base(services)
         {
-            Log = log;
         }
 
         public User Authenticate(string username, string password)
@@ -48,9 +45,7 @@ namespace jotfi.Jot.Core.Services.System
             {
                 return AuthenticateClient(username, password).Result;
             }
-            using var context = GetContext();
-            var repository = new Repository<User>(context.UnitOfWork);
-            var user = repository.Select(p => p.UserName == username).FirstOrDefault();
+            var user = Repository.FirstOrDefault(p => p.UserName == username);
             if (!PasswordUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
@@ -94,28 +89,7 @@ namespace jotfi.Jot.Core.Services.System
                 {
                     return CreateUserClient(user).Result;
                 }
-                long userId = 0;
-                using (var context = GetContext())
-                {
-                    var unitOfWork = context.UnitOfWork;
-                    unitOfWork.Begin();
-                    try
-                    {
-                        PasswordUtils.CreatePasswordHash(user.CreatePassword, out byte[] hash, out byte[] salt);
-                        user.PasswordHash = hash;
-                        user.PasswordSalt = salt;
-                        user.PersonId = user.Person.InsertEntity(unitOfWork);
-                        userId = user.Insert(unitOfWork);
-                        user.Id = userId;
-                        unitOfWork.Commit();
-                    }
-                    catch
-                    {
-                        unitOfWork.Rollback();
-                        throw;
-                    }
-                }
-                return userId;
+                return Repository.Insert(user);
             }
             catch (Exception ex)
             {

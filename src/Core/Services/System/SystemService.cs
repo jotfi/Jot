@@ -22,25 +22,23 @@ using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Core.Services.Base;
+using jotfi.Jot.Database.Repository.System;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SystemService : BaseService
+    public partial class SystemService : BaseService<SystemService, UserRepository>, IService
     {
         private readonly UserService Users;
-        private readonly ILogger Log;
 
-        public SystemService(IOptions<AppSettings> settings,
-            UserService users,
-            ILogger<UserService> log) : base(settings)
+        public SystemService(IServiceProvider services) : base(services)
         {
-            Users = users;
-            Log = log;
+            Users = services.GetRequiredService<UserService>();
         }
 
         public bool CheckConnection(out string error)

@@ -25,6 +25,7 @@ namespace jotfi.Jot.Model.Base
     {
         string? Code { get; set; }
         string? Description { get; set; }
+        string? CodePrefix { get; set; }
         string GetCodePrefix();
         void SetCode(long seq);
     }

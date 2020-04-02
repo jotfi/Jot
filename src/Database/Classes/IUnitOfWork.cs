@@ -30,7 +30,7 @@ namespace jotfi.Jot.Database.Classes
     {
         Guid Id { get; }
         DbConnection Connection { get; }
-        DbTransaction Transaction { get; }
+        DbTransaction? Transaction { get; }
         void Begin();
         void Commit();
         void Rollback();
