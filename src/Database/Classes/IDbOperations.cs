@@ -26,10 +26,12 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace jotfi.Jot.Database.Repository.Base
+namespace jotfi.Jot.Database.Classes
 {
-    public interface IBaseRepository<T>
+    public interface IDbOperations<T>
     {
+        bool Exists(UnitOfWork? uow = null);
+        Task<bool> ExistsAsync(UnitOfWork? uow = null);
         bool Any(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null);
         Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null);
         long Count(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null);

@@ -54,18 +54,6 @@ namespace jotfi.Jot.Database.Classes
             return entity.Hash();
         }
 
-        public static long Insert<T>(this T transaction, IUnitOfWork uow) where T : Transaction
-            => Convert.ToInt64(new DbProxy<T>(uow).Insert(transaction));
-
-        public static long InsertEntity<T>(this T transaction, IUnitOfWork uow) where T : Entity
-            => Convert.ToInt64(new DbProxy<T>(uow).InsertEntity(transaction));
-
-        public static Task<object> InsertAsync<T>(this T transaction, IUnitOfWork uow) where T : Transaction
-            => new DbProxy<T>(uow).InsertAsync(transaction);
-
-        public static Task<object> InsertEntityAsync<T>(this T transaction, IUnitOfWork uow) where T : Entity
-            => new DbProxy<T>(uow).InsertEntityAsync(transaction);
-
         public static ICreateTableColumnOptionOrWithColumnSyntax WithIdColumn(this ICreateTableWithColumnSyntax tableWithColumnSyntax)
         {
             return tableWithColumnSyntax

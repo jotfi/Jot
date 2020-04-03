@@ -18,8 +18,9 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using System;
-using System.Data.Common;
+using System.Data;
 
 namespace jotfi.Jot.Database.Classes
 {
@@ -29,8 +30,8 @@ namespace jotfi.Jot.Database.Classes
     public interface IUnitOfWork : IDisposable
     {
         Guid Id { get; }
-        DbConnection Connection { get; }
-        DbTransaction? Transaction { get; }
+        IDbConnection Connection { get; }
+        IDbTransaction? Transaction { get; }
         void Begin();
         void Commit();
         void Rollback();

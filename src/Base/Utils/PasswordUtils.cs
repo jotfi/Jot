@@ -43,8 +43,10 @@ namespace jotfi.Jot.Base.Utils
         /// </summary>
         /// <param name="password"></param>
         /// <returns>PasswordScore enum value from 0 - 5</returns>
-        public static PasswordScore CheckStrength(string password)
+        public static PasswordScore CheckStrength(string? password)
         {            
+            if (string.IsNullOrWhiteSpace(password))
+                return PasswordScore.Blank;
             if (password.Length < 1)
                 return PasswordScore.Blank;
             if (password.Length < 4)
@@ -71,7 +73,7 @@ namespace jotfi.Jot.Base.Utils
         /// <param name="password"></param>
         /// <param name="passwordHash"></param>
         /// <param name="passwordSalt"></param>
-        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        public static void CreatePasswordHash(string? password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
@@ -87,12 +89,12 @@ namespace jotfi.Jot.Base.Utils
         /// <param name="storedHash"></param>
         /// <param name="storedSalt"></param>
         /// <returns></returns>
-        public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        public static bool VerifyPasswordHash(string password, byte[]? storedHash, byte[]? storedSalt)
         {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+            if (storedHash?.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt?.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
             using (var hmac = new HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));

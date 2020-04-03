@@ -32,7 +32,7 @@ using System;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class SystemService : BaseService<SystemService, UserRepository>
+    public partial class SystemService : ClientService<SystemService>
     {
         private readonly UserService Users;
 
@@ -79,7 +79,7 @@ namespace jotfi.Jot.Core.Services.System
                 {
                     FirstName = "Admin",
                     LastName = "System",
-                    Data = new ContactData()
+                    Contact = new ContactData()
                     {
 #if DEBUG
                         EmailAddress = "admin@admin.com",
@@ -136,12 +136,12 @@ Please enter an organizaton name, this can be edited later.";
                 error += "Invalid password. Confirm password does not match.";
                 return false;
             }
-            if (!Users.GetEmailValid(user.Person.Data.EmailAddress))
+            if (!Users.GetEmailValid(user.Person.Contact?.EmailAddress))
             {
                 error += "Invalid email. Please check email address.";
                 return false;
             }
-            if (user.Person.Data.EmailAddress != user.Person.Data.ConfirmEmail)
+            if (user.Person.Contact?.EmailAddress != user.Person.Contact?.ConfirmEmail)
             {
                 error += "Invalid email. Confirm email does not match.";
                 return false;

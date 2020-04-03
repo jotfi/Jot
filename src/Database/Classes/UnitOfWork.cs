@@ -20,7 +20,7 @@
 #endregion
 
 using System;
-using System.Data.Common;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace jotfi.Jot.Database.Classes
@@ -28,10 +28,10 @@ namespace jotfi.Jot.Database.Classes
     public class UnitOfWork : IUnitOfWork
     {
         public Guid Id { get; }
-        public DbConnection Connection { get; }
-        public DbTransaction? Transaction { get; private set; }
+        public IDbConnection Connection { get; }
+        public IDbTransaction? Transaction { get; private set; }
 
-        public UnitOfWork(DbConnection connection)
+        public UnitOfWork(IDbConnection connection)
         {
             Id = Guid.NewGuid();
             Connection = connection;
@@ -52,24 +52,6 @@ namespace jotfi.Jot.Database.Classes
         public void Rollback()
         {
             Transaction?.Rollback();
-            Dispose();
-        }
-
-        public async Task CommitAsync()
-        {
-            if (Transaction != null)
-            {
-                await Transaction.CommitAsync();
-            }
-            Dispose();
-        }
-
-        public async Task RollbackAsync()
-        {
-            if (Transaction != null)
-            {
-                await Transaction.RollbackAsync();
-            }
             Dispose();
         }
 

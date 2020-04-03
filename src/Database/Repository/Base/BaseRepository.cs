@@ -31,7 +31,7 @@ using System.Linq.Expressions;
 
 namespace jotfi.Jot.Database.Repository.Base
 {
-    public partial class BaseRepository<S, T> : IBaseRepository<T>, IRepository where T : Transaction
+    public abstract partial class BaseRepository<S, T> : IDbOperations<T>, IRepository where T : Transaction
     {
         protected readonly ILogger Log;
         protected readonly AppSettings Settings;
@@ -42,7 +42,7 @@ namespace jotfi.Jot.Database.Repository.Base
             Settings = services.GetRequiredService<IOptions<AppSettings>>().Value;
         }
 
-        protected DbContext GetContext()
+        public DbContext GetContext()
         {
             return new DbContext(Settings.Database);
         }

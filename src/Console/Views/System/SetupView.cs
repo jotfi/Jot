@@ -196,19 +196,19 @@ namespace jotfi.Jot.Console.Views.System
             {
                 ShowTextField = false
             });
-            Term.AddToPanel(new Field(nameof(admin.Person.Data.EmailAddress), admin.Person.Data)
+            Term.AddToPanel(new Field(nameof(admin.Person.Contact.EmailAddress), admin.Person.Contact)
             {
                 TextChanged = (text) =>
                 {
                     ValidEmail = Users.GetPasswordValid(text);
-                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Data.ConfirmEmail)) == text;
+                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Contact.ConfirmEmail)) == text;
                     var emailInfo = ValidEmail ? emailsMatch ? "" : "Confirm email address" : "Invalid email address";
                     Term.MainLoop.Invoke(() => Term.SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = ValidEmail && emailsMatch ? Term.MenuColor : Term.ErrorColor;
                     Term.MainLoop.Invoke(() => Term.SetPanelColor(AdministratorEmailInfo, infoColor));
                 }
             });
-            Term.AddToPanel(new Field(nameof(admin.Person.Data.ConfirmEmail), admin.Person.Data)
+            Term.AddToPanel(new Field(nameof(admin.Person.Contact.ConfirmEmail), admin.Person.Contact)
             {
                 TextChanged = (text) =>
                 {
@@ -216,7 +216,7 @@ namespace jotfi.Jot.Console.Views.System
                     {
                         return;
                     }
-                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Data.EmailAddress)) == text;
+                    var emailsMatch = Term.GetPanelText(nameof(admin.Person.Contact.EmailAddress)) == text;
                     var emailInfo = emailsMatch ? "" : "Emails do not match";
                     Term.MainLoop.Invoke(() => Term.SetPanelLabel(AdministratorEmailInfo, emailInfo));
                     var infoColor = emailsMatch ? Term.MenuColor : Term.ErrorColor;

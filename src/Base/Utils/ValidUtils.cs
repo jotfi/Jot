@@ -32,7 +32,7 @@ namespace jotfi.Jot.Base.Utils
         /// </summary>
         /// <param name="email"></param>
         /// <returns>true if valid email address passed</returns>
-        public static bool IsEmailValid(string email)
+        public static bool IsEmailValid(string? email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return false;
@@ -78,8 +78,8 @@ namespace jotfi.Jot.Base.Utils
 
         public static bool IsUrlValid(string url)
         {
-            var valid = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
-            return valid && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            var valid = Uri.TryCreate(url, UriKind.Absolute, out Uri? uriResult);
+            return valid && (uriResult?.Scheme == Uri.UriSchemeHttp || uriResult?.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

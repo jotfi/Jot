@@ -52,31 +52,34 @@ namespace jotfi.Jot.Database.Repository.System
 
         public override Task<object> InsertAsync(User user, UnitOfWork? uow = null)
         {
-            return Task.Run(async () =>
+            if (uow != null)
             {
-                user.AddPasswordHash();
-                if (uow != null)
-                {
-                    user.PersonId = Convert.ToInt64(user.Person.InsertEntityAsync(uow));
-                    user.Id = Convert.ToInt64(user.InsertAsync(uow));
-                    return user.Id;
-                }
-                using var context = GetContext();
-                var unitOfWork = context.UnitOfWork;
-                unitOfWork.Begin();
-                try
-                {
-                    user.PersonId = Convert.ToInt64(user.Person.InsertEntityAsync(unitOfWork));
-                    user.Id = Convert.ToInt64(user.InsertAsync(unitOfWork));
-                    await unitOfWork.CommitAsync();
-                }
-                catch
-                {
-                    await unitOfWork.RollbackAsync();
-                    throw;
-                }
-                return (object)user.Id;
-            });
+                return InsertUserAsync(user, uow);
+            }
+            using var context = GetContext();
+            var unitOfWork = context.UnitOfWork;
+            unitOfWork.Begin();
+            try
+            {
+                return InsertUserAsync(user, unitOfWork, true);
+            }
+            catch
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
+        }
+
+        async Task<object> InsertUserAsync(User user, UnitOfWork uow, bool commit = false)
+        {
+            user.AddPasswordHash();
+            user.PersonId = (long)await Persons.InsertAsync(user.Person, uow);
+            user.Id = (long)await base.InsertAsync(user, uow);
+            if (commit)
+            {
+                uow.Commit();
+            }
+            return user.Id;
         }
     }
 }

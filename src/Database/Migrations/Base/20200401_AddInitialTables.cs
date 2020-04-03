@@ -24,17 +24,16 @@ using jotfi.Jot.Database.Classes;
 
 namespace jotfi.Jot.Database.Migrations.Base
 {
-    [Migration(20200331)]
+    [Migration(20200401)]
     public class AddInitialTables : Migration
     {
         public override void Up()
         {
-
             Create.Table("Persons")
                 .WithEntityColumns()
                 .WithColumn("FirstName").AsString(255).NotNullable()
                 .WithColumn("LastName").AsString(255).NotNullable()
-                .WithColumn("Data").AsString().Nullable()
+                .WithColumn("Contact").AsString().Nullable()
                 .WithColumn("Address").AsString().Nullable();
 
             Create.Index("ix_Code").OnTable("Persons").OnColumn("Code")

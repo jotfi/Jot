@@ -19,13 +19,20 @@
 //
 #endregion
 
+using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Database.Classes;
-using System.Threading.Tasks;
+using jotfi.Jot.Database.Repository.Base;
+using jotfi.Jot.Model.System;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace jotfi.Jot.Database.Repository.Base
+namespace jotfi.Jot.Database.Repository.System
 {
-    public interface IRepository
+    public partial class PersonRepository : EntityRepository<PersonRepository, Person>
     {
-        DbContext GetContext();
+        public PersonRepository(IServiceProvider services) : base(services)
+        {
+        }
     }
 }

@@ -81,7 +81,7 @@ namespace jotfi.Jot.Core.Classes
                     filePath = Path.Combine(AppContext.BaseDirectory, $"appsettings.json");
                 }
                 string json = File.ReadAllText(filePath);
-                dynamic jsonObj = JsonConvert.DeserializeObject(json);
+                dynamic? jsonObj = JsonConvert.DeserializeObject(json);
                 SetValueRecursively(sectionPathKey, jsonObj, value);
                 string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Formatting.Indented);
                 File.WriteAllText(filePath, output);

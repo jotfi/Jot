@@ -29,7 +29,7 @@ namespace jotfi.Jot.Model.System
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         [JsonData]
-        public ContactData? Data { get; set; }
+        public ContactData? Contact { get; set; }
         [JsonData]
         public Address? Address { get; set; }
 

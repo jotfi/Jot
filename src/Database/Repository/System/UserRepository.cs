@@ -23,6 +23,7 @@ using jotfi.Jot.Base.Utils;
 using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Database.Repository.Base;
 using jotfi.Jot.Model.System;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,8 +32,11 @@ namespace jotfi.Jot.Database.Repository.System
 {
     public partial class UserRepository : BaseRepository<UserRepository, User>
     {
+        private readonly PersonRepository Persons;
+
         public UserRepository(IServiceProvider services) : base(services)
         {
+            Persons = services.GetRequiredService<PersonRepository>();
         }
 
         public override User Get(object id, UnitOfWork? uow = null)
@@ -47,31 +51,35 @@ namespace jotfi.Jot.Database.Repository.System
 
         public override long Insert(User user, UnitOfWork? uow = null)
         {
-            long userId;
-            user.AddPasswordHash();
             if (uow != null)
             {
-                user.PersonId = user.Person.InsertEntity(uow);
-                userId = user.Insert(uow);
-                user.Id = userId;
-                return userId;
+                return InsertUser(user, uow);
             }
             using var context = GetContext();
             var unitOfWork = context.UnitOfWork;
             unitOfWork.Begin();
             try
             {
-                user.PersonId = user.Person.InsertEntity(unitOfWork);
-                userId = base.Insert(user, unitOfWork);
-                user.Id = userId;
-                unitOfWork.Commit();
+                InsertUser(user, unitOfWork, true);
+                return user.Id;
             }
             catch
             {
                 unitOfWork.Rollback();
                 throw;
             }
-            return userId;
+        }
+
+        long InsertUser(User user, UnitOfWork uow, bool commit = false)
+        {
+            user.AddPasswordHash();
+            user.PersonId = Persons.Insert(user.Person, uow);
+            user.Id = base.Insert(user, uow);
+            if (commit)
+            {
+                uow.Commit();
+            }
+            return user.Id;
         }
     }
 }

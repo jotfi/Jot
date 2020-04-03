@@ -25,7 +25,7 @@ using System;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class LoginService : BaseService<LoginService, UserRepository>
+    public partial class LoginService : ClientService<LoginService>
     {
         public LoginService(IServiceProvider services) : base(services)
         {

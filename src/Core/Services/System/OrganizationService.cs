@@ -33,7 +33,7 @@ using System.Text;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class OrganizationService : BaseService<OrganizationService, OrganizationRepository>
+    public partial class OrganizationService : BaseService<OrganizationService, OrganizationRepository, Organization>
     {
 
         public OrganizationService(IServiceProvider services) : base(services)

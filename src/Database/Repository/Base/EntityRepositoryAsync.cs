@@ -20,12 +20,22 @@
 #endregion
 
 using jotfi.Jot.Database.Classes;
+using jotfi.Jot.Model.Base;
+using System;
 using System.Threading.Tasks;
 
 namespace jotfi.Jot.Database.Repository.Base
 {
-    public interface IRepository
+    public abstract partial class EntityRepository<S, T> : BaseRepository<S, T> where T : Entity
     {
-        DbContext GetContext();
+        public override Task<object> InsertAsync(T obj, UnitOfWork? uow = null)
+        {
+            if (uow != null)
+            {
+                return new DbProxy<T>(uow).InsertEntityAsync(obj);
+            }
+            using var context = GetContext();
+            return new DbProxy<T>(context.UnitOfWork).InsertEntityAsync(obj);
+        }
     }
 }

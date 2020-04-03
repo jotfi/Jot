@@ -20,12 +20,25 @@
 #endregion
 
 using jotfi.Jot.Database.Classes;
-using System.Threading.Tasks;
+using jotfi.Jot.Model.Base;
+using System;
 
 namespace jotfi.Jot.Database.Repository.Base
 {
-    public interface IRepository
+    public abstract partial class EntityRepository<S, T> : BaseRepository<S, T> where T : Entity
     {
-        DbContext GetContext();
+        public EntityRepository(IServiceProvider services) : base(services)
+        {
+        }
+
+        public override long Insert(T obj, UnitOfWork? uow = null)
+        {
+            if (uow != null)
+            {
+                return Convert.ToInt64(new DbProxy<T>(uow).InsertEntity(obj));
+            }
+            using var context = GetContext();
+            return Convert.ToInt64(new DbProxy<T>(context.UnitOfWork).InsertEntity(obj));
+        }
     }
 }

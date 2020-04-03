@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Database.Repository.Base
 {
-    public partial class BaseRepository<S, T> where T : Transaction
+    public abstract partial class BaseRepository<S, T> where T : Transaction
     {
         public virtual Task<bool> ExistsAsync(UnitOfWork? uow = null)
         {

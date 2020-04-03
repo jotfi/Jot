@@ -33,13 +33,13 @@ using System.Linq;
 
 namespace jotfi.Jot.Core.Services.System
 {
-    public partial class UserService : BaseService<UserService, UserRepository>
+    public partial class UserService : BaseService<UserService, UserRepository, User>
     {
         public UserService(IServiceProvider services) : base(services)
         {
         }
 
-        public User Authenticate(string username, string password)
+        public User? Authenticate(string username, string password)
         {
             if (Settings.IsClient)
             {
@@ -53,8 +53,12 @@ namespace jotfi.Jot.Core.Services.System
             return user;
         }
 
-        public bool GetPasswordValid(string password)
+        public bool GetPasswordValid(string? password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return false;
+            }
             var passwordScore = PasswordUtils.CheckStrength(password);
             return passwordScore switch
             {
@@ -65,7 +69,7 @@ namespace jotfi.Jot.Core.Services.System
             };
         }
 
-        public string GetPasswordInfo(string password)
+        public string GetPasswordInfo(string? password)
         {
             var passwordScore = PasswordUtils.CheckStrength(password);
             var passwordInfo = $"Password Strength: {passwordScore}.";
@@ -76,7 +80,7 @@ namespace jotfi.Jot.Core.Services.System
             return passwordInfo;
         }
 
-        public bool GetEmailValid(string email)
+        public bool GetEmailValid(string? email)
         {
             return ValidUtils.IsEmailValid(email);
         }
