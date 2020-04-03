@@ -46,7 +46,7 @@ namespace jotfi.Jot.Core.Services.System
             {
                 return false;
             }
-            return CreateOrganization(organization);
+            return Insert(organization) > 0;
         }
         public bool IsOrganizationValid(Organization organization, out string error)
         {
@@ -63,11 +63,11 @@ namespace jotfi.Jot.Core.Services.System
         {
             try
             {
-                if (Settings.IsClient)
-                {
-                    return CreateOrganizationClient(organization);
-                }
-                var organizationId = Repository.Insert(organization);
+                //if (Settings.IsClient)
+                //{
+                //    return CreateOrganizationClient(organization);
+                //}
+                var organizationId = Insert(organization);
                 organizationId.IsNotZero();
                 return true;
             }

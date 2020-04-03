@@ -18,6 +18,7 @@
 // along with Jot.  If not, see <https://www.gnu.org/licenses/>.
 //
 #endregion
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,9 @@ using jotfi.Jot.Base.Settings;
 using jotfi.Jot.Base.System;
 using jotfi.Jot.Core.Classes;
 using jotfi.Jot.Database.Classes;
+using jotfi.Jot.Model.System;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +40,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
 
 namespace jotfi.Jot.Api
 {
@@ -74,6 +79,7 @@ namespace jotfi.Jot.Api
             });
             CoreApp.RegisterServices(services);
             services.AddControllers();
+            services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -93,6 +99,8 @@ namespace jotfi.Jot.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.EnableDependencyInjection();
+                endpoints.Select().Filter().OrderBy().Count().MaxTop(10);
             });
         }
     }

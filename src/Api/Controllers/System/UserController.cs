@@ -28,6 +28,7 @@ using jotfi.Jot.Api.Controllers.Base;
 using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -83,9 +84,10 @@ namespace jotfi.Jot.Api.Controllers.System
         // GET: user
         [HttpGet]
         [AllowAnonymous]
+        [EnableQuery()]
         public async Task<ActionResult<IEnumerable>> GetUsers()
         {
-            var res = await Service.Repository.GetAllAsync();
+            var res = await Service.GetAllAsync();
             if (res == null)
             {
                 return NotFound();
@@ -97,7 +99,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{id:int}")]
         public async Task<ActionResult> GetUserById(long id)
         {
-            var user = await Service.Repository.GetAsync(id);
+            var user = await Service.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -108,7 +110,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpGet("{name}")]
         public async Task<ActionResult> GetUserByName(string name)
         {
-            var user = await Service.Repository.FirstOrDefaultAsync(p => p.UserName == name);
+            var user = await Service.FirstOrDefaultAsync(p => p.UserName == name);
             if (user == null)
             {
                 return NotFound();
@@ -136,7 +138,7 @@ namespace jotfi.Jot.Api.Controllers.System
         [HttpPost]
         public async Task<ActionResult> PostUser(User user)
         {
-            var userId = await Service.CreateUserAsync(user);
+            var userId = Convert.ToInt64(await Service.InsertAsync(user));
             if (userId == 0)
             {
                 return BadRequest();

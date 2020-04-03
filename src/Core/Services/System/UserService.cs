@@ -26,10 +26,12 @@ using jotfi.Jot.Database.Repository.System;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.Services.System
 {
@@ -37,6 +39,24 @@ namespace jotfi.Jot.Core.Services.System
     {
         public UserService(IServiceProvider services) : base(services)
         {
+        }
+
+        public override Task<User> GetAsync(object id, UnitOfWork? uow = null)
+        {
+            if (Settings.IsClient)
+            {
+                return Task.Run(async () =>
+                {
+                    var response = await Client.GetAsync($"user/{id}");
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Cannot retrieve user");
+                    }
+                    var content = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<User>(content);
+                });
+            }
+            return base.GetAsync(id, uow);
         }
 
         public User? Authenticate(string username, string password)

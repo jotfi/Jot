@@ -40,18 +40,6 @@ namespace jotfi.Jot.Core.Services.System
             return JsonConvert.DeserializeObject<User>(content);
         }
 
-        public async Task<User> GetUserByIdClient(long id)
-        {
-            var response = await Client.GetAsync($"user/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception("Cannot retrieve tasks");
-            }
-
-            var content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<User>(content);
-        }
-
         public async Task<User> GetUserByNameClient(string name)
         {
             var response = await Client.GetAsync($"user/{name}");

@@ -42,103 +42,103 @@ namespace jotfi.Jot.Core.Services.Base
             Repository = services.GetRequiredService<S>();
         }
 
-        public bool Any(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual bool Any(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             //Todo: Check IsClient
             return Repository.Any(predicate, uow);
         }
 
-        public Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public long Count(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual  long Count(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<long> CountAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual Task<long> CountAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public bool Delete(T obj, UnitOfWork? uow = null)
+        public virtual bool Delete(T obj, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(T obj, UnitOfWork? uow = null)
+        public virtual Task<bool> DeleteAsync(T obj, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public bool Exists(UnitOfWork? uow = null)
+        public virtual bool Exists(UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> ExistsAsync(UnitOfWork? uow = null)
+        public virtual Task<bool> ExistsAsync(UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public T FirstOrDefault(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        {
+            return Repository.FirstOrDefault(predicate, uow);
+        }
+
+        public virtual Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
+        public virtual T Get(object id, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public T Get(object id, UnitOfWork? uow = null)
+        public virtual IEnumerable<T> GetAll(UnitOfWork? uow = null, bool buffered = true)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> GetAll(UnitOfWork? uow = null, bool buffered = true)
+        public virtual Task<IEnumerable<T>> GetAllAsync(UnitOfWork? uow = null)
+        {
+            return Repository.GetAllAsync(uow);
+        }
+
+        public virtual Task<T> GetAsync(object id, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<T>> GetAllAsync(UnitOfWork? uow = null)
+        public virtual long Insert(T obj, UnitOfWork? uow = null)
+        {
+            return Repository.Insert(obj, uow);
+        }
+
+        public virtual Task<object> InsertAsync(T obj, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> GetAsync(object id, UnitOfWork? uow = null)
+        public virtual IEnumerable<T> Select(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null, bool buffered = true)
         {
             throw new NotImplementedException();
         }
 
-        public long Insert(T obj, UnitOfWork? uow = null)
+        public virtual Task<IEnumerable<T>> SelectAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<object> InsertAsync(T obj, UnitOfWork? uow = null)
+        public virtual bool Update(T obj, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<T> Select(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null, bool buffered = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<T>> SelectAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Update(T obj, UnitOfWork? uow = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateAsync(T obj, UnitOfWork? uow = null)
+        public virtual Task<bool> UpdateAsync(T obj, UnitOfWork? uow = null)
         {
             throw new NotImplementedException();
         }
