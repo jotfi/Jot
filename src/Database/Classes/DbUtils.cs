@@ -92,7 +92,7 @@ namespace jotfi.Jot.Base.Utils
             };
         }
 
-        static string SQLiteConnectionString(string directory, string name)
+        static string SQLiteConnectionString(string? directory, string? name)
         {
             if (string.IsNullOrEmpty(name))
             {

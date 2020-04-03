@@ -108,7 +108,7 @@ namespace jotfi.Jot.Console.Views.System
 
         public bool BeginSetup()
         {
-            var admin = Users.Repository.FirstOrDefault(p => p.UserName == Constants.DefaultAdministratorName);
+            var admin = Users.FirstOrDefault(p => p.UserName == Constants.DefaultAdministratorName);
             if (admin == null)
             {
                 admin = MainService.CreateAdminUser();

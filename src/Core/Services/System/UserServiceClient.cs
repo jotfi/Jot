@@ -20,7 +20,6 @@
 #endregion
 using jotfi.Jot.Base.Classes;
 using jotfi.Jot.Model.Base;
-using jotfi.Jot.Model.Primitives;
 using jotfi.Jot.Model.System;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -29,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace jotfi.Jot.Core.Services.System
 {
+    //todo: remove this, implement client in base
     public partial class UserService
     {
         public async Task<User> AuthenticateClient(string username, string password)

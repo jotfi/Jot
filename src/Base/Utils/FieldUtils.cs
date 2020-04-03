@@ -30,7 +30,7 @@ namespace jotfi.Jot.Base.Utils
         public static void SetValue(object model, string id, string value)
         {
             var property = model.GetType().GetProperty(id);
-            switch (property?.PropertyType.FullName.ToLower())
+            switch (property?.PropertyType?.FullName?.ToLower())
             {
                 case "system.boolean":
                     property.SetValue(model, value.ToBool());
@@ -45,7 +45,7 @@ namespace jotfi.Jot.Base.Utils
                     property.SetValue(model, value.ToDateTime());
                     break;
                 default:
-                    property.SetValue(model, value);
+                    property?.SetValue(model, value);
                     break;
             }
         }

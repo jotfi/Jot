@@ -30,7 +30,7 @@ namespace jotfi.Jot.Base.System
     {
         public static void IsEqualTo<T>(this T obj, T other)
         {
-            if (!obj.Equals(other))
+            if (obj == null || !obj.Equals(other))
             {
                 throw new ApplicationException(string.Format("{0} should be equal to {1}", obj, other));
             }
