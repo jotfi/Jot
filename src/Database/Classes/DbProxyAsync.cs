@@ -42,6 +42,9 @@ namespace jotfi.Jot.Database.Classes
         public virtual Task<IEnumerable<T>> SelectAsync(Expression<Func<T, bool>> predicate) 
             => UnitOfWork.Connection.SelectAsync(predicate, UnitOfWork.Transaction);
 
+        public virtual Task<IEnumerable<T>> SelectAsync<T1, T2, T>(Expression<Func<T, bool>> predicate) where T1 : class, T
+            => UnitOfWork.Connection.SelectAsync<T1, T2, T>(predicate, UnitOfWork.Transaction);
+
         public virtual Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
             => UnitOfWork.Connection.FirstOrDefaultAsync(predicate, UnitOfWork.Transaction);
 

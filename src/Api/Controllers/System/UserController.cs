@@ -24,11 +24,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using jotfi.Jot.Api.Classes;
 using jotfi.Jot.Api.Controllers.Base;
 using jotfi.Jot.Core.Services.System;
 using jotfi.Jot.Model.Base;
 using jotfi.Jot.Model.System;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -96,9 +98,12 @@ namespace jotfi.Jot.Api.Controllers.System
         }
 
         // GET: user/5
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult> GetUserById(long id)
+        [HttpGet("{id:int?}")]
+        [AllowAnonymous]
+        [EnableQuery()]
+        public async Task<ActionResult> GetUserById(long? id, ODataQueryOptions<User> odataQueryOptions)
         {
+            var predicate = odataQueryOptions.GetFilter();
             var user = await Service.GetAsync(id);
             if (user == null)
             {
@@ -111,6 +116,20 @@ namespace jotfi.Jot.Api.Controllers.System
         public async Task<ActionResult> GetUserByName(string name)
         {
             var user = await Service.FirstOrDefaultAsync(p => p.UserName == name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("select")]
+        [EnableQuery()]
+        public async Task<ActionResult> Select(ODataQueryOptions<User> odataQueryOptions)
+        {
+            var predicate = odataQueryOptions.GetFilter();
+            var user = await Service.SelectAsync(predicate);
             if (user == null)
             {
                 return NotFound();

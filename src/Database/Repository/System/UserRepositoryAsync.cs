@@ -23,6 +23,7 @@ using jotfi.Jot.Database.Classes;
 using jotfi.Jot.Model.System;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,16 @@ namespace jotfi.Jot.Database.Repository.System
             }
             using var context = GetContext();
             return new DbProxy<User>(context.UnitOfWork).GetAllAsync<User, Person, User>();
+        }
+
+        public override Task<IEnumerable<User>> SelectAsync(Expression<Func<User, bool>> predicate, UnitOfWork? uow = null)
+        {
+            if (uow != null)
+            {
+                return new DbProxy<User>(uow).SelectAsync<User, Person, User>(predicate);
+            }
+            using var context = GetContext();
+            return new DbProxy<User>(context.UnitOfWork).SelectAsync<User, Person, User>(predicate);
         }
 
         public override Task<object> InsertAsync(User user, UnitOfWork? uow = null)

@@ -110,7 +110,7 @@ namespace jotfi.Jot.Core.Services.Base
 
         public virtual Task<T> GetAsync(object id, UnitOfWork? uow = null)
         {
-            throw new NotImplementedException();
+            return Repository.GetAsync(id, uow);
         }
 
         public virtual long Insert(T obj, UnitOfWork? uow = null)
@@ -130,7 +130,7 @@ namespace jotfi.Jot.Core.Services.Base
 
         public virtual Task<IEnumerable<T>> SelectAsync(Expression<Func<T, bool>> predicate, UnitOfWork? uow = null)
         {
-            throw new NotImplementedException();
+            return Repository.SelectAsync(predicate, uow);
         }
 
         public virtual bool Update(T obj, UnitOfWork? uow = null)
